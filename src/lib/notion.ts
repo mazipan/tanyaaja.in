@@ -8,15 +8,15 @@ const notion = new Client({
   auth: process.env.NOTION_SECRET,
 })
 
-const DB_USER =  process.env.NOTION_DB_USERS_ID || ''
-const DB_QUESTION =  process.env.NOTION_DB_QUESTIONS_ID || ''
+const DB_USER = process.env.NOTION_DB_USERS_ID || ''
+const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
 
 export const getUserByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
       property: "uid",
-      rich_text: {
+      title: {
         contains: uid,
       },
     },
@@ -95,9 +95,6 @@ export const addUser = async (param: AddUserArgs) => {
 }
 
 export const updateUser = async (param: UpdateUserArgs) => {
-  const existing = await getUserByUid(param.uid);
-
-  if (existing) {}
   await notion.pages.update({
     page_id: param.pageId,
     properties: {
@@ -158,4 +155,38 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
       },
     }
   })
+}
+
+export const getQuestionsByUid = async (uid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_QUESTION,
+    filter: {
+      property: "uid",
+      rich_text: {
+        contains: uid,
+      },
+    },
+  })
+
+  return response
+}
+
+// @ts-ignore
+export const simplifyResponseObject = (properties) => {
+  const simpleDataResponse = {}
+  for (const [key, value] of Object.entries(properties)) {
+    // @ts-ignore
+    const type = value.type
+    // @ts-ignore
+    if (value[type][0]) {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type][0].text.content
+      // @ts-ignore
+    } else if (value[type].name){
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].name
+    }
+  }
+
+  return simpleDataResponse
 }

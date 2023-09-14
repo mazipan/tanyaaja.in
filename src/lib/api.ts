@@ -73,3 +73,17 @@ export const postSendQuestion = async (ownerUid: string, question: string) => {
     }
   })
 }
+
+export const getAllQuestions = async (user: User) => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`/api/question/by-uid/${user.uid}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  })
+
+  return rawRes.json()
+}

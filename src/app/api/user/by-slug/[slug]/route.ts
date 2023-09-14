@@ -1,4 +1,4 @@
-import { getUserBySlug } from '@/lib/notion'
+import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 import { NextResponse } from 'next/server'
 
 export async function GET(
@@ -16,13 +16,7 @@ export async function GET(
   // @ts-ignore
   const properties = result.properties
 
-  const simpleDataResponse = {}
-  for (const [key, value] of Object.entries(properties)) {
-    // @ts-ignore
-    const type = value.type
-    // @ts-ignore
-    simpleDataResponse[key] = value[type][0].text.content
-  }
+  const simpleDataResponse = simplifyResponseObject(properties)
 
   return NextResponse.json({ message: `Found the owner of the slug ${slug}`, data: simpleDataResponse, },)
 }

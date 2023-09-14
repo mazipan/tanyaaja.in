@@ -8,11 +8,12 @@ import { useAuth } from './FirebaseAuth'
 
 import { getFirebaseAuth } from '@/lib/firebase'
 import { Button } from './ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { signOut } from 'firebase/auth'
 import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
+import { ProfileAvatar } from './ProfileAvatar'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 const auth = getFirebaseAuth();
 
@@ -49,19 +50,21 @@ export function Header() {
           src={logoSvg}
           alt="Tanya Aja"
           width={50}
-          height={41}
+          height={41.9}
           className=''
         />
       </Link>
       <div className='flex items-center gap-2'>
         {!isLoading ? (
           <>
-            {isLogin && user ? (
+            {isLogin && user && user.displayName && user.photoURL? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar className="border cursor-pointer">
-                    <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
-                    <AvatarFallback>{user?.displayName?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
+                  <Avatar>
+                    <AvatarImage src={user?.photoURL} alt={user?.displayName} />
+                    <AvatarFallback>
+                      {user?.displayName?.split(" ").map((n: string) => n[0]).join("").substring(2, 0).toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
