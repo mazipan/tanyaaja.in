@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { signInWithPopup } from "firebase/auth";
-import { getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
+import { createUserInDbIfNotExist, getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/FirebaseAuth";
 import { useEffect } from "react";
@@ -47,12 +47,14 @@ export default function Login() {
 
   const handleLogin = () => {
     signInWithPopup(auth, getGoogleAuthProvider())
-			.then((result) => {
+			.then(async (result) => {
 				const user = result.user;
 				toast({
           title: 'Success Login',
 					description: `Berhasil login. Selamat datang ${user.displayName}!`
 				});
+
+        await createUserInDbIfNotExist({ user })
 
         setTimeout(() => {
           router.push('/account')
@@ -67,6 +69,7 @@ export default function Login() {
 			});
   }
 
+  // Redirect back to /account --> if the session is already there
   useEffect(() => {
     if (!isLoading) {
       if (isLogin) {

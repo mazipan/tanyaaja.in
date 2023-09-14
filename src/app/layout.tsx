@@ -10,8 +10,8 @@ import { Toaster } from "@/components/ui/toaster"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TanyaAja Platform',
-  description: 'Deployable Q&A Platform',
+  title: 'TanyaAja | Tanya apa saja secara anonim',
+  description: 'Tanya apa saja secara anonim',
 };
 
 export default function RootLayout({

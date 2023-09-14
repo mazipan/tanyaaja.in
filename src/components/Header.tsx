@@ -1,6 +1,6 @@
 "use client"
 
-import logoSvg from '../../public/logo/svg/logo-no-background.svg'
+import logoSvg from '../../public/logo/TanyaAja.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ThemeSwitcher } from './ThemeSwitcher'
@@ -44,13 +44,13 @@ export function Header() {
 
   return (
     <header className='flex justify-between items-center p-4 border-b'>
-      <Link href="/">
+      <Link href="/" className='flex gap-2 items-center'>
         <Image
           src={logoSvg}
           alt="Tanya Aja"
-          width={200}
-          height={50}
-          className='bg-black py-2 px-4 rounded-lg'
+          width={50}
+          height={41}
+          className=''
         />
       </Link>
       <div className='flex items-center gap-2'>
@@ -59,8 +59,8 @@ export function Header() {
             {isLogin && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar className="border">
-                    <AvatarImage src={user?.photoURL} alt={user?.displayName} />
+                  <Avatar className="border cursor-pointer">
+                    <AvatarImage src={user?.photoURL || ''} alt={user?.displayName || ''} />
                     <AvatarFallback>{user?.displayName?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -72,7 +72,17 @@ export function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout}>
+                  <DropdownMenuItem className='cursor-pointer py-3' asChild>
+                    <Link href="/account">
+                      Daftar Pertanyaan
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className='cursor-pointer py-3' asChild>
+                    <Link href="/account/settings">
+                      Setelan Akun
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className='cursor-pointer py-3'>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
