@@ -1,5 +1,15 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { signInWithPopup } from "firebase/auth";
+import { getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
+import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/FirebaseAuth";
+import { useEffect } from "react";
+import { useRouter } from 'next/navigation';
+
+const auth = getFirebaseAuth();
 
 const GoogleIcon = () => {
   return (<svg
@@ -31,11 +41,45 @@ const GoogleIcon = () => {
 }
 
 export default function Login() {
+  const router = useRouter()
+  const { toast } = useToast()
+  const { isLogin, isLoading } = useAuth(auth)
+
+  const handleLogin = () => {
+    signInWithPopup(auth, getGoogleAuthProvider())
+			.then((result) => {
+				const user = result.user;
+				toast({
+          title: 'Success Login',
+					description: `Berhasil login. Selamat datang ${user.displayName}!`
+				});
+
+        setTimeout(() => {
+          router.push('/account')
+        }, 500)
+			})
+			.catch((error) => {
+				toast({
+          title: 'Gagal Login',
+					description: `Gagal login: ${error.message}`,
+          variant: "destructive"
+				});
+			});
+  }
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (isLogin) {
+        router.push('/account')
+      }
+    }
+  }, [isLogin, isLoading, router])
+
   return (
     <main className="flex flex-col gap-6 items-center p-24">
       <h1 className="text-3xl font-extrabold">Masuk atau Daftar</h1>
       <Card className="w-[350px] min-h-[350px] flex flex-col justify-center items-center gap-4">
-        <Button>
+        <Button onClick={handleLogin}>
           <GoogleIcon />
           Lanjutkan dengan Akun Google
         </Button>
