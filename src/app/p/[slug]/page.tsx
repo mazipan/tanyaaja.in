@@ -1,107 +1,39 @@
-"use client"
+import { ProfileAvatar } from "@/components/ProfileAvatar"
+import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm"
+import { getOwnerUser } from "@/lib/api"
+import { Metadata } from "next"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { UserProfile, getUserOwnerBySlug, sendQuestionToOwner } from "@/lib/firebase"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useToast } from "@/components/ui/use-toast"
+type PublicPageProps = {
+  params: { slug: string }
+}
 
-const formSchema = z.object({
-  q: z
-    .string()
-    .min(2, {
-      message: "Pertanyaan minimal 2 karakter",
-    })
-    .max(1000, {
-      message: "Pertanyaan maksimal 1000 karakter",
-    }),
-})
+export async function generateMetadata(
+  { params }: PublicPageProps
+): Promise<Metadata> {
+  const slug = params.slug
+  const ownerData = await getOwnerUser(slug as string)
 
-type FormValues = z.infer<typeof formSchema>
-
-export default function PublicPage() {
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [pageOwner, setPageOwner] = useState<UserProfile | null>(null)
-  const { slug } = useParams()
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      q: '',
-    },
-  })
-
-  async function fetchOwnerBySlug() {
-    const owner = await getUserOwnerBySlug(slug as string)
-    setPageOwner(owner)
+  return {
+    title: `Tanya apa saja ke ${ownerData?.data?.name} secara anonim`
   }
+}
 
-  async function onSubmit(data: FormValues) {
-    setIsLoading(true)
-    try {
-      await sendQuestionToOwner(pageOwner?.uid || '', data.q)
-      setIsLoading(false)
-      toast({
-        title: 'Pesan terkirim',
-        description: `Berhasil mengirimkan pertanyaan ke ${pageOwner?.name}!`
-      });
-    } catch (error) {
-      setIsLoading(false)
-      toast({
-        title: 'Pesan gagal terkirim',
-        description: `Gagal mengirimkan pertanyaan ke ${pageOwner?.name}, coba sesaat lagi!`
-      });
-    }
-  }
+export default async function PublicPage({
+  params: { slug },
+}: PublicPageProps) {
+  const ownerData = getOwnerUser(slug as string)
 
-  useEffect(() => {
-    fetchOwnerBySlug()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [owner] = await Promise.all([ownerData])
 
   return (
-    <main className="flex flex-col gap-6 items-center p-24">
-
-      <Avatar className="border cursor-pointer">
-        <AvatarImage src={pageOwner?.image || ''} alt={pageOwner?.name || ''} />
-        <AvatarFallback>{pageOwner?.name?.split(" ").map((n) => n[0]).join("")}</AvatarFallback>
-      </Avatar>
-
-      <h1 className="text-3xl font-extrabold">Tanya ke {pageOwner?.name}</h1>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-          <FormField
-            control={form.control}
-            name="q"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Pertanyaan</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Tulis pertanyaan yang ingin disampaikan"
-                    rows={7}
-
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Pertanyaanmu akan disampaikan secara anonim
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={isLoading}>Kirim pertanyaan</Button>
-        </form>
-      </Form>
+    <main className="flex flex-col gap-6 items-center py-16 px-4 md:px-8">
+      {owner ? (
+        <>
+          <ProfileAvatar image={owner?.data?.image} name={owner?.data?.name} />
+          <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
+          <QuestionForm owner={owner?.data} />
+        </>
+      ) : null}
     </main>
   )
 }

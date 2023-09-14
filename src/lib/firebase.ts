@@ -12,6 +12,7 @@ import {
   query,
   where,
 } from 'firebase/firestore';
+import { UserProfile } from "./types";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -43,13 +44,6 @@ export const getGoogleAuthProvider = () => {
 export const COLLECTION = {
   USER: 'users',
   QUESTIONS: 'question'
-}
-
-export interface UserProfile {
-  uid: string
-  image: string
-  name: string
-  slug: string
 }
 
 export interface Question {

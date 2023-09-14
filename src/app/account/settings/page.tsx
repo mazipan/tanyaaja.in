@@ -5,15 +5,16 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Link2Icon } from "@radix-ui/react-icons"
 
-import { UserProfile, getFirebaseAuth, getUserInDb, updateNameOrSlug } from '@/lib/firebase'
+import { getFirebaseAuth } from '@/lib/firebase'
 import { useAuth } from "@/components/FirebaseAuth";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/CopyButton"
+import { getExistingUser, patchUpdateUser } from "@/lib/api"
 
 const auth = getFirebaseAuth();
 
@@ -21,27 +22,25 @@ const accountFormSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: "Name must be at least 2 characters.",
+      message: "Nama butuh paling tidak 2 karakter.",
     })
     .max(30, {
-      message: "Name must not be longer than 30 characters.",
+      message: "Nama hanya bisa maksimal 30 karakter.",
     }),
   slug: z
     .string()
     .min(3, {
-      message: "Slug must be at least 3 characters.",
+      message: "Slug butuh paling tidak 3 karakter.",
     })
-    .max(30, {
-      message: "Slug must not be longer than 30 characters.",
+    .max(100, {
+      message: "Slug hanya bisa maksimal 100 karakter.",
     })
-    .refine((s: string) => !s.includes(' '), 'Slug must not contains space characters.'),
+    .refine((s: string) => !s.includes(' '), 'Slug tidak boleh mengandung karakter spasi.'),
 })
 
 type AccountFormValues = z.infer<typeof accountFormSchema>
 
 export default function Account() {
-  const [existingProfile, setExistingProfile] = useState<UserProfile | null>(null)
-
   const router = useRouter()
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -54,18 +53,19 @@ export default function Account() {
   })
 
   async function onSubmit(data: AccountFormValues) {
-    updateNameOrSlug(user?.uid || '', data.name, data.slug)
+    if (user) {
+      patchUpdateUser(user, { slug: data.slug, name: data.name })
+    }
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchUserFromDb = async () => {
     if (user) {
-      const res = await getUserInDb({ user })
-      if (res) {
-        form.setValue("name", res.name)
-        form.setValue("slug", res.slug)
+      const res = await getExistingUser(user)
 
-        setExistingProfile(res)
+      if(res && res.data) {
+        form.setValue("name", res.data.name)
+        form.setValue("slug", res.data.slug)
       }
     }
   }

@@ -1,6 +1,5 @@
 "use client"
 
-import { getUserInDb } from '@/lib/firebase';
 import { Auth, onAuthStateChanged, User } from 'firebase/auth';
 import { createContext, PropsWithChildren, useEffect, useState } from 'react';
 

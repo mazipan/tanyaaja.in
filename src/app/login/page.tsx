@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { signInWithPopup } from "firebase/auth";
-import { createUserInDbIfNotExist, getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
+import { getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/FirebaseAuth";
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
+import { postAddUser } from "@/lib/api";
 
 const auth = getFirebaseAuth();
 
@@ -54,7 +55,7 @@ export default function Login() {
 					description: `Berhasil login. Selamat datang ${user.displayName}!`
 				});
 
-        await createUserInDbIfNotExist({ user })
+        await postAddUser(user)
 
         setTimeout(() => {
           router.push('/account')
