@@ -14,9 +14,19 @@ export const metadata: Metadata = {
   title: 'Tanya secara anonim | TanyaAja',
   description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
   openGraph: {
-    siteName: 'TanyaAja',
+    description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+    siteName: 'TanyaAja.in',
     title: 'Tanya secara anonim | TanyaAja',
     url: BASEURL,
+    images: [{
+      url: `${BASEURL}/api/og`
+    }]
+  },
+  twitter: {
+    title: 'Tanya secara anonim | TanyaAja',
+    description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+    creator: '@Maz_Ipan',
+    site: 'TanyaAja.in',
     images: [{
       url: `${BASEURL}/api/og`
     }]

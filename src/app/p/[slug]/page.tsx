@@ -17,8 +17,18 @@ export async function generateMetadata(
     title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
     description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
     openGraph: {
-      siteName: 'TanyaAja',
+      siteName: 'TanyaAja.in',
+      description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
       url: `${BASEURL}/p/${ownerData?.data?.slug}`,
+      title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
+      images: [{
+        url: `${BASEURL}/api/og?user=${ownerData?.data?.name}`
+      }]
+    },
+    twitter: {
+      site: 'TanyaAja.in',
+      description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+      creator: '@Maz_Ipan',
       title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
       images: [{
         url: `${BASEURL}/api/og?user=${ownerData?.data?.name}`
