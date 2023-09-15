@@ -4,7 +4,7 @@ An anonymous question bank platform
 
 ## Live
 
-https://tanyaaja.in/
+[tanyaaja.in](https://tanyaaja.in/)
 
 ## Stacks
 
@@ -15,6 +15,8 @@ https://tanyaaja.in/
 
 ## Setup in Local
 
+### Preprequisites
+
 - `node`, minimum version `18.16.0`
 - `pnpm`, [see installation instruction](https://pnpm.io/installation)
 - Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
@@ -24,7 +26,7 @@ https://tanyaaja.in/
   - Duplicate the template from: [TanyaAja DB Template](https://general-lady-e21.notion.site/TanyaAja-Template-d6454b3d41934057badb0e389ada5e73)
   - Add the integration to the page
 
-### Preprequisites
+### Development
 
 - Install all dependencies, by running `pnpm install`
 - Create new `.env.local` file, copy from the `.env.example` and fill it with your value from Firebase and Notion
