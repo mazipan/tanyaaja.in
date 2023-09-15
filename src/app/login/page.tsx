@@ -1,5 +1,6 @@
 "use client"
 
+import logoSvg from '../../../public/logo/TanyaAja.svg'
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { signInWithPopup } from "firebase/auth";
@@ -9,6 +10,8 @@ import { useAuth } from "@/components/FirebaseAuth";
 import { useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { postAddUser } from "@/lib/api";
+import Link from "next/link";
+import Image from "next/image";
 
 const auth = getFirebaseAuth();
 
@@ -48,26 +51,26 @@ export default function Login() {
 
   const handleLogin = () => {
     signInWithPopup(auth, getGoogleAuthProvider())
-			.then(async (result) => {
-				const user = result.user;
-				toast({
+      .then(async (result) => {
+        const user = result.user;
+        toast({
           title: 'Success Login',
-					description: `Berhasil login. Selamat datang ${user.displayName}!`
-				});
+          description: `Berhasil login. Selamat datang ${user.displayName}!`
+        });
 
         await postAddUser(user)
 
         setTimeout(() => {
           router.push('/account')
         }, 500)
-			})
-			.catch((error) => {
-				toast({
+      })
+      .catch((error) => {
+        toast({
           title: 'Gagal Login',
-					description: `Gagal login: ${error.message}`,
+          description: `Gagal login: ${error.message}`,
           variant: "destructive"
-				});
-			});
+        });
+      });
   }
 
   // Redirect back to /account --> if the session is already there
@@ -80,14 +83,29 @@ export default function Login() {
   }, [isLogin, isLoading, router])
 
   return (
-    <main className="flex flex-col gap-6 items-center p-24">
+    <main className="flex flex-col gap-6 items-center px-4 py-24">
       <h1 className="text-3xl font-extrabold">Masuk atau Daftar</h1>
-      <Card className="w-[350px] min-h-[350px] flex flex-col justify-center items-center gap-4">
+      <Card className="w-full md:w-[350px] min-h-[350px] flex flex-col justify-between items-center gap-6 py-4">
+      <Link href="/" className='flex gap-2 items-center mt-4'>
+        <Image
+          src={logoSvg}
+          alt="Tanya Aja"
+          width={50}
+          height={41.9}
+          className=''
+        />
+        <h2 className="font-extrabold text-2xl tracking-tight">TanyaAja</h2>
+      </Link>
+
         <Button onClick={handleLogin}>
           <GoogleIcon />
           Lanjutkan dengan Akun Google
         </Button>
-        <p className="text-xs text-center px-4">Dengan mengklik tombol, kamu setuju dengan Ketentuan Layanan dan Kebijakan Privasi kami</p>
+        <p className="text-xs text-center px-4">
+          Dengan mengklik tombol di atas, berarti kamu setuju dengan <Link href="/ketentuan-layanan" className="underline">Ketentuan Layanan</Link> dan <Link href="/kebijakan-privasi" className="underline">
+            Kebijakan Privasi
+          </Link> kami
+        </p>
       </Card>
     </main>
   )

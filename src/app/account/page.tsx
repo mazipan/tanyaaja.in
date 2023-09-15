@@ -5,7 +5,7 @@ import { useAuth } from '@/components/FirebaseAuth';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { getAllQuestions, getExistingUser, patchQuestionAsDone } from '@/lib/api';
+import { BASEURL, getAllQuestions, getExistingUser, patchQuestionAsDone } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Question, UserProfile } from '@/lib/types';
 
@@ -31,6 +31,7 @@ const STATUS_MAP = {
 export default function Account() {
   const router = useRouter();
   const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [existingUser, setExistingUser] = useState<UserProfile | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
@@ -68,6 +69,7 @@ export default function Account() {
   const markAsDone = async (question: Question) => {
     if (user) {
       try {
+        setIsSubmitting(true)
         await patchQuestionAsDone(question.uuid, user)
 
         toast({
@@ -75,10 +77,11 @@ export default function Account() {
           description: `Berhasil menandai pertanyaan sebagai sudah dijawab!`
         });
 
+        setIsSubmitting(false)
         setIsOpenDialog(false);
         fetchQuestionsFromDb();
       } catch (error) {
-
+        setIsSubmitting(false)
         toast({
           title: 'Gagal menyimpan perubahan',
           description: `Gagal saat mencoba menandai pertanyaan sebagai sudah dijawab, coba sesaat lagi!`
@@ -152,6 +155,7 @@ export default function Account() {
                 <div className="mt-20 flex flex-col gap-2">
                   <div className='flex gap-2'>
                     <Button
+                      disabled={isSubmitting}
                       onClick={() => {
                         if (selectedQuestion) {
                           markAsDone(selectedQuestion);
@@ -160,7 +164,7 @@ export default function Account() {
                     >
                       Tandai sudah dijawab
                     </Button>
-                    <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`}/>
+                    <CopyButton text={`${BASEURL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`}/>
                   </div>
 
                   <small>

@@ -8,14 +8,14 @@ import { Link2Icon } from "@radix-ui/react-icons"
 
 import { getFirebaseAuth } from '@/lib/firebase'
 import { useAuth } from "@/components/FirebaseAuth";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/CopyButton"
-import { getExistingUser, patchUpdateUser } from "@/lib/api"
+import { BASEURL, getExistingUser, patchUpdateUser } from "@/lib/api"
 import { useToast } from "@/components/ui/use-toast"
 
 const auth = getFirebaseAuth();
@@ -45,6 +45,7 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 export default function Account() {
   const { toast } = useToast()
   const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { isLogin, isLoading, user } = useAuth(auth)
 
   const form = useForm<AccountFormValues>({
@@ -60,13 +61,16 @@ export default function Account() {
   async function onSubmit(data: AccountFormValues) {
     if (user) {
       try {
+        setIsSubmitting(true)
         await patchUpdateUser(user, { slug: data.slug, name: data.name })
 
         toast({
           title: 'Perubahan berhasil disimpan',
           description: `Berhasil menyimpan perubahan setelan!`
         });
+        setIsSubmitting(false)
       } catch (error) {
+        setIsSubmitting(false)
         toast({
           title: 'Gagal menyimpan',
           description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`
@@ -155,15 +159,15 @@ export default function Account() {
               <div className="flex gap-2 items-center">
                 <Link2Icon />
                 <span>
-                  {process.env.NEXT_PUBLIC_BASE_URL}/p/{watchSlug}
+                  {BASEURL}/p/{watchSlug}
                 </span>
 
                 {watchSlug !== '' ? (
-                  <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL}/p/${watchSlug}`} />
+                  <CopyButton text={`${BASEURL}/p/${watchSlug}`} />
                 ) : null}
               </div>
 
-              <Button type="submit">Simpan Perubahan</Button>
+              <Button type="submit" disabled={isSubmitting}>Simpan Perubahan</Button>
             </form>
           </Form>
         </section>

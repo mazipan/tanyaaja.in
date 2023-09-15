@@ -6,12 +6,21 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Toaster } from "@/components/ui/toaster"
+import { BASEURL } from '@/lib/api';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'TanyaAja | Tanya apa saja secara anonim',
-  description: 'Tanya apa saja secara anonim',
+  title: 'Tanya secara anonim | TanyaAja',
+  description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+  openGraph: {
+    siteName: 'TanyaAja',
+    title: 'Tanya secara anonim | TanyaAja',
+    url: BASEURL,
+    images: [{
+      url: `${BASEURL}/api/og`
+    }]
+  }
 };
 
 export default function RootLayout({

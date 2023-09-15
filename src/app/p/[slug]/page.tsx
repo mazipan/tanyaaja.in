@@ -1,6 +1,6 @@
 import { ProfileAvatar } from "@/components/ProfileAvatar"
 import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm"
-import { getOwnerUser } from "@/lib/api"
+import { BASEURL, getOwnerUser } from "@/lib/api"
 import { Metadata } from "next"
 
 type PublicPageProps = {
@@ -14,7 +14,16 @@ export async function generateMetadata(
   const ownerData = await getOwnerUser(slug as string)
 
   return {
-    title: `Tanya apa saja ke ${ownerData?.data?.name} secara anonim`
+    title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
+    description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+    openGraph: {
+      siteName: 'TanyaAja',
+      url: `${BASEURL}/p/${ownerData?.data?.slug}`,
+      title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
+      images: [{
+        url: `${BASEURL}/api/og?user=${ownerData?.data?.name}`
+      }]
+    }
   }
 }
 
