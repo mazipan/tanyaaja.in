@@ -171,6 +171,31 @@ export const getQuestionsByUid = async (uid: string) => {
   return response
 }
 
+export const getQuestionsByUuid = async (uuid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_QUESTION,
+    filter: {
+      property: "uuid",
+      title: {
+        contains: uuid,
+      },
+    },
+  })
+
+  return response
+}
+
+export const markStatusQuestionAsRead = async (pageId: string) => {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      status: {
+        name: 'Done',
+      },
+    }
+  })
+}
+
 // @ts-ignore
 export const simplifyResponseObject = (properties) => {
   const simpleDataResponse = {}

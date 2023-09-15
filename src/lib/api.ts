@@ -1,5 +1,5 @@
 import { User } from "firebase/auth"
-import { UpdateUserArgs } from "./types"
+import { Question, UpdateUserArgs } from "./types"
 
 export const getExistingUser = async (user: User) => {
   const token = await user.getIdToken()
@@ -74,7 +74,7 @@ export const postSendQuestion = async (ownerUid: string, question: string) => {
   })
 }
 
-export const getAllQuestions = async (user: User) => {
+export const getAllQuestions = async (user: User): Promise<{ data: Question[] }> => {
   const token = await user.getIdToken()
 
   const rawRes = await fetch(`/api/question/by-uid/${user.uid}`, {

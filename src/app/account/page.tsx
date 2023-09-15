@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { getAllQuestions } from '@/lib/api';
 import { Card, CardContent } from '@/components/ui/card';
+import { Question } from '@/lib/types';
 
 const auth = getFirebaseAuth();
 
 export default function Account() {
   const router = useRouter()
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState<Question[]>([])
   const { isLogin, isLoading, user } = useAuth(auth)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -52,7 +53,7 @@ export default function Account() {
       <div className='w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
         {questions && questions.length > 0 ? (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
-            {questions.map(q => (
+            {questions.map((q: Question) => (
               <Card key={q.uuid} className='min-h-[200px] flex flex-col items-center justify-center'>
                 <p className='p-4'>
                   {q.question}

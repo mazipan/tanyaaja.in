@@ -12,6 +12,13 @@ export interface AddUserArgs {
   image: string
 }
 
+export interface Question {
+  uuid: string
+  uid: string
+  question: string
+  status: string
+}
+
 export interface UpdateUserArgs {
   pageId: string
   uid: string
@@ -22,5 +29,5 @@ export interface UpdateUserArgs {
 export interface SubmitQuestionArgs {
   uid: string
   question: string
-  status: number
+  status: string
 }
