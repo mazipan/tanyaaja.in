@@ -4,7 +4,7 @@ An anonymous question bank platform
 
 ## Live
 
-TBA
+https://tanyaaja.in/
 
 ## Stacks
 
