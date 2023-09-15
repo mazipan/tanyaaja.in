@@ -5,9 +5,9 @@ import { useAuth } from '@/components/FirebaseAuth';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { getAllQuestions, patchQuestionAsDone } from '@/lib/api';
+import { getAllQuestions, getExistingUser, patchQuestionAsDone } from '@/lib/api';
 import { Card } from '@/components/ui/card';
-import { Question } from '@/lib/types';
+import { Question, UserProfile } from '@/lib/types';
 
 import {
   Dialog,
@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
+import { CopyButton } from '@/components/CopyButton';
 
 const auth = getFirebaseAuth();
 
@@ -31,6 +32,7 @@ export default function Account() {
   const router = useRouter();
   const { toast } = useToast()
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
+  const [existingUser, setExistingUser] = useState<UserProfile | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null
   );
@@ -47,6 +49,16 @@ export default function Account() {
       }
     }
   };
+
+  const fetchUserFromDb = async () => {
+    if (user) {
+      const res = await getExistingUser(user)
+
+      if (res && res.data) {
+        setExistingUser(res.data)
+      }
+    }
+  }
 
   const handleClickQuestion = (question: Question) => {
     setSelectedQuestion(question);
@@ -82,6 +94,7 @@ export default function Account() {
         router.push('/login');
       } else {
         fetchQuestionsFromDb();
+        fetchUserFromDb();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,7 +133,7 @@ export default function Account() {
                       </Badge>
                     </div>
 
-                    <p className="p-4">{q.question}</p>
+                    <p className="p-4 text-lg">{q.question}</p>
                   </Card>
                 ))}
               </div>
@@ -137,15 +150,18 @@ export default function Account() {
               <div className="my-4">
                 <p>{selectedQuestion?.question}</p>
                 <div className="mt-20 flex flex-col gap-2">
-                  <Button
-                    onClick={() => {
-                      if (selectedQuestion) {
-                        markAsDone(selectedQuestion);
-                      }
-                    }}
-                  >
-                    Tandai sudah dijawab
-                  </Button>
+                  <div className='flex gap-2'>
+                    <Button
+                      onClick={() => {
+                        if (selectedQuestion) {
+                          markAsDone(selectedQuestion);
+                        }
+                      }}
+                    >
+                      Tandai sudah dijawab
+                    </Button>
+                    <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`}/>
+                  </div>
 
                   <small>
                     Pertanyaan akan hilang dari daftar saat sudah dijawab

@@ -54,6 +54,8 @@ export default function Account() {
     },
   })
 
+  const watchSlug = form.watch("slug", false)
+
   async function onSubmit(data: AccountFormValues) {
     if (user) {
       try {
@@ -152,9 +154,12 @@ export default function Account() {
               <div className="flex gap-2 items-center">
                 <Link2Icon />
                 <span>
-                  {process.env.NEXT_PUBLIC_BASE_URL}/p/{form.getValues("slug")}
+                  {process.env.NEXT_PUBLIC_BASE_URL}/p/{watchSlug}
                 </span>
-                <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL}/p/${form.getValues("slug")}`} />
+
+                {watchSlug !== '' ? (
+                  <CopyButton text={`${process.env.NEXT_PUBLIC_BASE_URL}/p/${watchSlug}`} />
+                ) : null}
               </div>
 
               <Button type="submit">Simpan Perubahan</Button>

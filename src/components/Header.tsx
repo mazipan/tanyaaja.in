@@ -12,7 +12,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { signOut } from 'firebase/auth'
 import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
-import { ProfileAvatar } from './ProfileAvatar'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 const auth = getFirebaseAuth();
@@ -53,6 +52,7 @@ export function Header() {
           height={41.9}
           className=''
         />
+        <h2 className="font-extrabold text-2xl tracking-tight">TanyaAja</h2>
       </Link>
       <div className='flex items-center gap-2'>
         {!isLoading ? (
