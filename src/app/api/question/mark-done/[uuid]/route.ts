@@ -4,8 +4,6 @@ import { NextResponse } from 'next/server'
 export async function PATCH(request: Request,
   { params }: { params: { uuid: string } }) {
   const uuid = params.uuid || ''
-  const res = await request.json()
-
   try {
 
     const existingQuestion = await getQuestionsByUuid(uuid)

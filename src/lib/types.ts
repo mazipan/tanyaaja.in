@@ -16,7 +16,7 @@ export interface Question {
   uuid: string
   uid: string
   question: string
-  status: string
+  status: 'Done' | 'Not started'
 }
 
 export interface UpdateUserArgs {

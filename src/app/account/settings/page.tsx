@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/CopyButton"
 import { getExistingUser, patchUpdateUser } from "@/lib/api"
+import { useToast } from "@/components/ui/use-toast"
 
 const auth = getFirebaseAuth();
 
@@ -41,6 +42,7 @@ const accountFormSchema = z.object({
 type AccountFormValues = z.infer<typeof accountFormSchema>
 
 export default function Account() {
+  const { toast } = useToast()
   const router = useRouter()
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -54,7 +56,19 @@ export default function Account() {
 
   async function onSubmit(data: AccountFormValues) {
     if (user) {
-      patchUpdateUser(user, { slug: data.slug, name: data.name })
+      try {
+        await patchUpdateUser(user, { slug: data.slug, name: data.name })
+
+        toast({
+          title: 'Perubahan berhasil disimpan',
+          description: `Berhasil menyimpan perubahan setelan!`
+        });
+      } catch (error) {
+        toast({
+          title: 'Gagal menyimpan',
+          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`
+        });
+      }
     }
   }
 
@@ -63,7 +77,7 @@ export default function Account() {
     if (user) {
       const res = await getExistingUser(user)
 
-      if(res && res.data) {
+      if (res && res.data) {
         form.setValue("name", res.data.name)
         form.setValue("slug", res.data.slug)
       }

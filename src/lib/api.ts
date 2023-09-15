@@ -87,3 +87,16 @@ export const getAllQuestions = async (user: User): Promise<{ data: Question[] }>
 
   return rawRes.json()
 }
+
+
+export const patchQuestionAsDone = async (uuid: string, user: User) => {
+  const token = await user.getIdToken()
+
+  await fetch(`/api/question/mark-done/${uuid}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  })
+}

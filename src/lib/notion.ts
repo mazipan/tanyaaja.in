@@ -161,10 +161,20 @@ export const getQuestionsByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
     filter: {
-      property: "uid",
-      rich_text: {
-        contains: uid,
-      },
+      "and": [
+        {
+          property: "uid",
+          rich_text: {
+            contains: uid,
+          },
+        },
+        {
+          property: "status",
+          status: {
+            equals: 'Not started',
+          },
+        },
+      ]
     },
   })
 
@@ -190,7 +200,10 @@ export const markStatusQuestionAsRead = async (pageId: string) => {
     page_id: pageId,
     properties: {
       status: {
-        name: 'Done',
+        type: 'status',
+        status: {
+          name: 'Done'
+        },
       },
     }
   })
