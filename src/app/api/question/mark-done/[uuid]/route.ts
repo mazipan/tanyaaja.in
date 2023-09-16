@@ -1,4 +1,5 @@
-import { getQuestionsByUuid, getUserByUid, markStatusQuestionAsRead, submitQuestion } from '@/lib/notion'
+import { getQuestionsByUuid, markStatusQuestionAsRead } from '@/lib/notion'
+import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 export async function PATCH(request: Request,
@@ -20,6 +21,8 @@ export async function PATCH(request: Request,
     const foundPage = existingQuestion.results[0]
 
     await markStatusQuestionAsRead(foundPage.id)
+
+    revalidateTag(uuid)
 
     return NextResponse.json({ message: 'Question submitted' })
   } catch (error) {

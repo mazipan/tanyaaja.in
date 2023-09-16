@@ -49,7 +49,10 @@ export default async function PublicPage({
     <main className="flex flex-col gap-6 items-center py-16 px-4 md:px-8">
       {owner ? (
         <>
-          <ProfileAvatar image={owner?.data?.image} name={owner?.data?.name} useImgTag />
+          <ProfileAvatar
+            size="96"
+            image={owner?.data?.image}
+            name={owner?.data?.name} />
 
           <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
 

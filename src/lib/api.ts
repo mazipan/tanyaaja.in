@@ -11,6 +11,9 @@ export const getExistingUser = async (user: User) => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token
+    },
+    next: {
+      tags: ['user-by-uuid', user.uid]
     }
   })
 
@@ -22,6 +25,9 @@ export const getOwnerUser = async (slug: string) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['user-by-slug', slug]
     }
   })
 
@@ -94,6 +100,9 @@ export const getAllQuestions = async (user: User): Promise<{ data: Question[] }>
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token
+    },
+    next: {
+      tags: ['q-by-uid', user.uid]
     }
   })
 
@@ -118,6 +127,9 @@ export const getQuestion = async (uuid: string): Promise<{ data: Question[] }> =
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
+    },
+    next: {
+      tags: ['q-by-uuid', uuid]
     }
   })
 

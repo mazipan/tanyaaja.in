@@ -187,7 +187,7 @@ export default function Account() {
               {watchImage ? (
                 <div className="flex items-center gap-2 ">
                   <p>Preview:</p>
-                  <ProfileAvatar image={watchImage} name={watchName} />
+                  <ProfileAvatar image={watchImage} name={watchName} size="38" />
                 </div>
               ) : null}
 

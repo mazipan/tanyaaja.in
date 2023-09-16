@@ -1,5 +1,5 @@
 import { getUserByUid, updateUser } from '@/lib/notion'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
 
 export async function PATCH(request: Request) {
@@ -19,6 +19,7 @@ export async function PATCH(request: Request) {
       })
 
       revalidatePath(`/p/${res.slug}`)
+      revalidateTag(res.slug)
 
       return NextResponse.json({ message: 'User updated' })
     }

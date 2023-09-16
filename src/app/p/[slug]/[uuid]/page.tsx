@@ -22,7 +22,8 @@ export default async function PublicPage({
           <ProfileAvatar
             image={owner?.data?.image}
             name={owner?.data?.name}
-            useImgTag />
+            size="96"
+          />
 
           <h1 className="text-3xl font-extrabold">
             Pertanyaan untuk {owner?.data?.name}
