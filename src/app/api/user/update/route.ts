@@ -13,7 +13,8 @@ export async function PATCH(request: Request) {
         name: res.name,
         slug: res.slug,
         uid: res.uid,
-        pageId: foundPage.id
+        pageId: foundPage.id,
+        image: res.image
       })
 
       return NextResponse.json({ message: 'User updated' })

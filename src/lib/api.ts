@@ -46,7 +46,7 @@ export const postAddUser = async (user: User) => {
   })
 }
 
-export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'name' | 'slug'>) => {
+export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image'>) => {
   const token = await user.getIdToken()
 
   await fetch(`${BASEURL}/api/user/update`, {
@@ -55,10 +55,20 @@ export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'n
       uid: user.uid,
       name: param.name,
       slug: param.slug,
+      image: param.image,
     }),
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token
+    }
+  })
+}
+
+export const patchHit = async (slug: string) => {
+  await fetch(`${BASEURL}/api/tracker/hit/${slug}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
     }
   })
 }

@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 // @ts-ignore
 import * as z from "zod"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import { postSendQuestion } from "@/lib/api"
+import { patchHit, postSendQuestion } from "@/lib/api"
 import { UserProfile } from "@/lib/types"
 
 const formSchema = z.object({
@@ -53,6 +53,11 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       });
     }
   }
+
+  useEffect(() => {
+    patchHit(owner.slug)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Form {...form}>

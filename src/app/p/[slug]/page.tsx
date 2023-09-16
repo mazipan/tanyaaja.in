@@ -49,8 +49,12 @@ export default async function PublicPage({
       {owner ? (
         <>
           <ProfileAvatar image={owner?.data?.image} name={owner?.data?.name} />
+
           <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
-          <QuestionForm owner={owner?.data} />
+
+          {owner ? (
+            <QuestionForm owner={owner?.data} />
+          ) : null}
         </>
       ) : null}
     </main>

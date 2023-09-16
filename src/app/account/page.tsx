@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { CopyButton } from '@/components/CopyButton';
+import { EnvelopeClosedIcon, EnvelopeOpenIcon, Link2Icon } from '@radix-ui/react-icons';
 
 const auth = getFirebaseAuth();
 
@@ -118,9 +119,40 @@ export default function Account() {
         <Separator className="my-6" />
 
         <div className="w-full flex flex-col gap-4">
+
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
+            <Card
+              className="relative p-4 flex flex-col justify-between"
+            >
+              <h3 className='font-semibold leading-none tracking-tight'>Total kunjungan</h3>
+              <p className="text-4xl font-extrabold">{new Intl.NumberFormat('id-ID').format(parseInt(existingUser?.count || '0', 0))}</p>
+              <small className='font-light text-xs'>Jumlah orang yang mengunjungi laman publik Anda</small>
+            </Card>
+
+            <Card
+              className="relative p-4 flex flex-col justify-between"
+            >
+              <h3 className='font-semibold leading-none tracking-tight'>Laman Publik</h3>
+              <div className="flex gap-2 items-center mt-4">
+                <Link2Icon />
+                <a className='underline text-sm' href={`${BASEURL}/p/${existingUser?.slug}`} target='_blank' rel="noopener noreferrer" >
+                  {BASEURL}/p/{existingUser?.slug}
+                </a>
+              </div>
+              <div className='mt-4'>
+                <CopyButton text={`${BASEURL}/p/${existingUser?.slug}`} />
+              </div>
+            </Card>
+          </div>
+
+
+
           {questions && questions.length > 0 ? (
             <>
-              <h3 className="text-xl font-bold tracking-tight">Ada {questions.length} pertanyaan belum dijawab</h3>
+              <h3 className="text-xl font-bold tracking-tight flex gp-2 items-center">
+                <EnvelopeClosedIcon className='mr-2 w-6 h-6' /> Ada {questions.length} pertanyaan belum dijawab
+              </h3>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 {questions.map((q: Question) => (
                   <Card
@@ -130,10 +162,16 @@ export default function Account() {
                       handleClickQuestion(q);
                     }}
                   >
-                    <div className="absolute right-1 top-1">
-                      <Badge variant={q.status === 'Done' ? 'default' : 'secondary'}>
-                        {STATUS_MAP[q.status] || ''}
-                      </Badge>
+                    <div className="absolute left-2 right-2 top-1">
+                      <div className='flex justify-between items-center gap-2'>
+                        <Badge variant={q.status === 'Done' ? 'default' : 'secondary'}>
+                          {STATUS_MAP[q.status] || ''}
+                        </Badge>
+
+                        <Badge>
+                          {new Date(q.submitted_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                        </Badge>
+                      </div>
                     </div>
 
                     <p className="p-4 text-lg">{q.question}</p>
@@ -141,7 +179,11 @@ export default function Account() {
                 ))}
               </div>
             </>
-          ) : null}
+          ) : (
+            <h3 className="text-xl font-bold tracking-tight flex gp-2 items-center">
+              <EnvelopeOpenIcon className='mr-2 w-6 h-6' /> Tidak ada satupun pertanyaan yang belum dijawab
+            </h3>
+          )}
         </div>
       </main>
 
@@ -150,28 +192,35 @@ export default function Account() {
           <DialogHeader>
             <DialogTitle>Mari jawab pertanyaan ini</DialogTitle>
             <DialogDescription>
-              <div className="my-4">
-                <p>{selectedQuestion?.question}</p>
-                <div className="mt-20 flex flex-col gap-2">
-                  <div className='flex gap-2'>
-                    <Button
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        if (selectedQuestion) {
-                          markAsDone(selectedQuestion);
-                        }
-                      }}
-                    >
-                      Tandai sudah dijawab
-                    </Button>
-                    <CopyButton text={`${BASEURL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`}/>
-                  </div>
+              {selectedQuestion ? (
+                <div className="mb-4 mt-2">
 
                   <small>
-                    Pertanyaan akan hilang dari daftar saat sudah dijawab
+                    Tanggal pembuatan: {new Date(selectedQuestion?.submitted_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                   </small>
+
+                  <p className='mt-4'>{selectedQuestion?.question}</p>
+                  <div className="mt-20 flex flex-col gap-2">
+                    <div className='flex gap-2'>
+                      <Button
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          if (selectedQuestion) {
+                            markAsDone(selectedQuestion);
+                          }
+                        }}
+                      >
+                        Tandai sudah dijawab
+                      </Button>
+                      <CopyButton text={`${BASEURL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`} />
+                    </div>
+
+                    <small>
+                      Pertanyaan akan hilang dari daftar saat sudah dijawab
+                    </small>
+                  </div>
                 </div>
-              </div>
+              ) : null}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

@@ -2,7 +2,7 @@ import { Client } from '@notionhq/client';
 import slugify from '@sindresorhus/slugify';
 import { v4 as uuidv4 } from 'uuid';
 
-import { AddUserArgs, SubmitQuestionArgs, UpdateUserArgs } from './types';
+import { AddUserArgs, SubmitQuestionArgs, UpdateUserArgs, UpdateUserCounterArgs } from './types';
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -11,13 +11,27 @@ const notion = new Client({
 const DB_USER = process.env.NOTION_DB_USERS_ID || ''
 const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
 
+const submitRichTextProp = (fieldName: string, value: string) => {
+  return {
+    [fieldName]: {
+      type: 'rich_text',
+      rich_text: [
+        {
+          type: 'text',
+          text: { content: value },
+        },
+      ],
+    }
+  }
+}
+
 export const getUserByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
       property: "uid",
       title: {
-        contains: uid,
+        equals: uid,
       },
     },
   })
@@ -31,7 +45,7 @@ export const getUserBySlug = async (slug: string) => {
     filter: {
       property: "slug",
       rich_text: {
-        contains: slug,
+        equals: slug,
       },
     },
   })
@@ -54,47 +68,17 @@ export const addUser = async (param: AddUserArgs) => {
           },
         ],
       },
-      name: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: param.name },
-          },
-        ],
-      },
-      email: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: param.email },
-          },
-        ],
-      },
-      slug: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: slugify(param.email.split('@')[0] || '') },
-          },
-        ],
-      },
-      count: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: '0' },
-          },
-        ],
-      },
+      ...submitRichTextProp('name', param.name),
+      ...submitRichTextProp('email', param.email),
+      ...submitRichTextProp('slug', slugify(param.email.split('@')[0] || '')),
+      ...submitRichTextProp('count', '0'),
+      ...submitRichTextProp('image', param.image),
     }
   })
 }
 
 export const updateUser = async (param: UpdateUserArgs) => {
+  const withImage = param.image ? submitRichTextProp('image', param.image) : {}
   await notion.pages.update({
     page_id: param.pageId,
     properties: {
@@ -107,12 +91,22 @@ export const updateUser = async (param: UpdateUserArgs) => {
           },
         ],
       },
-      slug: {
+      ...submitRichTextProp('slug', param.slug),
+      ...withImage,
+    }
+  })
+}
+
+export const updateUserCounter = async (param: UpdateUserCounterArgs) => {
+  await notion.pages.update({
+    page_id: param.pageId,
+    properties: {
+      count: {
         type: 'rich_text',
         rich_text: [
           {
             type: 'text',
-            text: { content: param.slug },
+            text: { content: param.count },
           },
         ],
       },
@@ -135,23 +129,13 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
           },
         ],
       },
-      uid: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: param.uid },
-          },
-        ],
-      },
-      question: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: param.question },
-          },
-        ],
+      ...submitRichTextProp('uid', param.uid),
+      ...submitRichTextProp('question', param.question),
+      submitted_date: {
+        type: 'date',
+        date: {
+          start: new Date().toISOString()
+        },
       },
     }
   })
@@ -165,7 +149,7 @@ export const getQuestionsByUid = async (uid: string) => {
         {
           property: "uid",
           rich_text: {
-            contains: uid,
+            equals: uid,
           },
         },
         {
@@ -187,7 +171,7 @@ export const getQuestionsByUuid = async (uuid: string) => {
     filter: {
       property: "uuid",
       title: {
-        contains: uuid,
+        equals: uuid,
       },
     },
   })
@@ -223,6 +207,13 @@ export const simplifyResponseObject = (properties) => {
     } else if (value[type].name){
       // @ts-ignore
       simpleDataResponse[key] = value[type].name
+      // @ts-ignore
+    } else if (value[type].start){
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].start
+    } else {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
     }
   }
 

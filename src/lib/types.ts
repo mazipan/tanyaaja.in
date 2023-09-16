@@ -3,6 +3,7 @@ export interface UserProfile {
   image: string
   name: string
   slug: string
+  count: string
 }
 
 export interface AddUserArgs {
@@ -17,6 +18,7 @@ export interface Question {
   uid: string
   question: string
   status: 'Done' | 'Not started'
+  submitted_date: string
 }
 
 export interface UpdateUserArgs {
@@ -24,6 +26,12 @@ export interface UpdateUserArgs {
   uid: string
   name: string
   slug: string
+  image: string
+}
+
+export interface UpdateUserCounterArgs {
+  pageId: string
+  count: string
 }
 
 export interface SubmitQuestionArgs {

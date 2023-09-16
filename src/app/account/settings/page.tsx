@@ -15,12 +15,21 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/CopyButton"
-import { BASEURL, getExistingUser, patchUpdateUser } from "@/lib/api"
+import { BASEURL, getExistingUser, getOwnerUser, patchUpdateUser } from "@/lib/api"
 import { useToast } from "@/components/ui/use-toast"
+import { ProfileAvatar } from "@/components/ProfileAvatar"
 
 const auth = getFirebaseAuth();
 
 const accountFormSchema = z.object({
+  image: z
+    .string()
+    .min(2, {
+      message: "Avatar butuh paling tidak 2 karakter.",
+    })
+    .max(1000, {
+      message: "Avatar hanya bisa maksimal 1000 karakter.",
+    }),
   name: z
     .string()
     .min(2, {
@@ -51,23 +60,43 @@ export default function Account() {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
+      image: '',
       name: '',
       slug: ''
     },
   })
 
   const watchSlug = form.watch("slug", false)
+  const watchImage = form.watch("image", false)
+  const watchName = form.watch("name", false)
 
   async function onSubmit(data: AccountFormValues) {
     if (user) {
       try {
         setIsSubmitting(true)
-        await patchUpdateUser(user, { slug: data.slug, name: data.name })
+        try {
+          const res = await getOwnerUser(data.slug)
+          if (res && res.data) {
+            if (res.data.uid === user.uid) {
+              await patchUpdateUser(user, { slug: data.slug, name: data.name, image: data.image || user.photoURL })
 
-        toast({
-          title: 'Perubahan berhasil disimpan',
-          description: `Berhasil menyimpan perubahan setelan!`
-        });
+              toast({
+                title: 'Perubahan berhasil disimpan',
+                description: `Berhasil menyimpan perubahan setelan!`
+              });
+            } else {
+              form.setError('slug', {
+                type: 'custom',
+                message: "Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi"
+              })
+            }
+          }
+        } catch (err) {
+          toast({
+            title: 'Gagal menyimpan',
+            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`
+          });
+        }
         setIsSubmitting(false)
       } catch (error) {
         setIsSubmitting(false)
@@ -85,6 +114,7 @@ export default function Account() {
       const res = await getExistingUser(user)
 
       if (res && res.data) {
+        form.setValue("image", res.data.image)
         form.setValue("name", res.data.name)
         form.setValue("slug", res.data.slug)
       }
@@ -135,6 +165,31 @@ export default function Account() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Alamat Avatar Publik</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Alamat avatar publik Anda" {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Avatar ini akan ditampilkan di laman beranda publik Anda. Kami akan menggunakan gambar akun Google bila belum disetel.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {watchImage ? (
+                <div className="flex items-center gap-2 ">
+                  <p>Preview:</p>
+                  <ProfileAvatar image={watchImage} name={watchName} />
+                </div>
+              ) : null}
 
               <FormField
                 control={form.control}
