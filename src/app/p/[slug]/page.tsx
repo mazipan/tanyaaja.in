@@ -2,6 +2,7 @@ import { ProfileAvatar } from "@/components/ProfileAvatar"
 import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm"
 import { BASEURL, getOwnerUser } from "@/lib/api"
 import { Metadata } from "next"
+import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
 
 type PublicPageProps = {
   params: { slug: string }
@@ -48,13 +49,15 @@ export default async function PublicPage({
     <main className="flex flex-col gap-6 items-center py-16 px-4 md:px-8">
       {owner ? (
         <>
-          <ProfileAvatar image={owner?.data?.image} name={owner?.data?.name} />
+          <ProfileAvatar image={owner?.data?.image} name={owner?.data?.name} useImgTag />
 
           <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
 
           {owner ? (
             <QuestionForm owner={owner?.data} />
           ) : null}
+
+          <LinkAds />
         </>
       ) : null}
     </main>

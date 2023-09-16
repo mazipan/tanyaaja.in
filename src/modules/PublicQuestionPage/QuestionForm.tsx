@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import { patchHit, postSendQuestion } from "@/lib/api"
 import { UserProfile } from "@/lib/types"
+import { LockClosedIcon, PaperPlaneIcon } from "@radix-ui/react-icons"
 
 const formSchema = z.object({
   q: z
@@ -56,7 +57,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
 
   useEffect(() => {
     patchHit(owner.slug)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -70,20 +71,23 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
               <FormLabel>Pertanyaan</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tulis pertanyaan yang ingin disampaikan"
+                  placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
                   rows={7}
 
                   {...field}
                 />
               </FormControl>
-              <FormDescription>
-                Pertanyaanmu akan disampaikan secara anonim
+              <FormDescription className="flex items-center gap-2">
+                <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>Kirim pertanyaan</Button>
+        <Button type="submit" disabled={isLoading}>
+          <PaperPlaneIcon className="mr-2 h-4 w-4" />
+          Kirim pertanyaan
+        </Button>
       </form>
     </Form>
   )

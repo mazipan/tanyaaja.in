@@ -1,5 +1,6 @@
 import { ProfileAvatar } from "@/components/ProfileAvatar"
 import { getOwnerUser, getQuestion } from "@/lib/api"
+import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
 import { QuestionDetail } from "@/modules/PublicQuestionPage/QuestionDetail"
 
 type PublicPageProps = {
@@ -20,7 +21,8 @@ export default async function PublicPage({
         <>
           <ProfileAvatar
             image={owner?.data?.image}
-            name={owner?.data?.name} />
+            name={owner?.data?.name}
+            useImgTag />
 
           <h1 className="text-3xl font-extrabold">
             Pertanyaan untuk {owner?.data?.name}
@@ -29,6 +31,8 @@ export default async function PublicPage({
           <QuestionDetail
             questions={question.data || []}
             slug={owner?.data?.slug} />
+
+          <LinkAds />
         </>
       ) : null}
     </main>
