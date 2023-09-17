@@ -11,8 +11,10 @@ import { useEffect } from "react"
 export const QuestionDetail = ({ questions, slug }: { slug: string, questions: Question[] }) => {
 
   useEffect(() => {
-    patchHit(slug)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (slug) {
+      patchHit(slug)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

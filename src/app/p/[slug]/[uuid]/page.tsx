@@ -2,6 +2,7 @@ import { ProfileAvatar } from "@/components/ProfileAvatar"
 import { getPublicOwnerUser, getQuestion } from "@/lib/api"
 import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
 import { QuestionDetail } from "@/modules/PublicQuestionPage/QuestionDetail"
+import { notFound } from "next/navigation"
 
 type PublicPageProps = {
   params: { slug: string, uuid: string }
@@ -14,6 +15,10 @@ export default async function PublicPage({
   const questionData = await getQuestion(uuid as string)
 
   const [owner, question] = await Promise.all([ownerData, questionData])
+
+  if (!owner?.data) {
+    notFound()
+  }
 
   return (
     <main className="flex flex-col gap-6 items-center py-16 px-4 md:px-8">

@@ -3,6 +3,7 @@ import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm"
 import { BASEURL, getPublicOwnerUser } from "@/lib/api"
 import { Metadata } from "next"
 import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
+import { notFound } from "next/navigation"
 
 type PublicPageProps = {
   params: { slug: string }
@@ -45,6 +46,10 @@ export default async function PublicPage({
 
   const [owner] = await Promise.all([ownerData])
 
+  if (!owner?.data) {
+    notFound()
+  }
+
   return (
     <main className="flex flex-col gap-6 items-center py-16 px-4 md:px-8">
       {owner ? (
@@ -56,7 +61,7 @@ export default async function PublicPage({
 
           <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
 
-          {owner ? (
+          {owner && owner?.data ? (
             <QuestionForm owner={owner?.data} />
           ) : null}
 

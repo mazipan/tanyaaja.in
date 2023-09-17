@@ -56,7 +56,9 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   }
 
   useEffect(() => {
-    patchHit(owner.slug)
+    if (owner && owner?.slug) {
+      patchHit(owner.slug)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
