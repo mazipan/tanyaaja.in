@@ -19,7 +19,20 @@ export async function GET(
 
     const simpleDataResponse = simplifyResponseObject(properties)
 
-    return NextResponse.json({ message: `Found the owner of the slug ${slug}`, data: simpleDataResponse, },)
+    // Need to strip the uid data
+
+    return NextResponse.json({ message: `Found the owner of the slug ${slug}`, data: {
+      // @ts-ignore
+      image: simpleDataResponse?.image,
+      // @ts-ignore
+      name: simpleDataResponse?.name,
+      // @ts-ignore
+      email: simpleDataResponse?.email,
+      // @ts-ignore
+      count: simpleDataResponse?.count,
+      // @ts-ignore
+      slug: simpleDataResponse?.slug,
+    }, },)
   } catch (error) {
     return NextResponse.json({ message: 'Error while get user by slug' }, { status: 500 })
   }

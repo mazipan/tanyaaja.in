@@ -20,7 +20,7 @@ export const getExistingUser = async (user: User) => {
   return rawRes.json()
 }
 
-export const getOwnerUser = async (slug: string) => {
+export const getPublicOwnerUser = async (slug: string) => {
   const rawRes = await fetch(`${BASEURL}/api/user/by-slug/${slug}`, {
     method: 'GET',
     headers: {
@@ -28,6 +28,23 @@ export const getOwnerUser = async (slug: string) => {
     },
     next: {
       tags: ['user-by-slug', slug]
+    }
+  })
+
+  return rawRes.json()
+}
+
+export const checkTheSlugOwner = async (user: User, slug: string) => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/user/slug-checker/${slug}`, {
+    method: 'POST',
+    body: JSON.stringify({
+      uid: user.uid,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
     }
   })
 
@@ -122,6 +139,22 @@ export const patchQuestionAsDone = async (uuid: string, user: User) => {
   })
 }
 
+
+export const patchQuestionAsPublicOrPrivate = async (uuid: string, access: 'PUBLIC' | 'PRIVATE', user: User) => {
+  const token = await user.getIdToken()
+
+  await fetch(`${BASEURL}/api/question/toggle-access/${uuid}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      access: access,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  })
+}
+
 export const getQuestion = async (uuid: string): Promise<{ data: Question[] }> => {
   const rawRes = await fetch(`${BASEURL}/api/question/detail/${uuid}`, {
     method: 'GET',
@@ -134,4 +167,20 @@ export const getQuestion = async (uuid: string): Promise<{ data: Question[] }> =
   })
 
   return rawRes.json()
+}
+
+
+export const destroyActiveSession = async (user: User) => {
+  const token = await user.getIdToken()
+
+  await fetch(`${BASEURL}/api/user/session-destroy`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      uid: user.uid,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    }
+  })
 }

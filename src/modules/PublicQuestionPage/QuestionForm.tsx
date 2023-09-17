@@ -86,7 +86,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         />
         <Button type="submit" disabled={isLoading}>
           <PaperPlaneIcon className="mr-2 h-4 w-4" />
-          Kirim pertanyaan
+          {isLoading ? "Sedang mengirim..." : "Kirim pertanyaan"}
         </Button>
       </form>
     </Form>

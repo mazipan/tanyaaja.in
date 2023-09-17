@@ -13,12 +13,19 @@ export interface AddUserArgs {
   image: string
 }
 
+export interface CreateSessionArgs {
+  uid: string
+  token: string
+  expire: string
+}
+
 export interface Question {
   uuid: string
   uid: string
   question: string
   status: 'Done' | 'Not started'
   submitted_date: string
+  public: boolean
 }
 
 export interface UpdateUserArgs {

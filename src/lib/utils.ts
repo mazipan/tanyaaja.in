@@ -12,3 +12,10 @@ export async function copyTextToClipboard(text: string) {
     return document.execCommand('copy', true, text);
   }
 }
+
+export function addDays(date: string, days: number) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+
+  return result;
+}

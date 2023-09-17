@@ -1,8 +1,11 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { patchHit } from "@/lib/api"
 import { Question } from "@/lib/types"
+import { PaperPlaneIcon } from "@radix-ui/react-icons"
+import Link from "next/link"
 import { useEffect } from "react"
 
 export const QuestionDetail = ({ questions, slug }: { slug: string, questions: Question[] }) => {
@@ -22,7 +25,18 @@ export const QuestionDetail = ({ questions, slug }: { slug: string, questions: Q
             </Card>
           ))}
         </>
-      ) : <p className="p-4 text-lg">Pertanyaan tidak ditemukan</p>}
+      ) :
+      <div className="flex flex-col">
+        <p className="p-4 text-lg">Pertanyaan tidak ditemukan atau tidak diperbolehkan untuk diakses publik</p>
+
+        <Button type="submit" asChild>
+          <Link href={`/p/${slug}`}>
+            <PaperPlaneIcon className="mr-2 h-4 w-4" />
+            Kirim pertanyaan baru
+          </Link>
+        </Button>
+      </div>
+      }
     </div>
   )
 }

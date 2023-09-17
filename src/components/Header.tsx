@@ -13,6 +13,7 @@ import { signOut } from 'firebase/auth'
 import { useToast } from './ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { destroyActiveSession } from '@/lib/api'
 
 const auth = getFirebaseAuth();
 
@@ -21,7 +22,13 @@ export function Header() {
   const { toast } = useToast()
   const { isLogin, user, isLoading } = useAuth(auth)
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (user) {
+      try {
+        await destroyActiveSession(user)
+      } catch {}
+    }
+
     signOut(auth)
       .then(() => {
         toast({

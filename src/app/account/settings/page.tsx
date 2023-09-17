@@ -15,7 +15,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { CopyButton } from "@/components/CopyButton"
-import { BASEURL, getExistingUser, getOwnerUser, patchUpdateUser } from "@/lib/api"
+import { BASEURL, checkTheSlugOwner, getExistingUser, patchUpdateUser } from "@/lib/api"
 import { useToast } from "@/components/ui/use-toast"
 import { ProfileAvatar } from "@/components/ProfileAvatar"
 
@@ -54,6 +54,7 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 export default function Account() {
   const { toast } = useToast()
   const router = useRouter()
+  const [isLoadingInitialData, setIsLoadingInitialData] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -75,9 +76,9 @@ export default function Account() {
       try {
         setIsSubmitting(true)
         try {
-          const res = await getOwnerUser(data.slug)
+          const res = await checkTheSlugOwner(user, data.slug)
           if (res && res.data) {
-            if (res.data.uid === user.uid) {
+            if (res.data === 'NOT_EXIST') {
               await patchUpdateUser(user, { slug: data.slug, name: data.name, image: data.image || user.photoURL })
 
               toast({
@@ -90,6 +91,11 @@ export default function Account() {
                 message: "Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi"
               })
             }
+          } else {
+              form.setError('slug', {
+                type: 'custom',
+                message: "Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini."
+              })
           }
         } catch (err) {
           toast({
@@ -118,6 +124,8 @@ export default function Account() {
         form.setValue("name", res.data.name)
         form.setValue("slug", res.data.slug)
       }
+
+      setIsLoadingInitialData(false)
     }
   }
 
@@ -222,7 +230,9 @@ export default function Account() {
                 ) : null}
               </div>
 
-              <Button type="submit" disabled={isSubmitting}>Simpan Perubahan</Button>
+              <Button type="submit" disabled={isSubmitting || isLoadingInitialData}>
+                {isSubmitting ? "Processing" : "Simpan Perubahan"}
+              </Button>
             </form>
           </Form>
         </section>

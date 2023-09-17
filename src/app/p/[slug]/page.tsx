@@ -1,6 +1,6 @@
 import { ProfileAvatar } from "@/components/ProfileAvatar"
 import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm"
-import { BASEURL, getOwnerUser } from "@/lib/api"
+import { BASEURL, getPublicOwnerUser } from "@/lib/api"
 import { Metadata } from "next"
 import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
 
@@ -12,7 +12,7 @@ export async function generateMetadata(
   { params }: PublicPageProps
 ): Promise<Metadata> {
   const slug = params.slug
-  const ownerData = await getOwnerUser(slug as string)
+  const ownerData = await getPublicOwnerUser(slug as string)
 
   return {
     title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
@@ -41,7 +41,7 @@ export async function generateMetadata(
 export default async function PublicPage({
   params: { slug },
 }: PublicPageProps) {
-  const ownerData = getOwnerUser(slug as string)
+  const ownerData = getPublicOwnerUser(slug as string)
 
   const [owner] = await Promise.all([ownerData])
 

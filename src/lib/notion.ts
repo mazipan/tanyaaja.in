@@ -2,7 +2,7 @@ import { Client } from '@notionhq/client';
 import slugify from '@sindresorhus/slugify';
 import { v4 as uuidv4 } from 'uuid';
 
-import { AddUserArgs, SubmitQuestionArgs, UpdateUserArgs, UpdateUserCounterArgs } from './types';
+import { AddUserArgs, CreateSessionArgs, SubmitQuestionArgs, UpdateUserArgs, UpdateUserCounterArgs } from './types';
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -10,6 +10,7 @@ const notion = new Client({
 
 const DB_USER = process.env.NOTION_DB_USERS_ID || ''
 const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
+const DB_SESSION = process.env.NOTION_DB_SESSION_ID || ''
 
 const submitRichTextProp = (fieldName: string, value: string) => {
   return {
@@ -23,6 +24,59 @@ const submitRichTextProp = (fieldName: string, value: string) => {
       ],
     }
   }
+}
+
+export const getSession = async (token: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_SESSION,
+    filter: {
+      property: "token",
+      title: {
+        equals: token,
+      },
+    },
+  })
+
+  return response
+}
+
+export const createSession = async (param: CreateSessionArgs) => {
+  const response = await notion.pages.create({
+    parent: {
+      database_id: DB_SESSION,
+    },
+    properties: {
+      uuid: {
+        type: 'title',
+        title: [
+          {
+            type: 'text',
+            text: { content: uuidv4() },
+          },
+        ],
+      },
+      ...submitRichTextProp('uid', param.uid),
+      ...submitRichTextProp('token', param.token),
+      expired: {
+        type: 'date',
+        date: {
+          start: new Date(param.expire).toISOString(),
+          time_zone: 'Asia/Jakarta'
+        },
+      },
+    },
+  })
+
+  return response
+}
+
+export const destroySession = async (pageId: string) => {
+  const response = await notion.pages.update({
+    page_id: pageId,
+    archived: true,
+  })
+
+  return response
 }
 
 export const getUserByUid = async (uid: string) => {
@@ -134,7 +188,8 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
       submitted_date: {
         type: 'date',
         date: {
-          start: new Date().toISOString()
+          start: new Date().toISOString(),
+          time_zone: 'Asia/Jakarta'
         },
       },
     }
@@ -193,6 +248,18 @@ export const markStatusQuestionAsRead = async (pageId: string) => {
   })
 }
 
+export const togglePublicAccessQuestion = async (pageId: string, status: boolean) => {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      public: {
+        type: 'checkbox',
+        checkbox: status,
+      },
+    }
+  })
+}
+
 // @ts-ignore
 export const simplifyResponseObject = (properties) => {
   const simpleDataResponse = {}
@@ -204,11 +271,11 @@ export const simplifyResponseObject = (properties) => {
       // @ts-ignore
       simpleDataResponse[key] = value[type][0].text.content
       // @ts-ignore
-    } else if (value[type].name){
+    } else if (value[type].name) {
       // @ts-ignore
       simpleDataResponse[key] = value[type].name
       // @ts-ignore
-    } else if (value[type].start){
+    } else if (value[type].start) {
       // @ts-ignore
       simpleDataResponse[key] = value[type].start
     } else {

@@ -5,7 +5,7 @@ import { useAuth } from '@/components/FirebaseAuth';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
-import { BASEURL, getAllQuestions, getExistingUser, patchQuestionAsDone } from '@/lib/api';
+import { BASEURL, getAllQuestions, getExistingUser, patchQuestionAsDone, patchQuestionAsPublicOrPrivate } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Question, UserProfile } from '@/lib/types';
 
@@ -20,7 +20,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/components/ui/use-toast';
 import { CopyButton } from '@/components/CopyButton';
-import { EnvelopeClosedIcon, EnvelopeOpenIcon, Link2Icon } from '@radix-ui/react-icons';
+import { CalendarIcon, EnvelopeClosedIcon, EnvelopeOpenIcon, Link2Icon, LockClosedIcon, LockOpen1Icon, LockOpen2Icon } from '@radix-ui/react-icons';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const auth = getFirebaseAuth();
 
@@ -86,6 +87,30 @@ export default function Account() {
         toast({
           title: 'Gagal menyimpan perubahan',
           description: `Gagal saat mencoba menandai pertanyaan sebagai sudah dijawab, coba sesaat lagi!`
+        });
+      }
+    }
+  };
+
+  const togglePublicPrivate = async (question: Question) => {
+    if (user) {
+      try {
+        setIsSubmitting(true)
+        await patchQuestionAsPublicOrPrivate(question.uuid, question.public ? 'PRIVATE' : 'PUBLIC', user)
+
+        toast({
+          title: 'Berhasil mengubah akses ke pertanyaan',
+          description: `Berhasil mengubah akses publik ke laman detail pertanyaan Anda!`
+        });
+
+        setIsSubmitting(false)
+        setIsOpenDialog(false);
+        fetchQuestionsFromDb();
+      } catch (error) {
+        setIsSubmitting(false)
+        toast({
+          title: 'Gagal menyimpan perubahan',
+          description: `Gagal saat mencoba mengubah hak akses publik ke laman pertanyaan Anda, coba sesaat lagi!`
         });
       }
     }
@@ -164,9 +189,18 @@ export default function Account() {
                   >
                     <div className="absolute left-2 right-2 top-1">
                       <div className='flex justify-between items-center gap-2'>
-                        <Badge variant={q.status === 'Done' ? 'default' : 'secondary'}>
-                          {STATUS_MAP[q.status] || ''}
-                        </Badge>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Badge variant={q.public ? 'destructive' : 'secondary'}>
+                                {q.public ? "publik" : "private"}
+                              </Badge>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{q.public ? "Pertanyaan ini bisa dibagikan ke publik" : "Pertanyaan ini tidak bisa dibagikan ke publik"}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
 
                         <Badge>
                           {new Date(q.submitted_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
@@ -195,13 +229,23 @@ export default function Account() {
               {selectedQuestion ? (
                 <div className="mb-4 mt-2">
 
-                  <small>
-                    Tanggal pembuatan: {new Date(selectedQuestion?.submitted_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                  </small>
+                  <div className='flex justify-between items-center'>
+                    <div className='flex gap-1 items-center'>
+                      <CalendarIcon />
+                      <small>
+                        {new Date(selectedQuestion?.submitted_date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                      </small>
+                    </div>
+
+                    <div className='flex gap-1 items-center'>
+                      {selectedQuestion.public ? <LockOpen2Icon /> : <LockClosedIcon />}
+                      <small>{selectedQuestion.public ? "Bisa diakses publik" : "Tidak bisa diakses public"}</small>
+                    </div>
+                  </div>
 
                   <p className='mt-4'>{selectedQuestion?.question}</p>
                   <div className="mt-20 flex flex-col gap-2">
-                    <div className='flex gap-2'>
+                    <div className='flex gap-2 flex-col md:flex-row items-center'>
                       <Button
                         disabled={isSubmitting}
                         onClick={() => {
@@ -212,7 +256,20 @@ export default function Account() {
                       >
                         Tandai sudah dijawab
                       </Button>
-                      <CopyButton text={`${BASEURL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`} />
+                      <div className='flex gap-2 items-center'>
+                        <Button
+                          disabled={isSubmitting}
+                          variant="outline"
+                          onClick={() => {
+                            if (selectedQuestion) {
+                              togglePublicPrivate(selectedQuestion);
+                            }
+                          }}
+                        >
+                          {selectedQuestion.public ? "Larang akses publik" : "Beri akses publik"}
+                        </Button>
+                        <CopyButton text={`${BASEURL}/p/${existingUser?.slug}/${selectedQuestion?.uuid}`} />
+                      </div>
                     </div>
 
                     <small>
