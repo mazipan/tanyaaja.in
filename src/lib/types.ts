@@ -3,7 +3,7 @@ export interface UserProfile {
   image: string
   name: string
   slug: string
-  count: string
+  count: number
 }
 
 export interface AddUserArgs {
@@ -38,7 +38,7 @@ export interface UpdateUserArgs {
 
 export interface UpdateUserCounterArgs {
   pageId: string
-  count: string
+  count: number
 }
 
 export interface SubmitQuestionArgs {

@@ -26,6 +26,15 @@ const submitRichTextProp = (fieldName: string, value: string) => {
   }
 }
 
+const submitNumberProp = (fieldName: string, value: number) => {
+  return {
+    [fieldName]: {
+      type: 'number',
+      number: value || 0,
+    }
+  }
+}
+
 export const getSession = async (token: string) => {
   const response = await notion.databases.query({
     database_id: DB_SESSION,
@@ -125,8 +134,8 @@ export const addUser = async (param: AddUserArgs) => {
       ...submitRichTextProp('name', param.name),
       ...submitRichTextProp('email', param.email),
       ...submitRichTextProp('slug', slugify(param.email.split('@')[0] || '')),
-      ...submitRichTextProp('count', '0'),
       ...submitRichTextProp('image', param.image),
+      ...submitNumberProp('count', 0),
     }
   })
 }
@@ -156,13 +165,8 @@ export const updateUserCounter = async (param: UpdateUserCounterArgs) => {
     page_id: param.pageId,
     properties: {
       count: {
-        type: 'rich_text',
-        rich_text: [
-          {
-            type: 'text',
-            text: { content: param.count },
-          },
-        ],
+        type: 'number',
+        number: param.count,
       },
     }
   })
@@ -266,7 +270,6 @@ export const simplifyResponseObject = (properties) => {
   for (const [key, value] of Object.entries(properties)) {
     // @ts-ignore
     const type = value.type
-
     // @ts-ignore
     if (type === "rich_text" || type === "title") {
       // @ts-ignore
@@ -276,7 +279,11 @@ export const simplifyResponseObject = (properties) => {
       // @ts-ignore
       simpleDataResponse[type] = value[type]
       // @ts-ignore
-    } else if (value[type].name) {
+    } else if (type === "number") {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
+      // @ts-ignore
+    }else if (value[type].name) {
       // @ts-ignore
       simpleDataResponse[key] = value[type].name
       // @ts-ignore
@@ -284,7 +291,7 @@ export const simplifyResponseObject = (properties) => {
       // @ts-ignore
       simpleDataResponse[key] = value[type].start
       // @ts-ignore
-    }  else {
+    } else {
       // @ts-ignore
       simpleDataResponse[key] = value[type]
     }

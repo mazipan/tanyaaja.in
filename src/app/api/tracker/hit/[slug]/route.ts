@@ -19,12 +19,13 @@ export async function PATCH(request: Request,
 
     // @ts-ignore
     const countString = simpleDataResponse?.count || "0"
-    const countNumber = parseInt(countString, 10)
+    const countNumber = parseInt(`${countString}`, 10)
+
     const nextCounter = countNumber + 1
 
     await updateUserCounter({
       pageId: result.id,
-      count: `${nextCounter}`
+      count: nextCounter
     })
 
     return NextResponse.json({ message: `Tracker for slug ${slug} trigerred`, data: nextCounter, },)

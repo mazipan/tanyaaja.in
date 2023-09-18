@@ -219,14 +219,9 @@ export default function Account() {
                 }}
               />
 
-              <div className="flex gap-2 items-center">
-                <Link2Icon />
-                <span>
-                  {BASEURL}/p/{watchSlug}
-                </span>
-
+              <div className="flex gap-2 items-center w-full">
                 {watchSlug !== '' ? (
-                  <CopyButton text={`${BASEURL}/p/${watchSlug}`} />
+                  <CopyButton text={`${BASEURL}/p/${watchSlug}`} withLabel withInput fullWidth />
                 ) : null}
               </div>
 

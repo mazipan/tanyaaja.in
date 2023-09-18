@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, User } from 'firebase/auth';
+import { getAnalytics } from 'firebase/analytics';
 import slugify from '@sindresorhus/slugify';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -28,6 +29,8 @@ const app = initializeApp(firebaseConfig);
 
 export const getFirebaseApp = () => app
 export const getFirebaseAuth = () => getAuth(app)
+export const getFirebaseAnalytics = () => getAnalytics(app)
+
 export const getFirebaseDb = () => getFirestore(app)
 
 export const getGoogleAuthProvider = () => {
@@ -65,7 +68,7 @@ export const createUserInDbIfNotExist = async ({ user }: { user: User }) => {
     image: user.photoURL || '',
     name: user.displayName || '',
     slug: slugify(user.email?.split('@')[0] || ''),
-    count: '0'
+    count: 0
   }
 
   if (querySnapshot.size === 0) {
