@@ -1,9 +1,9 @@
 import { User } from "firebase/auth"
-import { Question, UpdateUserArgs } from "./types"
+import { Question, UpdateUserArgs, UserProfile } from "./types"
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
-export const getExistingUser = async (user: User) => {
+export const getExistingUser = async (user: User): Promise<{ data: UserProfile }> => {
   const token = await user.getIdToken()
 
   const rawRes = await fetch(`${BASEURL}/api/private/user/by-uuid/${user.uid}`, {
@@ -20,7 +20,7 @@ export const getExistingUser = async (user: User) => {
   return rawRes.json()
 }
 
-export const getPublicOwnerUser = async (slug: string) => {
+export const getPublicOwnerUser = async (slug: string): Promise<{ data: UserProfile }> => {
   const rawRes = await fetch(`${BASEURL}/api/user/by-slug/${slug}`, {
     method: 'GET',
     headers: {
@@ -166,7 +166,6 @@ export const getQuestionDetail = async (uuid: string): Promise<{ data: Question[
 
   return rawRes.json()
 }
-
 
 export const destroyActiveSession = async (user: User) => {
   const token = await user.getIdToken()

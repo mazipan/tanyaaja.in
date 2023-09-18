@@ -12,7 +12,9 @@ export async function DELETE(request: Request) {
       const session = await getSession(token)
       if (session.results.length === 0) {
         const foundPage = session.results[0]
-        destroySession(foundPage.id)
+        if (foundPage) {
+          destroySession(foundPage?.id)
+        }
       }
     }
     return NextResponse.json({ message: 'Session destroyed' })

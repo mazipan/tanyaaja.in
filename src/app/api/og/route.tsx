@@ -1,3 +1,4 @@
+import { BASEURL } from '@/lib/api';
 import { ImageResponse } from 'next/server';
 // App router includes @vercel/og.
 // No need to install it.
@@ -8,26 +9,39 @@ export async function GET(request: Request) {
 
   const url = new URL(request.url)
   const searchParams = url.searchParams
+  const type = searchParams.get("type")
   const user = searchParams.get("user")
+  const slug = searchParams.get("slug")
+  const question = searchParams.get("question")
+  const questionId = searchParams.get("questionId")
 
   return new ImageResponse(
     (
-      <div tw="flex p-2 flex-col w-full h-full items-center justify-center bg-white">
+      <div tw="flex p-4 flex-col w-full h-full items-center justify-center bg-white">
         <div tw="flex flex-wrap items-center justify-center">
-          {user ? (
-            <div tw="flex font-extrabold text-4xl tracking-tight">
+          {type === "user" && user ? (
+            <div tw="flex font-bold text-4xl tracking-tight">
               <span>Tanyakan
                 <span tw='text-blue-500 ml-2 mr-2'>apa aja</span>
                 ke {decodeURIComponent(user)} dengan </span>
               <span tw='text-blue-500 ml-2'>anonim</span>
             </div>
           ) : (
-            <div tw="flex font-extrabold text-4xl tracking-tight">
-              <span>Tanyakan
-                <span tw='text-blue-500 ml-2 mr-2'>apa aja</span>
-                ke saya dengan </span>
-              <span tw='text-blue-500 ml-2'>anonim</span>
-            </div>
+            <>
+              {type === "question" && question ? (
+                <div tw="flex font-bold text-2xl tracking-tight text-center">
+                  <p tw="px-4">{decodeURIComponent(question)}</p>
+                </div>
+              ) : (
+                <div tw="flex font-extrabold text-4xl tracking-tight">
+                  <span>Tanyakan
+                    <span tw='text-blue-500 ml-2 mr-2'>apa aja</span>
+                    ke saya dengan </span>
+                  <span tw='text-blue-500 ml-2'>anonim</span>
+                </div>
+              )}
+            </>
+
           )}
         </div>
         <div tw="flex mb-2 items-center justify-center mt-10">
@@ -36,6 +50,17 @@ export async function GET(request: Request) {
           </svg>
           <h1 tw="font-extrabold text-6xl tracking-tight ml-2">TanyaAja</h1>
         </div>
+        {type === "user" && user ? (
+          <small tw="text-sm">{BASEURL}/p/{slug}</small>
+        ) : (
+          <>
+          {type === "question" && question ? (
+            <small tw="text-sm">{BASEURL}/p/{slug}/{questionId}</small>
+          ) : (
+            <small tw="text-sm">{BASEURL}</small>
+          )}
+          </>
+        )}
       </div>
     ),
     {

@@ -24,7 +24,7 @@ export async function generateMetadata(
       url: `${BASEURL}/p/${ownerData?.data?.slug}`,
       title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
       images: [{
-        url: `${BASEURL}/api/og?user=${ownerData?.data?.name}`
+        url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`
       }]
     },
     twitter: {
@@ -33,7 +33,7 @@ export async function generateMetadata(
       creator: '@Maz_Ipan',
       title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
       images: [{
-        url: `${BASEURL}/api/og?user=${ownerData?.data?.name}`
+        url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`
       }]
     }
   }
