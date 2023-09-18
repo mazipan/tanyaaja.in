@@ -16,13 +16,13 @@ export async function generateMetadata(
   const ownerData = await getPublicOwnerUser(slug as string)
 
   return {
-    title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
+    title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
     description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
     openGraph: {
       siteName: 'TanyaAja.in',
       description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
       url: `${BASEURL}/p/${ownerData?.data?.slug}`,
-      title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
+      title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
       images: [{
         url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`
       }]
@@ -31,7 +31,7 @@ export async function generateMetadata(
       site: 'TanyaAja.in',
       description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
       creator: '@Maz_Ipan',
-      title: `Tanyakan ke ${ownerData?.data?.name} dengan anonim`,
+      title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
       images: [{
         url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`
       }]

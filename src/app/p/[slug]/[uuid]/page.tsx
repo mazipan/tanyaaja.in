@@ -24,22 +24,22 @@ export async function generateMetadata(
   const q: Question = (question?.data || [])[0] || {}
 
   return {
-    title: `Tanyakan ke ${owner?.data?.name} dengan anonim | TanyaAja`,
-    description: `Tanyakan apa saja ke ${owner?.data?.name} dengan anonim`,
+    title: `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`,
+    description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
     openGraph: {
       siteName: 'TanyaAja.in',
-      description: `Tanyakan apa saja ke ${owner?.data?.name} dengan anonim`,
+      description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
       url: `${BASEURL}/p/${owner?.data?.slug}`,
-      title: `Tanyakan ke ${owner?.data?.name} dengan anonim`,
+      title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
       images: [{
         url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`
       }]
     },
     twitter: {
       site: 'TanyaAja.in',
-      description: `Tanyakan apa saja ke ${owner?.data?.name} dengan anonim`,
+      description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
       creator: '@Maz_Ipan',
-      title: `Tanyakan ke ${owner?.data?.name} dengan anonim`,
+      title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
       images: [{
         url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`
       }]

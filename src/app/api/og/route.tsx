@@ -30,7 +30,7 @@ export async function GET(request: Request) {
             <>
               {type === "question" && question ? (
                 <div tw="flex font-bold text-2xl tracking-tight text-center">
-                  <p tw="px-4">{decodeURIComponent(question)}</p>
+                  <p tw="px-10">{decodeURIComponent(question)}</p>
                 </div>
               ) : (
                 <div tw="flex font-extrabold text-4xl tracking-tight">
@@ -41,7 +41,6 @@ export async function GET(request: Request) {
                 </div>
               )}
             </>
-
           )}
         </div>
         <div tw="flex mb-2 items-center justify-center mt-10">
@@ -51,13 +50,13 @@ export async function GET(request: Request) {
           <h1 tw="font-extrabold text-6xl tracking-tight ml-2">TanyaAja</h1>
         </div>
         {type === "user" && user ? (
-          <small tw="text-sm">{BASEURL}/p/{slug}</small>
+          <span tw="text-blue-500 text-md">{BASEURL}/p/{slug}</span>
         ) : (
           <>
           {type === "question" && question ? (
-            <small tw="text-sm">{BASEURL}/p/{slug}/{questionId}</small>
+            <span tw="text-blue-500 text-md">{BASEURL}/p/{slug}/{questionId}</span>
           ) : (
-            <small tw="text-sm">{BASEURL}</small>
+            <span tw="text-blue-500 text-md">{BASEURL}</span>
           )}
           </>
         )}
