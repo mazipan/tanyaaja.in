@@ -44,5 +44,4 @@ export interface UpdateUserCounterArgs {
 export interface SubmitQuestionArgs {
   uid: string
   question: string
-  status: string
 }

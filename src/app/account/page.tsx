@@ -25,11 +25,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 const auth = getFirebaseAuth();
 
-const STATUS_MAP = {
-  'Not started': 'Belum dijawab',
-  Done: 'Sudah dijawab',
-};
-
 export default function Account() {
   const router = useRouter();
   const { toast } = useToast()

@@ -27,6 +27,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ message: 'User is already exist' }, { status: 400 })
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while adding user' }, { status: 500 })
   }
 }

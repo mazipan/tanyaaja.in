@@ -34,6 +34,7 @@ export async function GET(
       slug: simpleDataResponse?.slug,
     }, },)
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while get user by slug' }, { status: 500 })
   }
 }

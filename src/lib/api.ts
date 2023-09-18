@@ -96,11 +96,11 @@ export const patchHit = async (slug: string) => {
   })
 }
 
-export const postSendQuestion = async (ownerUid: string, question: string) => {
+export const postSendQuestion = async (slug: string, question: string) => {
   await fetch(`${BASEURL}/api/question/submit`, {
     method: 'POST',
     body: JSON.stringify({
-      uid: ownerUid,
+      slug: slug,
       question: question,
     }),
     headers: {

@@ -39,6 +39,7 @@ export async function POST(
 
     return NextResponse.json({ message: `Can not found the session`, data: null }, { status: 403 })
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while get user by slug', data: null }, { status: 500 })
   }
 }

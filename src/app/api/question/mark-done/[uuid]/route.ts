@@ -26,6 +26,7 @@ export async function PATCH(request: Request,
 
     return NextResponse.json({ message: 'Question marked as Done' })
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while mark question as Done' }, { status: 500 })
   }
 }

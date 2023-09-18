@@ -21,6 +21,7 @@ export async function GET(
 
     return NextResponse.json({ message: `Found user ${uid}`, data: simpleDataResponse, },)
   } catch (error) {
+    console.error(error)
     return NextResponse.json({ message: 'Error while get user by uuid' }, { status: 500 })
   }
 }

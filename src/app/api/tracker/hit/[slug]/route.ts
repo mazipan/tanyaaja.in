@@ -29,6 +29,7 @@ export async function PATCH(request: Request,
 
     return NextResponse.json({ message: `Tracker for slug ${slug} trigerred`, data: nextCounter, },)
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while hit tracker' }, { status: 500 })
   }
 

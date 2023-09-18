@@ -26,6 +26,7 @@ export async function PATCH(request: Request,
 
     return NextResponse.json({ message: 'Question access changed' })
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while toggling the question access' }, { status: 500 })
   }
 }

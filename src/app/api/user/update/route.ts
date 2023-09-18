@@ -24,6 +24,7 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ message: 'User updated' })
     }
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while updating the user' }, { status: 500 })
   }
 

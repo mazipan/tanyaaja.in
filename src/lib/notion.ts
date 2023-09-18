@@ -266,10 +266,15 @@ export const simplifyResponseObject = (properties) => {
   for (const [key, value] of Object.entries(properties)) {
     // @ts-ignore
     const type = value.type
+
     // @ts-ignore
-    if (value[type][0]) {
+    if (type === "rich_text" || type === "title") {
       // @ts-ignore
-      simpleDataResponse[key] = value[type][0].text.content
+      simpleDataResponse[key] = value[type][0]?.text?.content || ''
+      // @ts-ignore
+    } else if (type === "last_edited_time" || type === "created_time") {
+      // @ts-ignore
+      simpleDataResponse[type] = value[type]
       // @ts-ignore
     } else if (value[type].name) {
       // @ts-ignore
@@ -278,7 +283,8 @@ export const simplifyResponseObject = (properties) => {
     } else if (value[type].start) {
       // @ts-ignore
       simpleDataResponse[key] = value[type].start
-    } else {
+      // @ts-ignore
+    }  else {
       // @ts-ignore
       simpleDataResponse[key] = value[type]
     }

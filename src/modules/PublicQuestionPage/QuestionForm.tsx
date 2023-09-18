@@ -40,7 +40,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   async function onSubmit(data: FormValues) {
     setIsLoading(true)
     try {
-      await postSendQuestion(owner?.uid || '', data.q)
+      await postSendQuestion(owner?.slug || '', data.q)
       setIsLoading(false)
       toast({
         title: 'Pesan terkirim',

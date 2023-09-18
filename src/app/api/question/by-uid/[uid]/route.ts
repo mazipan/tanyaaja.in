@@ -32,6 +32,7 @@ export async function GET(
     // @ts-ignore
     return NextResponse.json({ message: `Found questions for user ${uid}`, data: simpleResults, },)
   } catch (error) {
+    console.error(request.url, error)
     return NextResponse.json({ message: 'Error while get question by uid' }, { status: 500 })
   }
 }
