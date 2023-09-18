@@ -1,4 +1,5 @@
 import { getUserByUid, simplifyResponseObject } from '@/lib/notion'
+import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(
@@ -7,19 +8,26 @@ export async function GET(
 ) {
   const uid = params.uuid || ''
   try {
-    const userInNotion = await getUserByUid(uid)
+    const headersInstance = headers()
+    const token = headersInstance.get('Authorization')
 
-    if (userInNotion.results.length === 0) {
-      return NextResponse.json({ message: `User ${uid} is not exist`, data: null }, { status: 400 })
+    if (token) {
+      const userInNotion = await getUserByUid(uid)
+
+      if (userInNotion.results.length === 0) {
+        return NextResponse.json({ message: `User ${uid} is not exist`, data: null }, { status: 400 })
+      }
+
+      const result = userInNotion.results[0]
+      // @ts-ignore
+      const properties = result.properties
+
+      const simpleDataResponse = simplifyResponseObject(properties)
+
+      return NextResponse.json({ message: `Found user ${uid}`, data: simpleDataResponse, },)
     }
 
-    const result = userInNotion.results[0]
-    // @ts-ignore
-    const properties = result.properties
-
-    const simpleDataResponse = simplifyResponseObject(properties)
-
-    return NextResponse.json({ message: `Found user ${uid}`, data: simpleDataResponse, },)
+    return NextResponse.json({ message: `Can not found the session`, data: null }, { status: 403 })
   } catch (error) {
     console.error(error)
     return NextResponse.json({ message: 'Error while get user by uuid' }, { status: 500 })
