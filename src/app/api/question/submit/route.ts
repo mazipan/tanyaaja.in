@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       question: res.question,
     })
 
-    return NextResponse.json({ message: 'Question submitted' })
+    return NextResponse.json({ message: 'New question submitted' })
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json({ message: 'Error while submitting new question' }, { status: 500 })

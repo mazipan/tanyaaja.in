@@ -1,5 +1,5 @@
 import { ProfileAvatar } from "@/components/ProfileAvatar"
-import { getPublicOwnerUser, getQuestion } from "@/lib/api"
+import { getPublicOwnerUser, getQuestionDetail } from "@/lib/api"
 import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
 import { QuestionDetail } from "@/modules/PublicQuestionPage/QuestionDetail"
 import { notFound } from "next/navigation"
@@ -12,7 +12,7 @@ export default async function PublicPage({
   params: { slug, uuid },
 }: PublicPageProps) {
   const ownerData = getPublicOwnerUser(slug as string)
-  const questionData = await getQuestion(uuid as string)
+  const questionData = await getQuestionDetail(uuid as string)
 
   const [owner, question] = await Promise.all([ownerData, questionData])
 
@@ -30,7 +30,7 @@ export default async function PublicPage({
             size="96"
           />
 
-          <h1 className="text-3xl font-extrabold">
+          <h1 className="text-3xl font-extrabold text-center">
             Pertanyaan untuk {owner?.data?.name}
           </h1>
 

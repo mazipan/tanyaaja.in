@@ -59,7 +59,7 @@ export default async function PublicPage({
             image={owner?.data?.image}
             name={owner?.data?.name} />
 
-          <h1 className="text-3xl font-extrabold">Tanya ke {owner?.data?.name}</h1>
+          <h1 className="text-3xl font-extrabold text-center">Tanya ke {owner?.data?.name}</h1>
 
           {owner && owner?.data ? (
             <QuestionForm owner={owner?.data} />
