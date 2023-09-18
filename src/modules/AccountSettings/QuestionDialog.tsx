@@ -117,7 +117,7 @@ export const QuestionDialog = ({
             ) : null}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex flex-col">
+        <DialogFooter className="flex flex-col gap-2">
           <Button
             disabled={isSubmitting}
             variant={question?.public ? "ghost" : "destructive"}
