@@ -69,7 +69,7 @@ export const postAddUser = async (user: User) => {
   })
 }
 
-export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image'>) => {
+export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>) => {
   const token = await user.getIdToken()
 
   await fetch(`${BASEURL}/api/private/user/update`, {
@@ -79,6 +79,7 @@ export const patchUpdateUser = async (user: User, param: Pick<UpdateUserArgs, 'n
       name: param.name,
       slug: param.slug,
       image: param.image,
+      public: param.public ?? false,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -180,4 +181,19 @@ export const destroyActiveSession = async (user: User) => {
       'Authorization': token
     }
   })
+}
+
+
+export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
+  const rawRes = await fetch(`${BASEURL}/api/user/public-list`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    next: {
+      tags: ['public-users']
+    }
+  })
+
+  return rawRes.json()
 }

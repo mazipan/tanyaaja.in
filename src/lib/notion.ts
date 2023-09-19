@@ -116,6 +116,21 @@ export const getUserBySlug = async (slug: string) => {
   return response
 }
 
+
+export const getPublicUserList = async () => {
+  const response = await notion.databases.query({
+    database_id: DB_USER,
+    filter: {
+      property: "public",
+      checkbox: {
+        equals: true,
+      },
+    },
+  })
+
+  return response
+}
+
 export const addUser = async (param: AddUserArgs) => {
   await notion.pages.create({
     parent: {
@@ -153,6 +168,10 @@ export const updateUser = async (param: UpdateUserArgs) => {
             text: { content: param.name },
           },
         ],
+      },
+      public: {
+        type: 'checkbox',
+        checkbox: param.public,
       },
       ...submitRichTextProp('slug', param.slug),
       ...withImage,

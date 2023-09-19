@@ -18,6 +18,7 @@ import { CopyButton } from "@/components/CopyButton"
 import { BASEURL, checkTheSlugOwner, getExistingUser, patchUpdateUser } from "@/lib/api"
 import { useToast } from "@/components/ui/use-toast"
 import { ProfileAvatar } from "@/components/ProfileAvatar"
+import { Switch } from "@/components/ui/switch"
 
 const auth = getFirebaseAuth();
 
@@ -47,6 +48,7 @@ const accountFormSchema = z.object({
       message: "Slug hanya bisa maksimal 100 karakter.",
     })
     .refine((s: string) => !s.includes(' '), 'Slug tidak boleh mengandung karakter spasi.'),
+  public: z.boolean().default(false).optional(),
 })
 
 type AccountFormValues = z.infer<typeof accountFormSchema>
@@ -63,7 +65,8 @@ export default function Account() {
     defaultValues: {
       image: '',
       name: '',
-      slug: ''
+      slug: '',
+      public: false
     },
   })
 
@@ -79,7 +82,12 @@ export default function Account() {
           const res = await checkTheSlugOwner(user, data.slug)
           if (res && res.data) {
             if (res.data === 'NOT_EXIST') {
-              await patchUpdateUser(user, { slug: data.slug, name: data.name, image: data.image || user.photoURL })
+              await patchUpdateUser(user, {
+                slug: data.slug,
+                name: data.name,
+                public: data.public ?? false,
+                image: data.image || user.photoURL
+              })
 
               toast({
                 title: 'Perubahan berhasil disimpan',
@@ -92,10 +100,10 @@ export default function Account() {
               })
             }
           } else {
-              form.setError('slug', {
-                type: 'custom',
-                message: "Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini."
-              })
+            form.setError('slug', {
+              type: 'custom',
+              message: "Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini."
+            })
           }
         } catch (err) {
           toast({
@@ -123,6 +131,7 @@ export default function Account() {
         form.setValue("image", res.data.image)
         form.setValue("name", res.data.name)
         form.setValue("slug", res.data.slug)
+        form.setValue("public", res.data.public ?? false)
       }
 
       setIsLoadingInitialData(false)
@@ -224,6 +233,27 @@ export default function Account() {
                   <CopyButton text={`${BASEURL}/p/${watchSlug}`} withLabel withInput fullWidth />
                 ) : null}
               </div>
+
+              <FormField
+                control={form.control}
+                name="public"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                    <div className="space-y-0.5">
+                      <FormLabel>Bisa dicari publik?</FormLabel>
+                      <FormDescription>
+                        Pengguna anonim dapat mencari user Anda lewat laman eksplor
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
 
               <Button type="submit" disabled={isSubmitting || isLoadingInitialData}>
                 {isSubmitting ? "Processing" : "Simpan Perubahan"}

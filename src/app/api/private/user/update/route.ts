@@ -20,11 +20,15 @@ export async function PATCH(request: Request) {
           slug: res.slug,
           uid: res.uid,
           pageId: foundPage.id,
-          image: res.image
+          image: res.image,
+          public: res.public ?? false
         })
 
         revalidatePath(`/p/${res.slug}`)
         revalidateTag(res.slug)
+
+        revalidatePath(`/eksplor`)
+        revalidateTag('public-users')
 
         return NextResponse.json({ message: 'User updated' })
       }

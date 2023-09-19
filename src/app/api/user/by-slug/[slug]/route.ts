@@ -20,7 +20,6 @@ export async function GET(
     const simpleDataResponse = simplifyResponseObject(properties)
 
     // Need to strip the uid data
-
     return NextResponse.json({ message: `Found the owner of the slug ${slug}`, data: {
       // @ts-ignore
       image: simpleDataResponse?.image,

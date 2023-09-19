@@ -12,6 +12,11 @@ export function Footer() {
                 Tentang
               </Link>
             </li>
+            <li>
+              <Link href="/eksplor" className="underline">
+                Eksplor
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

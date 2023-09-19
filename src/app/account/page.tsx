@@ -8,15 +8,17 @@ import { Separator } from '@/components/ui/separator';
 import { getAllQuestions, getExistingUser } from '@/lib/api';
 import { Question, UserProfile } from '@/lib/types';
 
-import { EnvelopeClosedIcon, EnvelopeOpenIcon } from '@radix-ui/react-icons';
+import { EnvelopeOpenIcon } from '@radix-ui/react-icons';
 import { StatisticPanel } from '@/modules/AccountSettings/StatisticPanel';
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard';
 import { QuestionDialog } from '@/modules/AccountSettings/QuestionDialog';
+import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader';
 
 const auth = getFirebaseAuth();
 
 export default function Account() {
   const router = useRouter();
+  const [isLoadingData, setIsLoadingData] = useState<boolean>(true);
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
   const [owner, setOwner] = useState<UserProfile | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
@@ -26,7 +28,10 @@ export default function Account() {
   const { isLogin, isLoading, user } = useAuth(auth);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchQuestionsFromDb = async () => {
+  const fetchQuestionsFromDb = async (skipLoader = false) => {
+    if (!skipLoader) {
+      setIsLoadingData(true);
+    }
     if (user) {
       const res = await getAllQuestions(user);
 
@@ -34,9 +39,15 @@ export default function Account() {
         setQuestions(res.data || []);
       }
     }
+    if (!skipLoader) {
+      setIsLoadingData(false);
+    }
   };
 
-  const fetchUserFromDb = async () => {
+  const fetchUserFromDb = async (skipLoader = false) => {
+    if (!skipLoader) {
+      setIsLoadingData(true);
+    }
     if (user) {
       const res = await getExistingUser(user)
 
@@ -44,6 +55,16 @@ export default function Account() {
         setOwner(res.data)
       }
     }
+    if (!skipLoader) {
+      setIsLoadingData(false);
+    }
+  }
+
+  const fetchInitialData = async () => {
+    setIsLoadingData(true);
+    await fetchUserFromDb(true);
+    await fetchQuestionsFromDb(true);
+    setIsLoadingData(false);
   }
 
   const handleClickQuestion = (question: Question) => {
@@ -57,8 +78,7 @@ export default function Account() {
       if (!isLogin) {
         router.push('/login');
       } else {
-        fetchQuestionsFromDb();
-        fetchUserFromDb();
+        fetchInitialData();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,29 +100,44 @@ export default function Account() {
 
         <div className="w-full flex flex-col gap-4">
 
-          <StatisticPanel owner={owner} />
-
-          {questions && questions.length > 0 ? (
+          {isLoadingData ? (
             <>
-              <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
-                {questions.length} pertanyaan belum dijawab
-              </h3>
+              <StatisticPanel owner={owner} />
 
+              <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
+                Memuat data pertanyaan...
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                {questions.map((q: Question, index) => (
-                  <QuestionPanel
-                    key={q.uuid}
-                    owner={owner}
-                    question={q}
-                    onClick={handleClickQuestion}
-                    index={index + 1}/>
+                {[1, 2, 3].map(item => (
+                  <QuestionLoader key={item} index={item} />
                 ))}
               </div>
             </>
           ) : (
-            <h3 className="text-xl font-bold tracking-tight flex gp-2 items-center">
-              <EnvelopeOpenIcon className='mr-2 w-6 h-6' /> Tidak ada satupun pertanyaan yang belum dijawab
-            </h3>
+            <>
+              <StatisticPanel owner={owner} />
+              {questions && questions.length > 0 ? (
+                <>
+                  <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
+                    {questions.length} pertanyaan belum dijawab
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    {questions.map((q: Question, index) => (
+                      <QuestionPanel
+                        key={q.uuid}
+                        owner={owner}
+                        question={q}
+                        onClick={handleClickQuestion}
+                        index={index + 1} />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <h3 className="text-xl font-bold tracking-tight flex gp-2 items-center">
+                  <EnvelopeOpenIcon className='mr-2 w-6 h-6' /> Tidak ada satupun pertanyaan yang belum dijawab
+                </h3>
+              )}
+            </>
           )}
         </div>
       </main>

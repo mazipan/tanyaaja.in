@@ -4,6 +4,7 @@ export interface UserProfile {
   name: string
   slug: string
   count: number
+  public: boolean
 }
 
 export interface AddUserArgs {
@@ -34,6 +35,7 @@ export interface UpdateUserArgs {
   name: string
   slug: string
   image: string
+  public: boolean
 }
 
 export interface UpdateUserCounterArgs {
