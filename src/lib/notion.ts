@@ -1,8 +1,8 @@
 import { Client } from '@notionhq/client';
 import slugify from '@sindresorhus/slugify';
-import { v4 as uuidv4 } from 'uuid';
 
 import { AddUserArgs, CreateSessionArgs, SubmitQuestionArgs, UpdateUserArgs, UpdateUserCounterArgs } from './types';
+import { nanoid } from 'nanoid';
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -60,7 +60,7 @@ export const createSession = async (param: CreateSessionArgs) => {
         title: [
           {
             type: 'text',
-            text: { content: uuidv4() },
+            text: { content: nanoid() },
           },
         ],
       },
@@ -183,7 +183,7 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
         title: [
           {
             type: 'text',
-            text: { content: uuidv4() },
+            text: { content: nanoid() },
           },
         ],
       },

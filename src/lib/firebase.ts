@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, User } from 'firebase/auth';
 import { getAnalytics } from 'firebase/analytics';
 import slugify from '@sindresorhus/slugify';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 
 import {
   getFirestore,
@@ -156,7 +156,7 @@ export const sendQuestionToOwner = async (ownerUid: string, question: string) =>
 
   const newData: Question = {
     owner: ownerUid,
-    qid: uuidv4(),
+    qid: nanoid(),
     q: question || '',
     s: 0
   }
