@@ -68,7 +68,8 @@ export const createUserInDbIfNotExist = async ({ user }: { user: User }) => {
     image: user.photoURL || '',
     name: user.displayName || '',
     slug: slugify(user.email?.split('@')[0] || ''),
-    count: 0
+    count: 0,
+    public: false
   }
 
   if (querySnapshot.size === 0) {
