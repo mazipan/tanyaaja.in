@@ -1,18 +1,19 @@
-import { ProfileAvatar } from "@/components/ProfileAvatar"
-import { BASEURL, getPublicOwnerUser, getQuestionDetail } from "@/lib/api"
-import { Question, UserProfile } from "@/lib/types"
-import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds"
-import { QuestionDetail } from "@/modules/PublicQuestionPage/QuestionDetail"
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
+import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { BASEURL, getPublicOwnerUser, getQuestionDetail } from '@/lib/api'
+import { Question } from '@/lib/types'
+import { LinkAds } from '@/modules/PublicQuestionPage/LinkAds'
+import { QuestionDetail } from '@/modules/PublicQuestionPage/QuestionDetail'
 
 type PublicQuestionPageProps = {
-  params: { slug: string, uuid: string }
+  params: { slug: string; uuid: string }
 }
 
-export async function generateMetadata(
-  { params }: PublicQuestionPageProps
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PublicQuestionPageProps): Promise<Metadata> {
   const slug = params.slug
   const uuid = params.uuid
 
@@ -31,19 +32,23 @@ export async function generateMetadata(
       description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
       url: `${BASEURL}/p/${owner?.data?.slug}`,
       title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
-      images: [{
-        url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`
-      }]
+      images: [
+        {
+          url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`,
+        },
+      ],
     },
     twitter: {
       site: 'TanyaAja.in',
       description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
       creator: '@Maz_Ipan',
       title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
-      images: [{
-        url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`
-      }]
-    }
+      images: [
+        {
+          url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`,
+        },
+      ],
+    },
   }
 }
 
@@ -74,8 +79,9 @@ export default async function PublicQuestionPage({
           </h1>
 
           <QuestionDetail
-            questions={(question.data || []).filter(q => q.public)}
-            slug={owner?.data?.slug} />
+            questions={(question.data || []).filter((q) => q.public)}
+            slug={owner?.data?.slug}
+          />
 
           <LinkAds />
         </>

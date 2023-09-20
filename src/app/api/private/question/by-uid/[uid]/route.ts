@@ -1,10 +1,15 @@
-import { getQuestionsByUid, getUserByUid, simplifyResponseObject } from '@/lib/notion'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import {
+  getQuestionsByUid,
+  getUserByUid,
+  simplifyResponseObject,
+} from '@/lib/notion'
+
 export async function GET(
   request: Request,
-  { params }: { params: { uid: string } }
+  { params }: { params: { uid: string } },
 ) {
   const uid = params.uid || ''
   const headersInstance = headers()
@@ -14,7 +19,13 @@ export async function GET(
       const userInNotion = await getUserByUid(uid)
 
       if (userInNotion.results.length === 0) {
-        return NextResponse.json({ message: `Can not found any questions for user ${uid}`, data: null }, { status: 400 })
+        return NextResponse.json(
+          {
+            message: `Can not found any questions for user ${uid}`,
+            data: null,
+          },
+          { status: 400 },
+        )
       }
 
       const questionsInNotion = await getQuestionsByUid(uid)
@@ -22,23 +33,31 @@ export async function GET(
       // @ts-ignore
       const simpleResults = []
 
-      results.forEach(result => {
+      results.forEach((result) => {
         // @ts-ignore
         const properties = result.properties
 
         const simpleDataResponse = simplifyResponseObject(properties)
 
         simpleResults.push(simpleDataResponse)
-      });
-
+      })
 
       // @ts-ignore
-      return NextResponse.json({ message: `Found questions for user ${uid}`, data: simpleResults, },)
+      return NextResponse.json({
+        message: `Found questions for user ${uid}`,
+        data: simpleResults,
+      })
     }
 
-    return NextResponse.json({ message: `Can not found the session`, data: null }, { status: 403 })
+    return NextResponse.json(
+      { message: `Can not found the session`, data: null },
+      { status: 403 },
+    )
   } catch (error) {
     console.error(request.url, error)
-    return NextResponse.json({ message: 'Error while get question by uid' }, { status: 500 })
+    return NextResponse.json(
+      { message: 'Error while get question by uid' },
+      { status: 500 },
+    )
   }
 }

@@ -1,10 +1,11 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ArrowRightIcon } from "@radix-ui/react-icons"
-import Link from "next/link"
-import { useEffect } from "react"
+import { useEffect } from 'react'
+import Link from 'next/link'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
+
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 export default function GlobalError({
   error,
@@ -13,7 +14,6 @@ export default function GlobalError({
   error: Error
   reset: () => void
 }) {
-
   useEffect(() => {
     // Log the error to an error reporting service
     console.error(error)
@@ -35,9 +35,13 @@ export default function GlobalError({
 
           <div className="w-full flex flex-col gap-4 items-center justify-center">
             <Button onClick={() => reset()}>Coba lagi</Button>
-            <Button className="flex gap-2 items-center" asChild variant="secondary">
+            <Button
+              className="flex gap-2 items-center"
+              asChild
+              variant="secondary"
+            >
               <Link href="/login">
-              Kembali ke beranda
+                Kembali ke beranda
                 <ArrowRightIcon className="w-6 h-6" />
               </Link>
             </Button>

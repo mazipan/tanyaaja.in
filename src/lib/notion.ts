@@ -1,8 +1,14 @@
-import { Client } from '@notionhq/client';
-import slugify from '@sindresorhus/slugify';
+import { Client } from '@notionhq/client'
+import slugify from '@sindresorhus/slugify'
+import { nanoid } from 'nanoid'
 
-import { AddUserArgs, CreateSessionArgs, SubmitQuestionArgs, UpdateUserArgs, UpdateUserCounterArgs } from './types';
-import { nanoid } from 'nanoid';
+import {
+  AddUserArgs,
+  CreateSessionArgs,
+  SubmitQuestionArgs,
+  UpdateUserArgs,
+  UpdateUserCounterArgs,
+} from './types'
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -22,7 +28,7 @@ const submitRichTextProp = (fieldName: string, value: string) => {
           text: { content: value },
         },
       ],
-    }
+    },
   }
 }
 
@@ -31,7 +37,7 @@ const submitNumberProp = (fieldName: string, value: number) => {
     [fieldName]: {
       type: 'number',
       number: value || 0,
-    }
+    },
   }
 }
 
@@ -39,7 +45,7 @@ export const getSession = async (token: string) => {
   const response = await notion.databases.query({
     database_id: DB_SESSION,
     filter: {
-      property: "token",
+      property: 'token',
       title: {
         equals: token,
       },
@@ -70,7 +76,7 @@ export const createSession = async (param: CreateSessionArgs) => {
         type: 'date',
         date: {
           start: new Date(param.expire).toISOString(),
-          time_zone: 'Asia/Jakarta'
+          time_zone: 'Asia/Jakarta',
         },
       },
     },
@@ -92,7 +98,7 @@ export const getUserByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
-      property: "uid",
+      property: 'uid',
       title: {
         equals: uid,
       },
@@ -106,7 +112,7 @@ export const getUserBySlug = async (slug: string) => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
-      property: "slug",
+      property: 'slug',
       rich_text: {
         equals: slug,
       },
@@ -116,12 +122,11 @@ export const getUserBySlug = async (slug: string) => {
   return response
 }
 
-
 export const getPublicUserList = async () => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
-      property: "public",
+      property: 'public',
       checkbox: {
         equals: true,
       },
@@ -151,7 +156,7 @@ export const addUser = async (param: AddUserArgs) => {
       ...submitRichTextProp('slug', slugify(param.email.split('@')[0] || '')),
       ...submitRichTextProp('image', param.image),
       ...submitNumberProp('count', 0),
-    }
+    },
   })
 }
 
@@ -175,7 +180,7 @@ export const updateUser = async (param: UpdateUserArgs) => {
       },
       ...submitRichTextProp('slug', param.slug),
       ...withImage,
-    }
+    },
   })
 }
 
@@ -187,7 +192,7 @@ export const updateUserCounter = async (param: UpdateUserCounterArgs) => {
         type: 'number',
         number: param.count,
       },
-    }
+    },
   })
 }
 
@@ -212,10 +217,10 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
         type: 'date',
         date: {
           start: new Date().toISOString(),
-          time_zone: 'Asia/Jakarta'
+          time_zone: 'Asia/Jakarta',
         },
       },
-    }
+    },
   })
 }
 
@@ -223,20 +228,20 @@ export const getQuestionsByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
     filter: {
-      "and": [
+      and: [
         {
-          property: "uid",
+          property: 'uid',
           rich_text: {
             equals: uid,
           },
         },
         {
-          property: "status",
+          property: 'status',
           status: {
             equals: 'Not started',
           },
         },
-      ]
+      ],
     },
   })
 
@@ -247,7 +252,7 @@ export const getQuestionsByUuid = async (uuid: string) => {
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
     filter: {
-      property: "uuid",
+      property: 'uuid',
       title: {
         equals: uuid,
       },
@@ -264,14 +269,17 @@ export const markStatusQuestionAsRead = async (pageId: string) => {
       status: {
         type: 'status',
         status: {
-          name: 'Done'
+          name: 'Done',
         },
       },
-    }
+    },
   })
 }
 
-export const togglePublicAccessQuestion = async (pageId: string, status: boolean) => {
+export const togglePublicAccessQuestion = async (
+  pageId: string,
+  status: boolean,
+) => {
   await notion.pages.update({
     page_id: pageId,
     properties: {
@@ -279,7 +287,7 @@ export const togglePublicAccessQuestion = async (pageId: string, status: boolean
         type: 'checkbox',
         checkbox: status,
       },
-    }
+    },
   })
 }
 
@@ -290,19 +298,19 @@ export const simplifyResponseObject = (properties) => {
     // @ts-ignore
     const type = value.type
     // @ts-ignore
-    if (type === "rich_text" || type === "title") {
+    if (type === 'rich_text' || type === 'title') {
       // @ts-ignore
       simpleDataResponse[key] = value[type][0]?.text?.content || ''
       // @ts-ignore
-    } else if (type === "last_edited_time" || type === "created_time") {
+    } else if (type === 'last_edited_time' || type === 'created_time') {
       // @ts-ignore
       simpleDataResponse[type] = value[type]
       // @ts-ignore
-    } else if (type === "number") {
+    } else if (type === 'number') {
       // @ts-ignore
       simpleDataResponse[key] = value[type]
       // @ts-ignore
-    }else if (value[type].name) {
+    } else if (value[type].name) {
       // @ts-ignore
       simpleDataResponse[key] = value[type].name
       // @ts-ignore

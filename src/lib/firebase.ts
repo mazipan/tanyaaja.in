@@ -1,19 +1,19 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, User } from 'firebase/auth';
-import { getAnalytics } from 'firebase/analytics';
-import slugify from '@sindresorhus/slugify';
-import { nanoid } from 'nanoid';
-
+import slugify from '@sindresorhus/slugify'
+import { getAnalytics } from 'firebase/analytics'
+import { initializeApp } from 'firebase/app'
+import { getAuth, GoogleAuthProvider, User } from 'firebase/auth'
 import {
-  getFirestore,
+  addDoc,
   collection,
   getDocs,
-  addDoc,
-  updateDoc,
+  getFirestore,
   query,
+  updateDoc,
   where,
-} from 'firebase/firestore';
-import { UserProfile } from "./types";
+} from 'firebase/firestore'
+import { nanoid } from 'nanoid'
+
+import { UserProfile } from './types'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -22,10 +22,10 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
-};
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+}
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 
 export const getFirebaseApp = () => app
 export const getFirebaseAuth = () => getAuth(app)
@@ -34,19 +34,19 @@ export const getFirebaseAnalytics = () => getAnalytics(app)
 export const getFirebaseDb = () => getFirestore(app)
 
 export const getGoogleAuthProvider = () => {
-	const provider = new GoogleAuthProvider();
-	provider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-	provider.addScope('https://www.googleapis.com/auth/userinfo.email');
-	provider.setCustomParameters({
-		login_hint: 'user@example.com'
-	});
+  const provider = new GoogleAuthProvider()
+  provider.addScope('https://www.googleapis.com/auth/userinfo.profile')
+  provider.addScope('https://www.googleapis.com/auth/userinfo.email')
+  provider.setCustomParameters({
+    login_hint: 'user@example.com',
+  })
 
   return provider
 }
 
 export const COLLECTION = {
   USER: 'users',
-  QUESTIONS: 'question'
+  QUESTIONS: 'question',
 }
 
 export interface Question {
@@ -58,10 +58,10 @@ export interface Question {
 
 export const createUserInDbIfNotExist = async ({ user }: { user: User }) => {
   const db = getFirebaseDb()
-  const dbRef = collection(db, COLLECTION.USER);
-  const q = query(dbRef, where('uid', '==', user?.uid));
+  const dbRef = collection(db, COLLECTION.USER)
+  const q = query(dbRef, where('uid', '==', user?.uid))
 
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q)
 
   const newData: UserProfile = {
     uid: user.uid,
@@ -69,24 +69,28 @@ export const createUserInDbIfNotExist = async ({ user }: { user: User }) => {
     name: user.displayName || '',
     slug: slugify(user.email?.split('@')[0] || ''),
     count: 0,
-    public: false
+    public: false,
   }
 
   if (querySnapshot.size === 0) {
     try {
-      await addDoc(dbRef, newData);
+      await addDoc(dbRef, newData)
     } catch (e) {
-      console.error('Error adding new user: ', newData, e);
+      console.error('Error adding new user: ', newData, e)
     }
   }
 }
 
-export const getUserInDb = async ({ user }: { user: User }): Promise<UserProfile | null> => {
+export const getUserInDb = async ({
+  user,
+}: {
+  user: User
+}): Promise<UserProfile | null> => {
   const db = getFirebaseDb()
-  const dbRef = collection(db, COLLECTION.USER);
-  const q = query(dbRef, where('uid', '==', user?.uid));
+  const dbRef = collection(db, COLLECTION.USER)
+  const q = query(dbRef, where('uid', '==', user?.uid))
 
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q)
 
   let res = null
   if (querySnapshot.size > 0) {
@@ -95,19 +99,20 @@ export const getUserInDb = async ({ user }: { user: User }): Promise<UserProfile
       if (data) {
         res = doc.data()
       }
-    });
+    })
   }
 
   return res
 }
 
-
-export const getUserOwnerBySlug = async (slug: string): Promise<UserProfile | null> => {
+export const getUserOwnerBySlug = async (
+  slug: string,
+): Promise<UserProfile | null> => {
   const db = getFirebaseDb()
-  const dbRef = collection(db, COLLECTION.USER);
-  const q = query(dbRef, where('slug', '==', slug));
+  const dbRef = collection(db, COLLECTION.USER)
+  const q = query(dbRef, where('slug', '==', slug))
 
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q)
 
   let res = null
   if (querySnapshot.size > 0) {
@@ -116,18 +121,22 @@ export const getUserOwnerBySlug = async (slug: string): Promise<UserProfile | nu
       if (data) {
         res = doc.data()
       }
-    });
+    })
   }
 
   return res
 }
 
-export const updateNameOrSlug = async (uid: string, name: string, slug: string) => {
+export const updateNameOrSlug = async (
+  uid: string,
+  name: string,
+  slug: string,
+) => {
   const db = getFirebaseDb()
-  const dbRef = collection(db, COLLECTION.USER);
-  const q = query(dbRef, where('uid', '==', uid));
+  const dbRef = collection(db, COLLECTION.USER)
+  const q = query(dbRef, where('uid', '==', uid))
 
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q)
 
   if (querySnapshot.size > 0) {
     try {
@@ -135,34 +144,41 @@ export const updateNameOrSlug = async (uid: string, name: string, slug: string) 
         await updateDoc(doc.ref, {
           uid,
           name,
-          slug
-        });
-      });
+          slug,
+        })
+      })
     } catch (e) {
-      console.error('Error updating name or slug user: ', {
-        uid,
-        name,
-        slug
-      }, e);
+      console.error(
+        'Error updating name or slug user: ',
+        {
+          uid,
+          name,
+          slug,
+        },
+        e,
+      )
     }
   }
 }
 
-export const sendQuestionToOwner = async (ownerUid: string, question: string) => {
+export const sendQuestionToOwner = async (
+  ownerUid: string,
+  question: string,
+) => {
   const db = getFirebaseDb()
-  const dbRef = collection(db, COLLECTION.QUESTIONS);
-  const q = query(dbRef, where('uid', '==', ownerUid));
+  const dbRef = collection(db, COLLECTION.QUESTIONS)
+  const q = query(dbRef, where('uid', '==', ownerUid))
 
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await getDocs(q)
 
   const newData: Question = {
     owner: ownerUid,
     qid: nanoid(),
     q: question || '',
-    s: 0
+    s: 0,
   }
 
   if (querySnapshot.size === 0) {
-    await addDoc(dbRef, newData);
+    await addDoc(dbRef, newData)
   }
 }

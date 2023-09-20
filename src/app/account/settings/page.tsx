@@ -1,53 +1,69 @@
-"use client"
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
+
+import { zodResolver } from '@hookform/resolvers/zod'
 // @ts-ignore
-import * as z from "zod"
-import { Link2Icon } from "@radix-ui/react-icons"
+import * as z from 'zod'
 
+import { CopyButton } from '@/components/CopyButton'
+import { useAuth } from '@/components/FirebaseAuth'
+import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { Switch } from '@/components/ui/switch'
+import { useToast } from '@/components/ui/use-toast'
+import {
+  BASEURL,
+  checkTheSlugOwner,
+  getExistingUser,
+  patchUpdateUser,
+} from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
-import { useAuth } from "@/components/FirebaseAuth";
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Separator } from '@/components/ui/separator';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { CopyButton } from "@/components/CopyButton"
-import { BASEURL, checkTheSlugOwner, getExistingUser, patchUpdateUser } from "@/lib/api"
-import { useToast } from "@/components/ui/use-toast"
-import { ProfileAvatar } from "@/components/ProfileAvatar"
-import { Switch } from "@/components/ui/switch"
 
-const auth = getFirebaseAuth();
+const auth = getFirebaseAuth()
 
 const accountFormSchema = z.object({
   image: z
     .string()
     .min(2, {
-      message: "Avatar butuh paling tidak 2 karakter.",
+      message: 'Avatar butuh paling tidak 2 karakter.',
     })
     .max(1000, {
-      message: "Avatar hanya bisa maksimal 1000 karakter.",
+      message: 'Avatar hanya bisa maksimal 1000 karakter.',
     }),
   name: z
     .string()
     .min(2, {
-      message: "Nama butuh paling tidak 2 karakter.",
+      message: 'Nama butuh paling tidak 2 karakter.',
     })
     .max(30, {
-      message: "Nama hanya bisa maksimal 30 karakter.",
+      message: 'Nama hanya bisa maksimal 30 karakter.',
     }),
   slug: z
     .string()
     .min(3, {
-      message: "Slug butuh paling tidak 3 karakter.",
+      message: 'Slug butuh paling tidak 3 karakter.',
     })
     .max(100, {
-      message: "Slug hanya bisa maksimal 100 karakter.",
+      message: 'Slug hanya bisa maksimal 100 karakter.',
     })
-    .refine((s: string) => !s.includes(' '), 'Slug tidak boleh mengandung karakter spasi.'),
+    .refine(
+      (s: string) => !s.includes(' '),
+      'Slug tidak boleh mengandung karakter spasi.',
+    ),
   public: z.boolean().default(false).optional(),
 })
 
@@ -56,8 +72,9 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 export default function Account() {
   const { toast } = useToast()
   const router = useRouter()
-  const [isLoadingInitialData, setIsLoadingInitialData] = useState<boolean>(true);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isLoadingInitialData, setIsLoadingInitialData] =
+    useState<boolean>(true)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { isLogin, isLoading, user } = useAuth(auth)
 
   const form = useForm<AccountFormValues>({
@@ -66,13 +83,13 @@ export default function Account() {
       image: '',
       name: '',
       slug: '',
-      public: false
+      public: false,
     },
   })
 
-  const watchSlug = form.watch("slug", false)
-  const watchImage = form.watch("image", false)
-  const watchName = form.watch("name", false)
+  const watchSlug = form.watch('slug', false)
+  const watchImage = form.watch('image', false)
+  const watchName = form.watch('name', false)
 
   async function onSubmit(data: AccountFormValues) {
     if (user) {
@@ -86,38 +103,40 @@ export default function Account() {
                 slug: data.slug,
                 name: data.name,
                 public: data.public ?? false,
-                image: data.image || user.photoURL
+                image: data.image || user.photoURL,
               })
 
               toast({
                 title: 'Perubahan berhasil disimpan',
-                description: `Berhasil menyimpan perubahan setelan!`
-              });
+                description: `Berhasil menyimpan perubahan setelan!`,
+              })
             } else {
               form.setError('slug', {
                 type: 'custom',
-                message: "Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi"
+                message:
+                  'Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi',
               })
             }
           } else {
             form.setError('slug', {
               type: 'custom',
-              message: "Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini."
+              message:
+                'Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini.',
             })
           }
         } catch (err) {
           toast({
             title: 'Gagal menyimpan',
-            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`
-          });
+            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`,
+          })
         }
         setIsSubmitting(false)
       } catch (error) {
         setIsSubmitting(false)
         toast({
           title: 'Gagal menyimpan',
-          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`
-        });
+          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
+        })
       }
     }
   }
@@ -128,10 +147,10 @@ export default function Account() {
       const res = await getExistingUser(user)
 
       if (res && res.data) {
-        form.setValue("image", res.data.image)
-        form.setValue("name", res.data.name)
-        form.setValue("slug", res.data.slug)
-        form.setValue("public", res.data.public ?? false)
+        form.setValue('image', res.data.image)
+        form.setValue('name', res.data.name)
+        form.setValue('slug', res.data.slug)
+        form.setValue('public', res.data.public ?? false)
       }
 
       setIsLoadingInitialData(false)
@@ -155,14 +174,14 @@ export default function Account() {
       <div className="w-full space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Setelan Akun</h2>
         <p className="text-muted-foreground">
-          Atur nama dan alamat publik Anda
+          Atur nama dan alamat publik yang diinginkan
         </p>
       </div>
 
       <Separator className="my-6" />
 
-      <div className='w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
-        <section className='flex-1 lg:max-w-2xl'>
+      <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <section className="flex-1 lg:max-w-2xl">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -172,11 +191,11 @@ export default function Account() {
                   <FormItem>
                     <FormLabel>Nama Publik</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nama publik Anda" {...field}
-                      />
+                      <Input placeholder="Nama publik" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Nama ini akan ditampilkan di laman beranda publik Anda. Kami akan menggunakan nama dari akun Google bila belum disetel.
+                      Nama ini akan ditampilkan di laman beranda publikmu. Kami
+                      akan menggunakan nama dari akun Google bila belum disetel.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -190,11 +209,12 @@ export default function Account() {
                   <FormItem>
                     <FormLabel>Alamat Avatar Publik</FormLabel>
                     <FormControl>
-                      <Input placeholder="Alamat avatar publik Anda" {...field}
-                      />
+                      <Input placeholder="Alamat avatar publik" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Avatar ini akan ditampilkan di laman beranda publik Anda. Kami akan menggunakan gambar akun Google bila belum disetel.
+                      Avatar ini akan ditampilkan di laman beranda publikmu.
+                      Kami akan menggunakan gambar akun Google bila belum
+                      disetel.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -204,7 +224,11 @@ export default function Account() {
               {watchImage ? (
                 <div className="flex items-center gap-2 ">
                   <p>Preview:</p>
-                  <ProfileAvatar image={watchImage} name={watchName} size="38" />
+                  <ProfileAvatar
+                    image={watchImage}
+                    name={watchName}
+                    size="38"
+                  />
                 </div>
               ) : null}
 
@@ -216,11 +240,12 @@ export default function Account() {
                     <FormItem>
                       <FormLabel>Slug</FormLabel>
                       <FormControl>
-                        <Input placeholder="Slug publik Anda" {...field}
-                        />
+                        <Input placeholder="Slug publik" {...field} />
                       </FormControl>
                       <FormDescription>
-                        Slug ini adalah alamat dari laman publik Anda. Bisa diubah kapan saja, tapi dapat menyebabkan alamat lama Anda tidak dapat dikunjungi lagi.
+                        Slug ini adalah alamat dari laman publikmu. Bisa diubah
+                        kapan saja, tapi dapat menyebabkan alamat lamamu tidak
+                        dapat dikunjungi lagi.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -230,7 +255,12 @@ export default function Account() {
 
               <div className="flex gap-2 items-center w-full">
                 {watchSlug !== '' ? (
-                  <CopyButton text={`${BASEURL}/p/${watchSlug}`} withLabel withInput fullWidth />
+                  <CopyButton
+                    text={`${BASEURL}/p/${watchSlug}`}
+                    withLabel
+                    withInput
+                    fullWidth
+                  />
                 ) : null}
               </div>
 
@@ -242,7 +272,7 @@ export default function Account() {
                     <div className="space-y-0.5">
                       <FormLabel>Bisa dicari publik?</FormLabel>
                       <FormDescription>
-                        Pengguna anonim dapat mencari user Anda lewat laman eksplor
+                        Pengguna anonim dapat mencari akunmu lewat laman eksplor
                       </FormDescription>
                     </div>
                     <FormControl>
@@ -255,8 +285,11 @@ export default function Account() {
                 )}
               />
 
-              <Button type="submit" disabled={isSubmitting || isLoadingInitialData}>
-                {isSubmitting ? "Processing" : "Simpan Perubahan"}
+              <Button
+                type="submit"
+                disabled={isSubmitting || isLoadingInitialData}
+              >
+                {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
               </Button>
             </form>
           </Form>

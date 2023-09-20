@@ -1,26 +1,36 @@
-"use client"
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
+
+import { zodResolver } from '@hookform/resolvers/zod'
 // @ts-ignore
-import * as z from "zod"
-import { useEffect, useState } from "react"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
-import { patchHit, postSendQuestion } from "@/lib/api"
-import { UserProfile } from "@/lib/types"
-import { LockClosedIcon, PaperPlaneIcon } from "@radix-ui/react-icons"
+import * as z from 'zod'
+
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/components/ui/use-toast'
+import { patchHit, postSendQuestion } from '@/lib/api'
+import { UserProfile } from '@/lib/types'
 
 const formSchema = z.object({
   q: z
     .string()
     .min(2, {
-      message: "Pertanyaan butuh minimal 2 karakter",
+      message: 'Pertanyaan butuh minimal 2 karakter',
     })
     .max(1000, {
-      message: "Pertanyaan hanya bisa maksimal 1000 karakter",
+      message: 'Pertanyaan hanya bisa maksimal 1000 karakter',
     }),
 })
 
@@ -44,14 +54,14 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       setIsLoading(false)
       toast({
         title: 'Pesan terkirim',
-        description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`
-      });
+        description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
+      })
     } catch (error) {
       setIsLoading(false)
       toast({
         title: 'Pesan gagal terkirim',
-        description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`
-      });
+        description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
+      })
     }
   }
 
@@ -64,7 +74,10 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full md:w-2/3 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full md:w-2/3 space-y-6"
+      >
         <FormField
           control={form.control}
           name="q"
@@ -75,7 +88,6 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
                 <Textarea
                   placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
                   rows={7}
-
                   {...field}
                 />
               </FormControl>
@@ -88,7 +100,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         />
         <Button type="submit" disabled={isLoading}>
           <PaperPlaneIcon className="mr-2 h-4 w-4" />
-          {isLoading ? "Sedang mengirim..." : "Kirim pertanyaan"}
+          {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
         </Button>
       </form>
     </Form>

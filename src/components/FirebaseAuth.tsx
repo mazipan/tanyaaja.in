@@ -1,7 +1,8 @@
-"use client"
+'use client'
 
-import { Auth, onAuthStateChanged, User } from 'firebase/auth';
-import { createContext, PropsWithChildren, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+
+import { Auth, onAuthStateChanged, User } from 'firebase/auth'
 
 export const useAuth = (auth: Auth) => {
   const [user, setUser] = useState<User | null>(null)
@@ -21,20 +22,19 @@ export const useAuth = (auth: Auth) => {
       },
       () => {
         setIsLoading(false)
-      }
-    );
+      },
+    )
 
     return () => {
-      listener();
-    };
-  }, [auth]);
-
+      listener()
+    }
+  }, [auth])
 
   return {
     user,
     isLogin: !!user,
-    isLoading
-  };
+    isLoading,
+  }
 }
 
 export interface IAuthContext {
@@ -46,15 +46,16 @@ export interface IAuthContext {
 const AuthContext = createContext<IAuthContext>({
   isLogin: false,
   isLoading: true,
-  user: null
+  user: null,
 })
 
-export const AuthProvider = ({ children, auth }: PropsWithChildren<{ auth: Auth }>) => {
+export const AuthProvider = ({
+  children,
+  auth,
+}: PropsWithChildren<{ auth: Auth }>) => {
   const { isLogin, isLoading, user } = useAuth(auth)
   return (
-    <AuthContext.Provider
-      value={{ user, isLogin, isLoading }}
-    >
+    <AuthContext.Provider value={{ user, isLogin, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

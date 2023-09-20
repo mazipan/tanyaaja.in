@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev",
+    "format": "prettier --write .",
+    "postinstall": "husky install",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
@@ -22,17 +24,17 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@radix-ui/react-tooltip": "^1.0.6",
     "@sindresorhus/slugify": "^2.2.1",
-    "@types/node": "20.6.1",
-    "@types/react": "18.2.21",
+    "@types/node": "20.6.3",
+    "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
-    "@vercel/og": "^0.5.13",
+    "@vercel/og": "^0.5.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "encoding": "^0.1.13",
     "eslint": "8.49.0",
-    "eslint-config-next": "13.4.19",
+    "eslint-config-next": "13.5.1",
     "firebase": "^10.4.0",
-    "lucide-react": "^0.277.0",
+    "lucide-react": "^0.279.0",
     "nanoid": "^5.0.1",
     "next": "13.4.19",
     "next-themes": "^0.2.1",
@@ -45,13 +47,29 @@
     "zod": "link:@hookform/resolvers/zod"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
     "autoprefixer": "10.4.15",
-    "postcss": "8.4.29",
+    "eslint": "8.49.0",
+    "eslint-config-next": "13.5.1",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "postcss": "8.4.30",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
     "tailwindcss": "3.3.3"
   },
+  "packageManager": "pnpm@8.6.5",
   "engines": {
     "node": "18.x",
     "pnpm": ">=8"
-  },
-  "packageManager": "pnpm@8.6.5"
+  }
 }

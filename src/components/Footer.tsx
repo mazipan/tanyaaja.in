@@ -1,8 +1,8 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className='p-4 border-t'>
+    <footer className="p-4 border-t">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 container mb-8">
         <div>
           <h4 className="text-lg font-bold mb-2">Lebih banyak</h4>
@@ -38,12 +38,22 @@ export function Footer() {
           <h4 className="text-lg font-bold mb-2">Sumber daya</h4>
           <ul className="flex flex-col gap-2">
             <li>
-              <a href="https://github.com/mazipan/tanyaaja/issues/new" className="underline" target='_blank' rel='noopener noreferrer'>
+              <a
+                href="https://github.com/mazipan/tanyaaja/issues/new"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Laporkan Isu
               </a>
             </li>
             <li>
-              <a href="https://mazipan.space/support" className="underline" target='_blank' rel='noopener noreferrer'>
+              <a
+                href="https://mazipan.space/support"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Dukung
               </a>
             </li>
@@ -53,12 +63,22 @@ export function Footer() {
           <h4 className="text-lg font-bold mb-2">Karya Lain</h4>
           <ul className="flex flex-col gap-2">
             <li>
-              <a href="https://ksana.in" className="underline" target='_blank' rel='noopener noreferrer'>
+              <a
+                href="https://ksana.in"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Ksana.in
               </a>
             </li>
             <li>
-              <a href="https://www.baca-quran.id/" className="underline" target='_blank' rel='noopener noreferrer'>
+              <a
+                href="https://www.baca-quran.id/"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Baca-Quran.id
               </a>
             </li>
@@ -73,7 +93,15 @@ export function Footer() {
           <p>
             <small>
               <span>With ☕️, by </span>
-              <a href="https://mazipan.space/" target='_blank' rel='noopener noreferrer' className='underline'> Irfan Maulana</a>
+              <a
+                href="https://mazipan.space/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline"
+              >
+                {' '}
+                Irfan Maulana
+              </a>
             </small>
           </p>
         </div>

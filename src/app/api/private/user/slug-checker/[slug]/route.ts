@@ -1,10 +1,11 @@
-import { getSession, getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import { getSession, getUserBySlug, simplifyResponseObject } from '@/lib/notion'
+
 export async function POST(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: { slug: string } },
 ) {
   const res = await request.json()
   const slug = params.slug || ''
@@ -15,11 +16,13 @@ export async function POST(
     if (token) {
       const session = await getSession(token)
       if (session.results.length > 0) {
-
         const userInNotion = await getUserBySlug(slug)
 
         if (userInNotion.results.length === 0) {
-          return NextResponse.json({ message: `Slug ${slug} is not exist`, data: 'NOT_EXIST' }, { status: 400 })
+          return NextResponse.json(
+            { message: `Slug ${slug} is not exist`, data: 'NOT_EXIST' },
+            { status: 400 },
+          )
         }
 
         const result = userInNotion.results[0]
@@ -30,16 +33,28 @@ export async function POST(
 
         // @ts-ignore
         if (res.uid === simpleDataResponse.uid) {
-          return NextResponse.json({ message: `Slug ${slug} is exist but it's own by your self`, data: 'NOT_EXIST', },)
+          return NextResponse.json({
+            message: `Slug ${slug} is exist but it's own by your self`,
+            data: 'NOT_EXIST',
+          })
         }
 
-        return NextResponse.json({ message: `Slug ${slug} is exist and own by other user`, data: 'EXIST', },)
+        return NextResponse.json({
+          message: `Slug ${slug} is exist and own by other user`,
+          data: 'EXIST',
+        })
       }
     }
 
-    return NextResponse.json({ message: `Can not found the session`, data: null }, { status: 403 })
+    return NextResponse.json(
+      { message: `Can not found the session`, data: null },
+      { status: 403 },
+    )
   } catch (error) {
     console.error(request.url, error)
-    return NextResponse.json({ message: 'Error while get user by slug', data: null }, { status: 500 })
+    return NextResponse.json(
+      { message: 'Error while get user by slug', data: null },
+      { status: 500 },
+    )
   }
 }
