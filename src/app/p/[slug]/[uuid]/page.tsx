@@ -39,7 +39,7 @@ export async function generateMetadata({
       title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`,
+          url: `${BASEURL}/api/og?type=question&question=${q?.question}`,
         },
       ],
     },
@@ -50,7 +50,7 @@ export async function generateMetadata({
       title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=question&user=${owner?.data?.name}&questionId=${q?.uuid}&question=${q?.question}&slug=${owner?.data?.slug}`,
+          url: `${BASEURL}/api/og?type=question&question=${q?.question}`,
         },
       ],
     },

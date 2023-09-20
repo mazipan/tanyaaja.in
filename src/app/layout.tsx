@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     url: BASEURL,
     images: [
       {
-        url: `${BASEURL}/api/og`,
+        url: `${BASEURL}/api/og?type=default`,
       },
     ],
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     site: 'TanyaAja.in',
     images: [
       {
-        url: `${BASEURL}/api/og`,
+        url: `${BASEURL}/api/og?type=default`,
       },
     ],
   },

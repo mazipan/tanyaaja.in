@@ -31,7 +31,7 @@ export async function generateMetadata({
       title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`,
+          url: `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`,
         },
       ],
     },
@@ -42,7 +42,7 @@ export async function generateMetadata({
       title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=user&user=${ownerData?.data?.name}&slug=${ownerData?.data?.slug}`,
+          url: `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`,
         },
       ],
     },
