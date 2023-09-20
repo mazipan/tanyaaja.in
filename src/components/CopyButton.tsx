@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { CheckIcon, CopyIcon } from '@radix-ui/react-icons'
 
@@ -25,6 +27,7 @@ export function CopyButton({
       <Button
         variant="outline"
         className="flex gap-2 items-center"
+        type="button"
         onClick={() => {
           setIsCopied(true)
           copyTextToClipboard(`${text}`)

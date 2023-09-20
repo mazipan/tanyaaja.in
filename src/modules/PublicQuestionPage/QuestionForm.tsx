@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 // @ts-ignore
 import * as z from 'zod'
 
+import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -20,7 +21,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
-import { patchHit, postSendQuestion } from '@/lib/api'
+import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
 import { UserProfile } from '@/lib/types'
 
 const formSchema = z.object({
@@ -73,36 +74,48 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   }, [])
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full md:w-2/3 space-y-6"
-      >
-        <FormField
-          control={form.control}
-          name="q"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Pertanyaan</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
-                  rows={7}
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription className="flex items-center gap-2">
-                <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={isLoading}>
-          <PaperPlaneIcon className="mr-2 h-4 w-4" />
-          {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
-        </Button>
-      </form>
-    </Form>
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full md:w-2/3 space-y-6"
+        >
+          <FormField
+            control={form.control}
+            name="q"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Pertanyaan</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
+                    rows={7}
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription className="flex items-center gap-2">
+                  <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex flex-wrap justify-between gap-2">
+            <Button type="submit" disabled={isLoading}>
+              <PaperPlaneIcon className="mr-2 h-4 w-4" />
+              {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
+            </Button>
+
+            {owner && owner?.slug ? (
+              <ShareButton
+                text={`Tanyakan apa aja ke saya`}
+                title={`Kamu bisa tanyakan apa aja ke saya dengan anonim`}
+                url={`${BASEURL}/p/${owner?.slug}`}
+              />
+            ) : null}
+          </div>
+        </form>
+      </Form>
+    </>
   )
 }

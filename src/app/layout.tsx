@@ -14,6 +14,11 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Tanya secara anonim | TanyaAja',
   description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+  metadataBase: new URL(BASEURL),
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
     description: 'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
     siteName: 'TanyaAja.in',

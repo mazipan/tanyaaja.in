@@ -101,7 +101,7 @@ export default function Login() {
           <h2 className="font-extrabold text-2xl tracking-tight">TanyaAja</h2>
         </Link>
 
-        <Button onClick={handleLogin}>
+        <Button onClick={handleLogin} type="button">
           <GoogleIcon />
           Lanjutkan dengan Akun Google
         </Button>

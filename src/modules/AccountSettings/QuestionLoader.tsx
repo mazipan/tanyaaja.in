@@ -30,7 +30,9 @@ export const QuestionLoader = ({ index }: { index: number }) => {
 
       <CardFooter className="justify-end space-x-2">
         <CopyButton text={``} withLabel />
-        <Button disabled>Selengkapnya</Button>
+        <Button type="button" disabled>
+          Selengkapnya
+        </Button>
       </CardFooter>
     </Card>
   )

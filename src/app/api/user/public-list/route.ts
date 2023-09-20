@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { getPublicUserList, simplifyResponseObject } from '@/lib/notion'
+import { UserProfile } from '@/lib/types'
 
 export async function GET(request: Request) {
   try {
@@ -14,30 +15,25 @@ export async function GET(request: Request) {
     }
 
     const results = publicUsers?.results || []
-    // @ts-ignore
-    const simpleResults = []
+    const simpleResults: UserProfile[] = []
+
     results.forEach((result) => {
       // @ts-ignore
       const properties = result.properties
 
-      const simpleDataResponse = simplifyResponseObject(properties)
+      const simpleDataResponse = simplifyResponseObject<UserProfile>(properties)
 
       // Need to strip the uid data
       simpleResults.push({
-        // @ts-ignore
+        uid: '<REDACTED>',
         image: simpleDataResponse?.image,
-        // @ts-ignore
         name: simpleDataResponse?.name,
-        // @ts-ignore
-        email: simpleDataResponse?.email,
-        // @ts-ignore
         count: simpleDataResponse?.count,
-        // @ts-ignore
         slug: simpleDataResponse?.slug,
+        public: simpleDataResponse?.public ?? false,
       })
     })
 
-    // @ts-ignore
     return NextResponse.json({
       message: `Found public users`,
       data: simpleResults,

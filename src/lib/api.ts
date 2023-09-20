@@ -42,7 +42,10 @@ export const getPublicOwnerUser = async (
   return rawRes.json()
 }
 
-export const checkTheSlugOwner = async (user: User, slug: string) => {
+export const checkTheSlugOwner = async (
+  user: User,
+  slug: string,
+): Promise<{ data: 'NOT_EXIST' | 'EXIST' | null }> => {
   const token = await user.getIdToken()
 
   const rawRes = await fetch(
@@ -62,10 +65,10 @@ export const checkTheSlugOwner = async (user: User, slug: string) => {
   return rawRes.json()
 }
 
-export const postAddUser = async (user: User) => {
+export const postAddUser = async (user: User): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  await fetch(`${BASEURL}/api/private/user/add`, {
+  const rawRes = await fetch(`${BASEURL}/api/private/user/add`, {
     method: 'POST',
     body: JSON.stringify({
       uid: user.uid,
@@ -78,15 +81,17 @@ export const postAddUser = async (user: User) => {
       Authorization: token,
     },
   })
+
+  return rawRes.json()
 }
 
 export const patchUpdateUser = async (
   user: User,
   param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>,
-) => {
+): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  await fetch(`${BASEURL}/api/private/user/update`, {
+  const rawRes = await fetch(`${BASEURL}/api/private/user/update`, {
     method: 'PATCH',
     body: JSON.stringify({
       uid: user.uid,
@@ -100,19 +105,25 @@ export const patchUpdateUser = async (
       Authorization: token,
     },
   })
+
+  return rawRes.json()
 }
 
-export const patchHit = async (slug: string) => {
-  await fetch(`${BASEURL}/api/tracker/hit/${slug}`, {
+export const patchHit = async (slug: string): Promise<{ message: string }> => {
+  const rawRes = await fetch(`${BASEURL}/api/tracker/hit/${slug}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
   })
+  return rawRes.json()
 }
 
-export const postSendQuestion = async (slug: string, question: string) => {
-  await fetch(`${BASEURL}/api/question/submit`, {
+export const postSendQuestion = async (
+  slug: string,
+  question: string,
+): Promise<{ message: string }> => {
+  const rawRes = await fetch(`${BASEURL}/api/question/submit`, {
     method: 'POST',
     body: JSON.stringify({
       slug: slug,
@@ -122,6 +133,7 @@ export const postSendQuestion = async (slug: string, question: string) => {
       'Content-Type': 'application/json',
     },
   })
+  return rawRes.json()
 }
 
 export const getAllQuestions = async (
@@ -146,35 +158,46 @@ export const getAllQuestions = async (
   return rawRes.json()
 }
 
-export const patchQuestionAsDone = async (uuid: string, user: User) => {
+export const patchQuestionAsDone = async (
+  uuid: string,
+  user: User,
+): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  await fetch(`${BASEURL}/api/private/question/mark-done/${uuid}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/mark-done/${uuid}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
     },
-  })
+  )
+  return rawRes.json()
 }
 
 export const patchQuestionAsPublicOrPrivate = async (
   uuid: string,
   access: 'PUBLIC' | 'PRIVATE',
   user: User,
-) => {
+): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  await fetch(`${BASEURL}/api/private/question/toggle-access/${uuid}`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      access: access,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/toggle-access/${uuid}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({
+        access: access,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
     },
-  })
+  )
+  return rawRes.json()
 }
 
 export const getQuestionDetail = async (
@@ -193,10 +216,12 @@ export const getQuestionDetail = async (
   return rawRes.json()
 }
 
-export const destroyActiveSession = async (user: User) => {
+export const destroyActiveSession = async (
+  user: User,
+): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  await fetch(`${BASEURL}/api/private/user/session-destroy`, {
+  const rawRes = await fetch(`${BASEURL}/api/private/user/session-destroy`, {
     method: 'DELETE',
     body: JSON.stringify({
       uid: user.uid,
@@ -206,6 +231,8 @@ export const destroyActiveSession = async (user: User) => {
       Authorization: token,
     },
   })
+
+  return rawRes.json()
 }
 
 export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {

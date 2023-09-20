@@ -34,7 +34,9 @@ export default function GlobalError({
           <Separator className="my-6" />
 
           <div className="w-full flex flex-col gap-4 items-center justify-center">
-            <Button onClick={() => reset()}>Coba lagi</Button>
+            <Button type="button" onClick={() => reset()}>
+              Coba lagi
+            </Button>
             <Button
               className="flex gap-2 items-center"
               asChild

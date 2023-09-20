@@ -27,6 +27,11 @@ export async function generateMetadata({
   return {
     title: `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`,
     description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
+    metadataBase: new URL(BASEURL),
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
       siteName: 'TanyaAja.in',
       description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
@@ -75,7 +80,7 @@ export default async function PublicQuestionPage({
           />
 
           <h1 className="text-3xl font-extrabold text-center">
-            Pertanyaan untuk {owner?.data?.name}
+            Intip pertanyaan untuk {owner?.data?.name}
           </h1>
 
           <QuestionDetail

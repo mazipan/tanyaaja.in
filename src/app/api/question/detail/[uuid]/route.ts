@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 import { getQuestionsByUuid, simplifyResponseObject } from '@/lib/notion'
+import { Question } from '@/lib/types'
 
 export async function GET(
   request: Request,
@@ -18,12 +19,12 @@ export async function GET(
 
     const results = questionsInNotion?.results || []
     // @ts-ignore
-    const simpleResults = []
+    const simpleResults: Question[] = []
 
     results.forEach((result) => {
       // @ts-ignore
       const properties = result.properties
-      const simpleDataResponse = simplifyResponseObject(properties)
+      const simpleDataResponse = simplifyResponseObject<Question>(properties)
 
       // ONLY allow for public question data
       // @ts-ignore

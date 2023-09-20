@@ -137,6 +137,7 @@ export const QuestionDialog = ({
         </DialogHeader>
         <DialogFooter className="flex flex-col gap-2">
           <Button
+            type="button"
             disabled={isSubmitting}
             variant={question?.public ? 'ghost' : 'destructive'}
             onClick={() => {
@@ -148,6 +149,7 @@ export const QuestionDialog = ({
             {question?.public ? 'Larang akses publik' : 'Beri akses publik'}
           </Button>
           <Button
+            type="button"
             disabled={isSubmitting}
             onClick={() => {
               if (question) {

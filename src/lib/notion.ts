@@ -292,7 +292,7 @@ export const togglePublicAccessQuestion = async (
 }
 
 // @ts-ignore
-export const simplifyResponseObject = (properties) => {
+export const simplifyResponseObject = <T>(properties): T => {
   const simpleDataResponse = {}
   for (const [key, value] of Object.entries(properties)) {
     // @ts-ignore
@@ -324,5 +324,5 @@ export const simplifyResponseObject = (properties) => {
     }
   }
 
-  return simpleDataResponse
+  return simpleDataResponse as T
 }

@@ -70,6 +70,7 @@ export const QuestionPanel = ({
             />
 
             <Button
+              type="button"
               onClick={() => {
                 onClick(question)
               }}

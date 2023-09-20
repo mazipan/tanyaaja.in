@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 
+import { UserProfile } from 'firebase/auth'
+
 import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 
 export async function GET(
@@ -21,22 +23,18 @@ export async function GET(
     // @ts-ignore
     const properties = result.properties
 
-    const simpleDataResponse = simplifyResponseObject(properties)
+    const simpleDataResponse = simplifyResponseObject<UserProfile>(properties)
 
     // Need to strip the uid data
     return NextResponse.json({
       message: `Found the owner of the slug ${slug}`,
       data: {
-        // @ts-ignore
+        uid: '<REDACTED>',
         image: simpleDataResponse?.image,
-        // @ts-ignore
         name: simpleDataResponse?.name,
-        // @ts-ignore
-        email: simpleDataResponse?.email,
-        // @ts-ignore
         count: simpleDataResponse?.count,
-        // @ts-ignore
         slug: simpleDataResponse?.slug,
+        public: simpleDataResponse?.public ?? false,
       },
     })
   } catch (error) {

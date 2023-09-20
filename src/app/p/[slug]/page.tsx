@@ -19,6 +19,11 @@ export async function generateMetadata({
   return {
     title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
     description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+    metadataBase: new URL(BASEURL),
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
       siteName: 'TanyaAja.in',
       description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,

@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { getUserByUid, simplifyResponseObject } from '@/lib/notion'
+import { UserProfile } from '@/lib/types'
 
 export async function GET(
   request: Request,
@@ -26,7 +27,7 @@ export async function GET(
       // @ts-ignore
       const properties = result.properties
 
-      const simpleDataResponse = simplifyResponseObject(properties)
+      const simpleDataResponse = simplifyResponseObject<UserProfile>(properties)
 
       return NextResponse.json({
         message: `Found user ${uid}`,

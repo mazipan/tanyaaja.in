@@ -2,6 +2,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { getSession, getUserBySlug, simplifyResponseObject } from '@/lib/notion'
+import { UserProfile } from '@/lib/types'
 
 export async function POST(
   request: Request,
@@ -29,10 +30,10 @@ export async function POST(
         // @ts-ignore
         const properties = result.properties
 
-        const simpleDataResponse = simplifyResponseObject(properties)
+        const simpleDataResponse =
+          simplifyResponseObject<UserProfile>(properties)
 
-        // @ts-ignore
-        if (res.uid === simpleDataResponse.uid) {
+        if (res?.uid === simpleDataResponse.uid) {
           return NextResponse.json({
             message: `Slug ${slug} is exist but it's own by your self`,
             data: 'NOT_EXIST',

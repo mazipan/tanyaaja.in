@@ -6,6 +6,7 @@ import {
   getUserByUid,
   simplifyResponseObject,
 } from '@/lib/notion'
+import { Question } from '@/lib/types'
 
 export async function GET(
   request: Request,
@@ -31,18 +32,17 @@ export async function GET(
       const questionsInNotion = await getQuestionsByUid(uid)
       const results = questionsInNotion?.results || []
       // @ts-ignore
-      const simpleResults = []
+      const simpleResults: Question[] = []
 
       results.forEach((result) => {
         // @ts-ignore
         const properties = result.properties
 
-        const simpleDataResponse = simplifyResponseObject(properties)
+        const simpleDataResponse = simplifyResponseObject<Question>(properties)
 
         simpleResults.push(simpleDataResponse)
       })
 
-      // @ts-ignore
       return NextResponse.json({
         message: `Found questions for user ${uid}`,
         data: simpleResults,

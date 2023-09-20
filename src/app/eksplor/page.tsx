@@ -66,7 +66,7 @@ export default function EksplorPage() {
                     <Skeleton className="h-2 w-[100px]" />
                   </div>
 
-                  <Button disabled>
+                  <Button disabled type="button">
                     Kunjungi
                     <ArrowTopRightIcon className="ml-2" />
                   </Button>
