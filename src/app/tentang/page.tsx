@@ -1,7 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
+import { Metadata } from 'next'
+
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+
+export const metadata: Metadata = {
+  title: 'Infomasi Mengenai TanyaAja',
+  description:
+    'Informasi dasar mengenai aplikasi TanyaAja. Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+  openGraph: {
+    description:
+      'Informasi dasar mengenai aplikasi TanyaAja. Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+    title: 'Infomasi Mengenai TanyaAja',
+  },
+  twitter: {
+    title: 'Infomasi Mengenai TanyaAja',
+    description:
+      'Informasi dasar mengenai aplikasi TanyaAja. Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
+  },
+}
 
 export default async function AboutPage() {
   return (

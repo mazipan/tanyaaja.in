@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { EnvelopeOpenIcon } from '@radix-ui/react-icons'
 
+import EmptyState from '@/components/EmptyState'
 import { useAuth } from '@/components/FirebaseAuth'
 import { Separator } from '@/components/ui/separator'
 import { getAllQuestions, getExistingUser } from '@/lib/api'
@@ -133,10 +133,10 @@ export default function Account() {
                   </div>
                 </>
               ) : (
-                <h3 className="text-xl font-bold tracking-tight flex gp-2 items-center">
-                  <EnvelopeOpenIcon className="mr-2 w-6 h-6" /> Tidak ada
-                  satupun pertanyaan yang belum dijawab
-                </h3>
+                <EmptyState
+                  title="Tidak ada satupun pertanyaan"
+                  description="Maaf, tapi sepertinya tidak ada satupun pertanyaan yang belum kamu baca. Mulai bagikan halaman publikmu dan dapatkan pertanyaan dari siapapun."
+                />
               )}
             </>
           )}
