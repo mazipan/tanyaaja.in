@@ -6,6 +6,16 @@ An anonymous question bank platform
 
 [tanyaaja.in](https://tanyaaja.in/)
 
+## Screenshots
+
+| Homepage | Publik | Pertanyaan |
+| -------- | ------ | ---------- |
+| ![Homepage](screenshots/01-homepage.png) | ![Publik](screenshots/04-publik.png) |![Pertanyaan](screenshots/05-pertanyaan.png) |
+
+| Daftar Pertanyaan | Setelan Akun |
+| ----------------- | ------------ |
+| ![Daftar Pertanyaan](screenshots/02-daftar-pertanyaan.png) | ![Setelan Akun](screenshots/03-setelan-akun.png) |
+
 ## Stacks
 
 - [Next.js](https://nextjs.org/) using App Router
