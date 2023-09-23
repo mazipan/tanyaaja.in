@@ -9,6 +9,7 @@ import {
   UpdateUserArgs,
   UpdateUserCounterArgs,
 } from './types'
+import { addDays } from './utils'
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -55,6 +56,20 @@ export const getSession = async (token: string) => {
   return response
 }
 
+export const getSessionByUid = async (uid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_SESSION,
+    filter: {
+      property: 'uid',
+      title: {
+        equals: uid,
+      },
+    },
+  })
+
+  return response
+}
+
 export const createSession = async (param: CreateSessionArgs) => {
   const response = await notion.pages.create({
     parent: {
@@ -75,7 +90,33 @@ export const createSession = async (param: CreateSessionArgs) => {
       expired: {
         type: 'date',
         date: {
-          start: new Date(param.expire).toISOString(),
+          start: addDays(new Date().toISOString(), 30).toISOString(),
+          time_zone: 'Asia/Jakarta',
+        },
+      },
+    },
+  })
+
+  return response
+}
+
+export const updateSessionToken = async (pageId: string, token: string) => {
+  const response = await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      token: {
+        type: 'rich_text',
+        rich_text: [
+          {
+            type: 'text',
+            text: { content: token },
+          },
+        ],
+      },
+      expired: {
+        type: 'date',
+        date: {
+          start: addDays(new Date().toISOString(), 30).toISOString(),
           time_zone: 'Asia/Jakarta',
         },
       },

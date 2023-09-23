@@ -1,9 +1,13 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { addUser, getUserByUid } from '@/lib/notion'
+import {
+  addUser,
+  getSessionByUid,
+  getUserByUid,
+  updateSessionToken,
+} from '@/lib/notion'
 import { createSession } from '@/lib/notion'
-import { addDays } from '@/lib/utils'
 
 export async function POST(request: Request) {
   const res = await request.json()
@@ -14,11 +18,19 @@ export async function POST(request: Request) {
     const userInNotion = await getUserByUid(res.uid)
 
     if (token) {
-      await createSession({
-        token,
-        uid: res?.uid,
-        expire: addDays(new Date().toISOString(), 30).toISOString(),
-      })
+      // Check session, kalau ada --> jangan create baru --> update aja tokennya
+      const session = await getSessionByUid(res.uid)
+      if (session.results.length > 0) {
+        const foundPage = session.results[0]
+        if (foundPage) {
+          await updateSessionToken(foundPage?.id, token)
+        }
+      } else {
+        await createSession({
+          token,
+          uid: res?.uid,
+        })
+      }
     }
 
     if (userInNotion.results.length === 0) {
