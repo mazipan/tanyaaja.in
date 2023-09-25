@@ -1,4 +1,5 @@
 import { CopyButton } from '@/components/CopyButton'
+import { RedirectButton } from '@/components/RedirectButton'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -8,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { BASEURL } from '@/lib/api'
 
 export const QuestionLoader = ({ index }: { index: number }) => {
   return (
@@ -28,7 +30,8 @@ export const QuestionLoader = ({ index }: { index: number }) => {
         <Skeleton className="h-4 w-full" />
       </CardContent>
 
-      <CardFooter className="justify-end space-x-2">
+      <CardFooter className="justify-end gap-2 flex-wrap">
+        <RedirectButton url={`${BASEURL}/account`} />
         <CopyButton text={``} withLabel />
         <Button type="button" disabled>
           Selengkapnya

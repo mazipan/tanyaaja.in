@@ -5,6 +5,7 @@ import {
 } from '@radix-ui/react-icons'
 
 import { CopyButton } from '@/components/CopyButton'
+import { RedirectButton } from '@/components/RedirectButton'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -63,7 +64,11 @@ export const QuestionPanel = ({
             </p>
           </CardContent>
 
-          <CardFooter className="justify-end space-x-2">
+          <CardFooter className="justify-end gap-2 flex-wrap">
+            <RedirectButton
+              url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+              external
+            />
             <CopyButton
               text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
               withLabel
