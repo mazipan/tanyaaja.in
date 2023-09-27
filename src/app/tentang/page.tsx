@@ -4,9 +4,13 @@ import { Metadata } from 'next'
 
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { BASEURL } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Infomasi Mengenai TanyaAja',
+  alternates: {
+    canonical: `${BASEURL}/tentang`,
+  },
   description:
     'Informasi dasar mengenai aplikasi TanyaAja. Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
   openGraph: {

@@ -19,6 +19,9 @@ export async function generateMetadata({
   return {
     title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
     description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+    alternates: {
+      canonical: `${BASEURL}/p/${ownerData?.data?.slug}`,
+    },
     metadataBase: new URL(BASEURL),
     robots: {
       index: true,

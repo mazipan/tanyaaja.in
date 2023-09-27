@@ -1,5 +1,26 @@
+import { Metadata } from 'next'
+
 import { Separator } from '@/components/ui/separator'
+import { BASEURL } from '@/lib/api'
 import PublicUserList from '@/modules/EskplorPage/PublicUserList'
+
+export const metadata: Metadata = {
+  title: 'Eksplor Pengguna di TanyaAja',
+  alternates: {
+    canonical: `${BASEURL}/eksplor`,
+  },
+  description: 'Eksplor Pengguna di TanyaAja dan mulai bertanya dengan anonim',
+  openGraph: {
+    description:
+      'Eksplor Pengguna di TanyaAja dan mulai bertanya dengan anonim',
+    title: 'Eksplor Pengguna di TanyaAja',
+  },
+  twitter: {
+    title: 'Eksplor Pengguna di TanyaAja',
+    description:
+      'Eksplor Pengguna di TanyaAja dan mulai bertanya dengan anonim',
+  },
+}
 
 export default function EksplorPage() {
   return (

@@ -2,9 +2,13 @@
 import { Metadata } from 'next'
 
 import { Separator } from '@/components/ui/separator'
+import { BASEURL } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Ketentuan Layanan | TanyaAja',
+  alternates: {
+    canonical: `${BASEURL}/ketentuan-layanan`,
+  },
   description:
     'Ketentuan penggunaan layanan di aplikasi TanyaAja. Kumpulkan berbagai pertanyaan dari siapa saja secara anonim',
   openGraph: {

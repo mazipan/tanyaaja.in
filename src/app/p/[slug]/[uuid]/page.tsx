@@ -32,6 +32,9 @@ export async function generateMetadata({
       index: true,
       follow: true,
     },
+    alternates: {
+      canonical: `${BASEURL}/p/${owner?.data?.slug}/${q?.uuid}`,
+    },
     openGraph: {
       siteName: 'TanyaAja.in',
       description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
