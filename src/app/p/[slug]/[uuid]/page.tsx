@@ -24,36 +24,42 @@ export async function generateMetadata({
 
   const q: Question = (question?.data || [])[0] || {}
 
+  const title = `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`
+  const description = `Cuplikan dari pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`
+  const url = `${BASEURL}/p/${owner?.data?.slug}/${q?.uuid}`
+  const ogImage = `${BASEURL}/api/og?type=question&question=${q?.question}`
+
   return {
-    title: `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`,
-    description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
     metadataBase: new URL(BASEURL),
     robots: {
       index: true,
       follow: true,
     },
-    alternates: {
-      canonical: `${BASEURL}/p/${owner?.data?.slug}/${q?.uuid}`,
-    },
     openGraph: {
       siteName: 'TanyaAja.in',
-      description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
-      url: `${BASEURL}/p/${owner?.data?.slug}`,
-      title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
+      description,
+      title,
+      url: url,
       images: [
         {
-          url: `${BASEURL}/api/og?type=question&question=${q?.question}`,
+          url: ogImage,
         },
       ],
     },
     twitter: {
+      card: 'summary_large_image',
       site: 'TanyaAja.in',
-      description: `Cuplikan pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`,
+      description,
+      title,
       creator: '@Maz_Ipan',
-      title: `Intip pertanyaan anonim untuk ${owner?.data?.name}`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=question&question=${q?.question}`,
+          url: ogImage,
         },
       ],
     },
