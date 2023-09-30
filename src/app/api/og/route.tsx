@@ -94,12 +94,12 @@ export async function GET(request: Request) {
   const slug = searchParams.get('slug')
   const question = searchParams.get('question')
 
-  if (type === 'user') {
+  if (type === 'user' && slug && slug !== 'undefined') {
     return new ImageResponse(<UserOg slug={slug || ''} />, {
       width: 800,
       height: 400,
     })
-  } else if (type == 'question') {
+  } else if (type === 'question' && question && question !== 'undefined') {
     return new ImageResponse(<QuestionOg question={question || ''} />, {
       width: 800,
       height: 600,
