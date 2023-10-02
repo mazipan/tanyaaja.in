@@ -22,6 +22,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
+import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 
 const formSchema = z.object({
@@ -49,6 +50,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   })
 
   async function onSubmit(data: FormValues) {
+    trackEvent('click submit new question')
     setIsLoading(true)
     try {
       await postSendQuestion(owner?.slug || '', data.q)
@@ -71,6 +73,10 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       patchHit(owner.slug)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    trackEvent('view public page')
   }, [])
 
   return (

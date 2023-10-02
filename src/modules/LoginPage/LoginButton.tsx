@@ -9,7 +9,11 @@ import { useAuth } from '@/components/FirebaseAuth'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { postAddUser } from '@/lib/api'
-import { getFirebaseAuth, getGoogleAuthProvider } from '@/lib/firebase'
+import {
+  getFirebaseAuth,
+  getGoogleAuthProvider,
+  trackEvent,
+} from '@/lib/firebase'
 
 const GoogleIcon = () => {
   return (
@@ -50,6 +54,7 @@ export const LoginButtonWithRedirect = () => {
   const { isLogin, isLoading } = useAuth(auth)
 
   const handleLogin = () => {
+    trackEvent('click login button')
     signInWithPopup(auth, getGoogleAuthProvider())
       .then(async (result) => {
         const user = result.user
@@ -81,6 +86,10 @@ export const LoginButtonWithRedirect = () => {
       }
     }
   }, [isLogin, isLoading, router])
+
+  useEffect(() => {
+    trackEvent('view login page')
+  }, [])
 
   return (
     <Button onClick={handleLogin} type="button">

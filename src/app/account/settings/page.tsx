@@ -31,7 +31,7 @@ import {
   getExistingUser,
   patchUpdateUser,
 } from '@/lib/api'
-import { getFirebaseAuth } from '@/lib/firebase'
+import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 
 const auth = getFirebaseAuth()
 
@@ -92,6 +92,7 @@ export default function Account() {
   const watchName = form.watch('name', false)
 
   async function onSubmit(data: AccountFormValues) {
+    trackEvent('click update account info')
     if (user) {
       try {
         setIsSubmitting(true)
@@ -168,6 +169,10 @@ export default function Account() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin, user, isLoading, router])
+
+  useEffect(() => {
+    trackEvent('view account setting page')
+  }, [])
 
   return (
     <main className="w-full container py-8">

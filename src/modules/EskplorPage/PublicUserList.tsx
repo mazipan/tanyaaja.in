@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getAllPublicUsers } from '@/lib/api'
+import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 
 export default function PublicUserList() {
@@ -30,6 +31,10 @@ export default function PublicUserList() {
   useEffect(() => {
     fetchDataUsersFromDb()
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    trackEvent('view eksplor page')
   }, [])
 
   return (

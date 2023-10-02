@@ -1,5 +1,5 @@
 import slugify from '@sindresorhus/slugify'
-import { getAnalytics } from 'firebase/analytics'
+import { getAnalytics, logEvent } from 'firebase/analytics'
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, User } from 'firebase/auth'
 import {
@@ -30,6 +30,15 @@ const app = initializeApp(firebaseConfig)
 export const getFirebaseApp = () => app
 export const getFirebaseAuth = () => getAuth(app)
 export const getFirebaseAnalytics = () => getAnalytics(app)
+
+export const trackEvent = (
+  eventName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eventParam?: Record<string, any>,
+) => {
+  const analytics = getAnalytics()
+  logEvent(analytics, eventName, eventParam)
+}
 
 export const getFirebaseDb = () => getFirestore(app)
 

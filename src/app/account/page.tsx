@@ -7,7 +7,7 @@ import EmptyState from '@/components/EmptyState'
 import { useAuth } from '@/components/FirebaseAuth'
 import { Separator } from '@/components/ui/separator'
 import { getAllQuestions, getExistingUser } from '@/lib/api'
-import { getFirebaseAuth } from '@/lib/firebase'
+import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { Question, UserProfile } from '@/lib/types'
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
 import { QuestionDialog } from '@/modules/AccountSettings/QuestionDialog'
@@ -83,6 +83,10 @@ export default function Account() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLogin, isLoading, router])
+
+  useEffect(() => {
+    trackEvent('view account page')
+  }, [])
 
   return (
     <>
