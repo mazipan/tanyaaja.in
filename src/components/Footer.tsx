@@ -39,6 +39,16 @@ export function Footer() {
           <ul className="flex flex-col gap-2">
             <li>
               <a
+                href="https://tanyaaja.betteruptime.com/"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Status Server
+              </a>
+            </li>
+            <li>
+              <a
                 href="https://github.com/mazipan/tanyaaja/issues/new"
                 className="underline"
                 target="_blank"
