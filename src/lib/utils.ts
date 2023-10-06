@@ -1,4 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
+// eslint-disable-next-line
+// @ts-ignore
 import domtoimage from 'dom-to-image-more'
 import { twMerge } from 'tailwind-merge'
 
@@ -55,6 +57,8 @@ export function downloadFromHref(href: string, filename = 'question.png') {
 export function downloadQuestion(questionId: string) {
   const domQuestion = document.querySelector('#question-card')
   if (domQuestion) {
+    // eslint-disable-next-line
+    // @ts-ignore
     domtoimage
       .toPng(domQuestion)
       .then(function (dataUrl: string) {
