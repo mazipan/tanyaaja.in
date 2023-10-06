@@ -10,8 +10,8 @@ import { getAllQuestions, getExistingUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { Question, UserProfile } from '@/lib/types'
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
-import { QuestionDialog } from '@/modules/AccountSettings/QuestionDialog'
 import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader'
+import { QuestionResponsive } from '@/modules/AccountSettings/QuestionPreview/QuestionResponsive'
 import { StatisticPanel } from '@/modules/AccountSettings/StatisticPanel'
 
 const auth = getFirebaseAuth()
@@ -147,7 +147,7 @@ export default function Account() {
         </div>
       </main>
 
-      <QuestionDialog
+      <QuestionResponsive
         isOpen={isOpenDialog}
         onOpenChange={setIsOpenDialog}
         user={user}
