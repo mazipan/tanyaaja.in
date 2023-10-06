@@ -16,6 +16,7 @@ export const QuestionDialog = ({
   isOpen,
   onOpenChange,
   onRefetch,
+  owner,
 }: QuestionPreviewProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -24,7 +25,7 @@ export const QuestionDialog = ({
           <DialogTitle>Mari jawab pertanyaan ini</DialogTitle>
         </DialogHeader>
 
-        <PreviewContent question={question} />
+        <PreviewContent question={question} owner={owner} />
 
         <DialogFooter className="flex gap-2 w-full">
           <ButtonAction

@@ -17,14 +17,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Question } from '@/lib/types'
+import { Question, UserProfile } from '@/lib/types'
 import { cn, downloadQuestion } from '@/lib/utils'
 
 import { ClassMap } from './helpers'
 import { CARD_SCALES } from './helpers'
 import { GRADIENTS } from './helpers'
+import { QuestionImage } from './QuestionImage'
 
-export const PreviewContent = ({ question }: { question: Question | null }) => {
+export const PreviewContent = ({
+  question,
+  owner,
+}: {
+  question: Question | null
+  owner: UserProfile
+}) => {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const [selectedScale, setSelectedScale] = useState<string>('fluid')
 
@@ -121,7 +128,7 @@ export const PreviewContent = ({ question }: { question: Question | null }) => {
           <div className={cn('relative')}>
             <Card
               className={cn(
-                'p-4 flex justify-center items-center text-center',
+                'p-4 flex justify-center items-center text-center min-h-[300px]',
                 activeGradient !== ''
                   ? GRADIENTS.find((g) => g.id === activeGradient)?.class
                   : '',
@@ -129,21 +136,12 @@ export const PreviewContent = ({ question }: { question: Question | null }) => {
             >
               {question?.question}
             </Card>
-            <div className="relative">
-              <div
-                id="question-card"
-                className={cn(
-                  '-z-10 p-8 flex justify-center items-center text-center absolute -top-[2000px] -left-[2000px] rounded-lg',
-                  activeGradient !== ''
-                    ? GRADIENTS.find((g) => g.id === activeGradient)?.class
-                    : '',
-                  CARD_SCALES.find((scale) => scale.id === selectedScale)
-                    ?.class,
-                )}
-              >
-                {question?.question}
-              </div>
-            </div>
+            <QuestionImage
+              owner={owner}
+              question={question}
+              selectedScale={selectedScale}
+              activeGradient={activeGradient}
+            />
           </div>
         </>
       ) : null}

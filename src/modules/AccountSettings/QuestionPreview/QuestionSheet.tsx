@@ -16,6 +16,7 @@ export const QuestionSheet = ({
   isOpen,
   onOpenChange,
   onRefetch,
+  owner,
 }: QuestionPreviewProps) => {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
@@ -24,7 +25,7 @@ export const QuestionSheet = ({
           <SheetTitle>Mari jawab pertanyaan ini</SheetTitle>
         </SheetHeader>
 
-        <PreviewContent question={question} />
+        <PreviewContent question={question} owner={owner} />
 
         <SheetFooter className="flex flex-col gap-2 mt-2">
           <ButtonAction

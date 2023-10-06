@@ -41,19 +41,19 @@ export const CARD_SCALES: ClassMap[] = [
     class: 'w-[600px] text-2xl',
   },
   {
-    id: '800px',
-    class: 'w-[800px] h-[800px] text-3xl',
-  },
-  {
-    id: '600px',
-    class: 'w-[600px] h-[600px] text-2xl',
+    id: '300px',
+    class: 'w-[300px] h-[300px]',
   },
   {
     id: '400px',
     class: 'w-[400px] h-[400px]',
   },
   {
-    id: '300px',
-    class: 'w-[300px] h-[300px]',
+    id: '600px',
+    class: 'w-[600px] h-[600px] text-2xl',
+  },
+  {
+    id: '800px',
+    class: 'w-[800px] h-[800px] text-3xl',
   },
 ]
