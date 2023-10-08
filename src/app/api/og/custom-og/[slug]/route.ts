@@ -17,12 +17,10 @@ export async function GET(
 
     if (userInNotion.results.length === 0) {
       // send response 200
-      return NextResponse.json(
-        {
-          message: `Can not found any custom og for user ${slug}`,
-          data: null,
-        }
-      )
+      return NextResponse.json({
+        message: `Can not found any custom og for user ${slug}`,
+        data: null,
+      })
     }
 
     const userResult = userInNotion.results[0]
@@ -44,12 +42,10 @@ export async function GET(
     }
 
     // send status 200
-    return NextResponse.json(
-      {
-        message: `Can not found custom og for user ${slug}`,
-        data: null,
-      }
-    )
+    return NextResponse.json({
+      message: `Can not found custom og for user ${slug}`,
+      data: null,
+    })
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json(
