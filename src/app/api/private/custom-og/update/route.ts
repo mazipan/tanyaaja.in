@@ -1,3 +1,4 @@
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -25,6 +26,11 @@ export async function PATCH(request: Request) {
         } else {
           const foundPage = existingOg.results[0]
           await updateCustomOgByUuid(foundPage?.id, res)
+
+          revalidatePath(`/p/${res.slug}`)
+          revalidateTag(res.slug)
+          revalidateTag(`og-by-uid-${res.uid}`)
+
           return NextResponse.json({ message: 'Custom og updated' })
         }
       }

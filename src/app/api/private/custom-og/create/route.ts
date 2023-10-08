@@ -1,3 +1,4 @@
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -13,6 +14,11 @@ export async function POST(request: Request) {
       const session = await getSession(token)
       if (session.results.length > 0) {
         await createCustomOgByUid(res)
+
+        revalidatePath(`/p/${res.slug}`)
+        revalidateTag(res.slug)
+        revalidateTag(`og-by-uid-${res.uid}`)
+
         return NextResponse.json({ message: 'Custom og created' })
       }
     }
