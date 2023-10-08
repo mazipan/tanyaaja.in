@@ -16,12 +16,12 @@ export async function GET(
     const userInNotion = await getUserBySlug(slug)
 
     if (userInNotion.results.length === 0) {
+      // send response 200
       return NextResponse.json(
         {
           message: `Can not found any custom og for user ${slug}`,
           data: null,
-        },
-        { status: 400 },
+        }
       )
     }
 
@@ -43,12 +43,12 @@ export async function GET(
       })
     }
 
+    // send status 200
     return NextResponse.json(
       {
         message: `Can not found custom og for user ${slug}`,
         data: null,
-      },
-      { status: 400 },
+      }
     )
   } catch (error) {
     console.error(request.url, error)
