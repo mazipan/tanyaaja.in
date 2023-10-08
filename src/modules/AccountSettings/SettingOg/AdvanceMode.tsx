@@ -129,7 +129,7 @@ export default function AdvanceMode({
                     rel="noopener noreferrer"
                     className="hover:underline flex items-center"
                   >
-                    https://og-playground.vercel.app
+                    og-playground.vercel.app
                     <ArrowTopRightIcon className="h-4 w-4" />
                   </Link>
                 </div>
@@ -137,6 +137,21 @@ export default function AdvanceMode({
               <li className="m-0">
                 <div className="flex items-center gap-2">
                   Gunakan ukuran 800x600 (width: 800px, height: 400px)
+                </div>
+              </li>
+              <li className="m-0">
+                <div className="flex items-center gap-2">
+                  Kamu bisa menggunakan{' '}
+                  <Link
+                    href="https://hypercolor.dev/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:underline flex items-center"
+                  >
+                    hypercolor.dev
+                    <ArrowTopRightIcon className="h-4 w-4" />
+                  </Link>
+                  , kalau perlu inspirasi gradient
                 </div>
               </li>
               <li className="m-0">
