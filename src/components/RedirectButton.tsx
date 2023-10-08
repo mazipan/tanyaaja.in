@@ -21,6 +21,7 @@ export function RedirectButton({
         variant="secondary"
         className="flex gap-2 items-center"
         type="button"
+        asChild
       >
         <Link href={url} {...externalProps}>
           <ArrowTopRightIcon className="h-4 w-4" />

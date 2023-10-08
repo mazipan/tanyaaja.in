@@ -43,11 +43,19 @@ export const QuestionDetail = ({
           </Card>
 
           {slug ? (
-            <ShareButton
-              text={`Tanyakan apa aja ke saya`}
-              title={`Kamu bisa tanyakan apa aja ke saya dengan anonim`}
-              url={`${BASEURL}/p/${slug}/${question?.uuid}`}
-            />
+            <div className="flex gap-2 items-center">
+              <Button asChild>
+                <Link href={`/p/${slug}`}>
+                  <PaperPlaneIcon className="mr-2 h-4 w-4" />
+                  Buat pertanyaan baru
+                </Link>
+              </Button>
+              <ShareButton
+                text={`Tanyakan apa aja ke saya`}
+                title={`Kamu bisa tanyakan apa aja ke saya dengan anonim`}
+                url={`${BASEURL}/p/${slug}/${question?.uuid}`}
+              />
+            </div>
           ) : null}
         </Fragment>
       ) : (
