@@ -23,7 +23,7 @@ export function CustomUserOgSimple({
         {BASEURL.replace('https://www.', '')}/p/{slug}
       </div>
       <div tw="flex flex-col justify-center items-center text-center font-extrabold text-6xl tracking-tight w-full">
-        <div tw="flex">{text}</div>
+        <p>{text}</p>
       </div>
       <div tw="flex mb-2 items-center justify-center mt-10 w-full">
         <LogoSvg />

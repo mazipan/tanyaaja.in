@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/server'
 
+import { CustomQuestionOgSimple } from '@/components/OgImage/CustomQuestionOgSimple'
 import { CustomUserOgSimple } from '@/components/OgImage/CustomUserOgSimple'
 import { DefaultOg } from '@/components/OgImage/DefaultOg'
 import { QuestionOg } from '@/components/OgImage/QuestionOg'
@@ -29,7 +30,9 @@ export async function GET(request: Request) {
     slug &&
     slug !== 'undefined' &&
     text &&
-    text !== 'undefined'
+    text !== 'undefined' &&
+    theme &&
+    theme !== 'undefined'
   ) {
     return new ImageResponse(
       (
@@ -49,6 +52,26 @@ export async function GET(request: Request) {
       width: 800,
       height: 600,
     })
+  } else if (
+    type === 'custom-question' &&
+    question &&
+    question !== 'undefined' &&
+    theme &&
+    theme !== 'undefined'
+  ) {
+    return new ImageResponse(
+      (
+        <CustomQuestionOgSimple
+          question={question || ''}
+          theme={theme || ''}
+          text={text || ''}
+        />
+      ),
+      {
+        width: 800,
+        height: 600,
+      },
+    )
   }
 
   return new ImageResponse(<DefaultOg />, {
