@@ -1,10 +1,7 @@
 'use client'
 
 import { Question, UserProfile } from '@/lib/types'
-import { cn } from '@/lib/utils'
-
-import { CARD_SCALES } from './helpers'
-import { GRADIENTS } from './helpers'
+import { CARD_SCALES, cn, GRADIENTS } from '@/lib/utils'
 
 export const QuestionImage = ({
   question,
