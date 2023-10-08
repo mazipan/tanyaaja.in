@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ProfileAvatar } from '@/components/ProfileAvatar'
-import { BASEURL, getPublicOwnerUser } from '@/lib/api'
+import { BASEURL, getPublicCustomOg, getPublicOwnerUser } from '@/lib/api'
 import { LinkAds } from '@/modules/PublicQuestionPage/LinkAds'
 import { QuestionForm } from '@/modules/PublicQuestionPage/QuestionForm'
 
@@ -14,12 +14,21 @@ export async function generateMetadata({
   params,
 }: PublicPageProps): Promise<Metadata> {
   const slug = params.slug
-  const ownerData = await getPublicOwnerUser(slug as string)
+  const ownerData = getPublicOwnerUser(slug as string)
+  const customOgData = getPublicCustomOg(slug as string)
 
-  const title = `Lempar pertanyaan anonim ke ${ownerData?.data?.name} lewat TanyaAja`
-  const description = `Mulai bertanya anonim ke ${ownerData?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
-  const url = `${BASEURL}/p/${ownerData?.data?.slug}`
-  const ogImage = `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`
+  const [owner, customOg] = await Promise.all([ownerData, customOgData])
+
+  const title = `Lempar pertanyaan anonim ke ${owner?.data?.name} lewat TanyaAja`
+  const description = `Mulai bertanya anonim ke ${owner?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
+  const url = `${BASEURL}/p/${owner?.data?.slug}`
+
+  let ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}`
+
+  if (customOg && customOg?.data) {
+    // -- mode simple
+    ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+  }
 
   return {
     title,

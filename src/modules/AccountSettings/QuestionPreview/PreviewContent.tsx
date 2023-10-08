@@ -7,6 +7,7 @@ import {
   LockOpen2Icon,
 } from '@radix-ui/react-icons'
 
+import { GradientSelection } from '@/components/GradientSelection'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
@@ -17,12 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Question, UserProfile } from '@/lib/types'
-import { cn, downloadQuestion } from '@/lib/utils'
+import { ClassMap, Question, UserProfile } from '@/lib/types'
+import { CARD_SCALES, cn, downloadQuestion, GRADIENTS } from '@/lib/utils'
 
-import { ClassMap } from './helpers'
-import { CARD_SCALES } from './helpers'
-import { GRADIENTS } from './helpers'
 import { QuestionImage } from './QuestionImage'
 
 export const PreviewContent = ({
@@ -79,23 +77,10 @@ export const PreviewContent = ({
       {question ? (
         <>
           <div className="flex gap-2 flex-wrap justify-between flex-col md:flex-row">
-            <div className="flex gap-2 flex-wrap">
-              {GRADIENTS.map((gradient: ClassMap) => (
-                <div
-                  key={gradient.id}
-                  className={cn(
-                    'h-8 w-8 border rounded-full cursor-pointer',
-                    gradient.class,
-                    activeGradient === gradient.id
-                      ? 'border-2 border-gray-900 dark:border-gray-100'
-                      : '',
-                  )}
-                  onClick={() => {
-                    handleClickGradient(gradient)
-                  }}
-                ></div>
-              ))}
-            </div>
+            <GradientSelection
+              activeGradient={activeGradient}
+              onClick={handleClickGradient}
+            />
             <div className="flex justify-between md:justify-end gap-2 items-center">
               <Select
                 onValueChange={handleChangeScale}

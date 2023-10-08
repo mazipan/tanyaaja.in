@@ -4,6 +4,7 @@ import { nanoid } from 'nanoid'
 
 import {
   AddUserArgs,
+  CreateCustomOgArgs,
   CreateSessionArgs,
   SubmitQuestionArgs,
   UpdateUserArgs,
@@ -18,6 +19,7 @@ const notion = new Client({
 const DB_USER = process.env.NOTION_DB_USERS_ID || ''
 const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
 const DB_SESSION = process.env.NOTION_DB_SESSION_ID || ''
+const DB_CUSTOM_OG = process.env.NOTION_DB_CUSTOM_OG || ''
 
 const submitRichTextProp = (fieldName: string, value: string) => {
   return {
@@ -366,4 +368,86 @@ export const simplifyResponseObject = <T>(properties): T => {
   }
 
   return simpleDataResponse as T
+}
+
+export const getCustomOgByUid = async (uid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_CUSTOM_OG,
+    filter: {
+      property: 'uid',
+      title: {
+        equals: uid,
+      },
+    },
+  })
+
+  return response
+}
+
+export const createCustomOgByUid = async (param: CreateCustomOgArgs) => {
+  const response = await notion.pages.create({
+    parent: {
+      database_id: DB_CUSTOM_OG,
+    },
+    properties: {
+      uid: {
+        type: 'title',
+        title: [
+          {
+            type: 'text',
+            text: {
+              content: param.uid,
+            },
+          },
+        ],
+      },
+      mode: {
+        type: 'status',
+        status: {
+          name: param.mode,
+        },
+      },
+      theme: {
+        type: 'select',
+        select: {
+          name: param.theme,
+        },
+      },
+      ...submitRichTextProp('slug', param.slug),
+      ...submitRichTextProp('simple_text', param.simpleText),
+      ...submitRichTextProp('code_public', param.codePublic),
+      ...submitRichTextProp('code_question', param.codeQuestion),
+    },
+  })
+
+  return response
+}
+
+export const updateCustomOgByUuid = async (
+  pageId: string,
+  param: Omit<CreateCustomOgArgs, 'uid'>,
+) => {
+  const response = await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      mode: {
+        type: 'status',
+        status: {
+          name: param.mode,
+        },
+      },
+      theme: {
+        type: 'select',
+        select: {
+          name: param.theme,
+        },
+      },
+      ...submitRichTextProp('slug', param.slug),
+      ...submitRichTextProp('simple_text', param.simpleText),
+      ...submitRichTextProp('code_public', param.codePublic),
+      ...submitRichTextProp('code_question', param.codeQuestion),
+    },
+  })
+
+  return response
 }

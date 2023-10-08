@@ -4,6 +4,8 @@ import { type ClassValue, clsx } from 'clsx'
 import domtoimage from 'dom-to-image-more'
 import { twMerge } from 'tailwind-merge'
 
+import { ClassMap } from './types'
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -69,4 +71,58 @@ export function downloadQuestion(questionId: string) {
         console.error('Opps, something went wrong!', error)
       })
   }
+}
+
+export const GRADIENTS: ClassMap[] = [
+  {
+    id: 'hyper',
+    class: 'bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500',
+    cssNative:
+      'linear-gradient(to right, rgb(236, 72, 153), rgb(239, 68, 68), rgb(234, 179, 8))',
+  },
+  {
+    id: 'oceanic',
+    class: 'bg-gradient-to-r from-green-300 via-blue-500 to-purple-600',
+    cssNative:
+      'linear-gradient(to right, rgb(134, 239, 172), rgb(59, 130, 246), rgb(147, 51, 234))',
+  },
+  {
+    id: 'pumkin',
+    class: 'bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-700',
+    cssNative:
+      'linear-gradient(to right, rgb(254, 240, 138), rgb(250, 204, 21), rgb(161, 98, 7))',
+  },
+  {
+    id: 'candy',
+    class: 'bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400',
+    cssNative:
+      'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
+  },
+]
+
+export const CARD_SCALES: ClassMap[] = [
+  {
+    id: 'fluid',
+    class: 'w-[600px] text-2xl',
+  },
+  {
+    id: '300px',
+    class: 'w-[300px] min-h-[300px] text-xl',
+  },
+  {
+    id: '400px',
+    class: 'w-[400px] min-h-[400px] text-2xl',
+  },
+  {
+    id: '600px',
+    class: 'w-[600px] min-h-[600px] text-2xl',
+  },
+  {
+    id: '800px',
+    class: 'w-[800px] min-h-[800px] text-3xl',
+  },
+]
+
+export function parseJwtToken(token: string) {
+  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
 }

@@ -103,6 +103,12 @@ export function Header() {
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
                     <Link href="/account/settings">Setelan Akun</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                    <Link href="/account/settings/og-image">
+                      Setelan OG Image
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer py-3"
