@@ -9,7 +9,7 @@ export const QuestionImage = ({
   selectedScale,
 }: {
   question: Question | null
-  owner: UserProfile | null
+  owner: UserProfile | null | undefined
   activeGradient: string
   selectedScale: string
 }) => {

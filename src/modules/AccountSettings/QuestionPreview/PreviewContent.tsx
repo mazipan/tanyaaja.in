@@ -28,7 +28,7 @@ export const PreviewContent = ({
   owner,
 }: {
   question: Question | null
-  owner: UserProfile | null
+  owner: UserProfile | null | undefined
 }) => {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const [selectedScale, setSelectedScale] = useState<string>('fluid')

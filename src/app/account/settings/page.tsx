@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 // @ts-ignore
@@ -25,13 +24,9 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
-import {
-  BASEURL,
-  checkTheSlugOwner,
-  getExistingUser,
-  patchUpdateUser,
-} from '@/lib/api'
+import { BASEURL, checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
+import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
 
@@ -71,11 +66,13 @@ type AccountFormValues = z.infer<typeof accountFormSchema>
 
 export default function Account() {
   const { toast } = useToast()
-  const router = useRouter()
-  const [isLoadingInitialData, setIsLoadingInitialData] =
-    useState<boolean>(true)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { isLogin, isLoading, user } = useAuth(auth)
+
+  // @ts-ignore
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+    enabled: !isLoading && isLogin && !!user,
+  })
 
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -142,40 +139,22 @@ export default function Account() {
     }
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchUserFromDb = async () => {
-    if (user) {
-      const res = await getExistingUser(user)
-
-      if (res && res.data) {
-        form.setValue('image', res.data.image)
-        form.setValue('name', res.data.name)
-        form.setValue('slug', res.data.slug)
-        form.setValue('public', res.data.public ?? false)
-      }
-
-      setIsLoadingInitialData(false)
-    }
-  }
-
-  // Redirect back to /login --> if the session is not found
   useEffect(() => {
-    if (!isLoading) {
-      if (!isLogin) {
-        router.push('/login')
-      } else if (user) {
-        fetchUserFromDb()
-      }
+    if (!isLoadingOwner && dataOwner) {
+      form.setValue('image', dataOwner.data.image)
+      form.setValue('name', dataOwner.data.name)
+      form.setValue('slug', dataOwner.data.slug)
+      form.setValue('public', dataOwner.data.public ?? false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogin, user, isLoading, router])
+  }, [isLoadingOwner, dataOwner])
 
   useEffect(() => {
     trackEvent('view account setting page')
   }, [])
 
   return (
-    <main className="w-full container py-8">
+    <>
       <div className="w-full space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Setelan Akun</h2>
         <p className="text-muted-foreground">
@@ -290,16 +269,13 @@ export default function Account() {
                 )}
               />
 
-              <Button
-                type="submit"
-                disabled={isSubmitting || isLoadingInitialData}
-              >
+              <Button type="submit" disabled={isSubmitting || isLoadingOwner}>
                 {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
               </Button>
             </form>
           </Form>
         </section>
       </div>
-    </main>
+    </>
   )
 }

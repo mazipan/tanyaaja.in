@@ -32,7 +32,7 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {BASEURL}/p/{owner?.slug}
+            {BASEURL}/p/{owner?.slug || '...'}
           </a>
         </div>
         <div className="mt-4">

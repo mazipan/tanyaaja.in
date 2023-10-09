@@ -1,60 +1,32 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 // @ts-ignore
 import { useAuth } from '@/components/FirebaseAuth'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getExistingCustomOg, getExistingUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
-import { CustomOg, UserProfile } from '@/lib/types'
 import AdvanceMode from '@/modules/AccountSettings/SettingOg/AdvanceMode'
 import SimpleMode from '@/modules/AccountSettings/SettingOg/SimpleMode'
+import { useCustomOgByUser, useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
 
 export default function SettingOgImage() {
-  const router = useRouter()
   const { isLogin, isLoading, user } = useAuth(auth)
-  const [owner, setOwner] = useState<UserProfile | null>(null)
-  const [existingOg, setExistingOg] = useState<CustomOg[] | null>(null)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchUserFromDb = async () => {
-    if (user) {
-      const res = await getExistingUser(user)
+  // @ts-ignore
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+    enabled: !isLoading && isLogin && !!user,
+  })
 
-      if (res && res.data) {
-        setOwner(res.data)
-      }
-    }
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchExistingOgFromDb = async () => {
-    if (user) {
-      const res = await getExistingCustomOg(user)
-
-      if (res && res.data) {
-        setExistingOg(res.data)
-      }
-    }
-  }
-
-  // Redirect back to /login --> if the session is not found
-  useEffect(() => {
-    if (!isLoading) {
-      if (!isLogin) {
-        router.push('/login')
-      } else if (user) {
-        fetchUserFromDb()
-        fetchExistingOgFromDb()
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogin, user, isLoading, router])
+  // @ts-ignore
+  const { data: dataCustomOg, isLoading: isLoadingCustomOg } =
+    // @ts-ignore
+    useCustomOgByUser(user, {
+      enabled: !isLoading && isLogin && !!user,
+    })
 
   useEffect(() => {
     trackEvent('view og-image setting page')
@@ -82,7 +54,12 @@ export default function SettingOgImage() {
               Atur OG Image dengan lebih mudah untuk pengguna awam
             </p>
           </div>
-          <SimpleMode owner={owner} user={user} existingOg={existingOg} />
+          <SimpleMode
+            isLoading={isLoadingOwner || isLoadingCustomOg}
+            owner={dataOwner?.data}
+            user={user}
+            existingOg={dataCustomOg?.data}
+          />
         </TabsContent>
         <TabsContent value="advance-mode">
           <div className="w-full space-y-0.5">
@@ -91,7 +68,12 @@ export default function SettingOgImage() {
               Atur OG Image semaumu untuk pengguna yang familiar dengan coding
             </p>
           </div>
-          <AdvanceMode owner={owner} user={user} existingOg={existingOg} />
+          <AdvanceMode
+            isLoading={isLoadingOwner || isLoadingCustomOg}
+            owner={dataOwner?.data}
+            user={user}
+            existingOg={dataCustomOg?.data}
+          />
         </TabsContent>
       </Tabs>
     </main>

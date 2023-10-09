@@ -40,13 +40,15 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export default function AdvanceMode({
+  isLoading,
   owner,
   user,
   existingOg,
 }: {
-  owner: UserProfile | null
+  isLoading: boolean
+  owner: UserProfile | null | undefined
   user: User | null
-  existingOg: CustomOg[] | null
+  existingOg: CustomOg[] | null | undefined
 }) {
   const { toast } = useToast()
   const router = useRouter()
@@ -213,7 +215,7 @@ export default function AdvanceMode({
 
             <Button
               type="submit"
-              // disabled={isSubmitting || isLoadingInitialData}
+              // disabled={isSubmitting || isLoading}
               disabled
             >
               {/* {isSubmitting ? 'Processing' : 'Simpan Perubahan'} */}

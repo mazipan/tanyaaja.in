@@ -34,13 +34,15 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export default function SimpleMode({
+  isLoading,
   owner,
   user,
   existingOg,
 }: {
-  owner: UserProfile | null
+  isLoading: boolean
+  owner: UserProfile | null | undefined
   user: User | null
-  existingOg: CustomOg[] | null
+  existingOg: CustomOg[] | null | undefined
 }) {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const { toast } = useToast()
@@ -163,7 +165,7 @@ export default function SimpleMode({
                   <ArrowTopRightIcon className="h-4 w-4" />
                 </a>
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting || isLoading}>
                 {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
               </Button>
             </div>

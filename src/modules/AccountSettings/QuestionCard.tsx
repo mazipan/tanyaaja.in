@@ -19,7 +19,7 @@ import { BASEURL } from '@/lib/api'
 import { Question, UserProfile } from '@/lib/types'
 interface QuestionPanelProps {
   question: Question | null
-  owner: UserProfile | null
+  owner: UserProfile | null | undefined
   onClick: (q: Question) => void
   index: number
 }

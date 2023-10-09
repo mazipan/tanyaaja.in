@@ -3,11 +3,19 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import {
+  ArrowTopRightIcon,
+  CameraIcon,
+  ChatBubbleIcon,
+  ExitIcon,
+  MixerHorizontalIcon,
+} from '@radix-ui/react-icons'
 
 import { signOut } from 'firebase/auth'
 
 import { destroyActiveSession } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
+import { useOwner } from '@/queries/useQueries'
 import logoSvg from '~/public/logo/TanyaAja.svg'
 
 import { useAuth } from './FirebaseAuth'
@@ -30,6 +38,10 @@ export function Header() {
   const router = useRouter()
   const { toast } = useToast()
   const { isLogin, user, isLoading } = useAuth(auth)
+  // @ts-ignore
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+    enabled: !isLoading && isLogin && !!user,
+  })
 
   const handleLogout = async () => {
     if (user) {
@@ -97,14 +109,33 @@ export function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {!isLoadingOwner && dataOwner && (
+                    <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                      <Link
+                        href={`/p/${dataOwner?.data?.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ArrowTopRightIcon className="h-4 w-4 mr-2" />
+                        Laman Publik
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account">Daftar Pertanyaan</Link>
+                    <Link href="/account">
+                      <ChatBubbleIcon className="h-4 w-4 mr-2" />
+                      Daftar Pertanyaan
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account/settings">Setelan Akun</Link>
+                    <Link href="/account/settings">
+                      <MixerHorizontalIcon className="h-4 w-4 mr-2" />
+                      Setelan Akun
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
                     <Link href="/account/settings/og-image">
+                      <CameraIcon className="h-4 w-4 mr-2" />
                       Setelan OG Image
                     </Link>
                   </DropdownMenuItem>
@@ -113,6 +144,7 @@ export function Header() {
                     onClick={handleLogout}
                     className="cursor-pointer py-3"
                   >
+                    <ExitIcon className="h-4 w-4 mr-2" />
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
