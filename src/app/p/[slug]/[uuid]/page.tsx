@@ -22,26 +22,23 @@ export async function generateMetadata({
   const slug = params.slug
   const uuid = params.uuid
 
-  const ownerData = getPublicOwnerUser(slug as string)
-  const customOgData = getPublicCustomOg(slug as string)
-  const questionData = getQuestionDetail(uuid as string)
-
-  const [owner, question, customOg] = await Promise.all([
-    ownerData,
-    questionData,
-    customOgData,
-  ])
+  const owner = await getPublicOwnerUser(slug as string)
+  const question = await getQuestionDetail(uuid as string)
+  const customOg = await getPublicCustomOg(slug as string)
 
   const q: Question = (question?.data || [])[0] || {}
 
   const title = `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`
   const description = `Cuplikan dari pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`
   const url = `${BASEURL}/p/${owner?.data?.slug}/${q?.uuid}`
-  let ogImage = `${BASEURL}/api/og?type=question&question=${q?.question}`
+
+  let ogImage = ''
 
   if (customOg && customOg?.data) {
     // -- mode simple
     ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${owner?.data?.slug}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+  } else {
+    ogImage = `${BASEURL}/api/og?type=question&question=${q?.question}`
   }
 
   return {

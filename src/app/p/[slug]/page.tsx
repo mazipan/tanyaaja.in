@@ -14,20 +14,20 @@ export async function generateMetadata({
   params,
 }: PublicPageProps): Promise<Metadata> {
   const slug = params.slug
-  const ownerData = getPublicOwnerUser(slug as string)
-  const customOgData = getPublicCustomOg(slug as string)
-
-  const [owner, customOg] = await Promise.all([ownerData, customOgData])
+  const owner = await getPublicOwnerUser(slug as string)
+  const customOg = await getPublicCustomOg(slug as string)
 
   const title = `Lempar pertanyaan anonim ke ${owner?.data?.name} lewat TanyaAja`
   const description = `Mulai bertanya anonim ke ${owner?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
   const url = `${BASEURL}/p/${owner?.data?.slug}`
 
-  let ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}`
+  let ogImage = ''
 
   if (customOg && customOg?.data) {
     // -- mode simple
     ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+  } else {
+    ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}`
   }
 
   return {
