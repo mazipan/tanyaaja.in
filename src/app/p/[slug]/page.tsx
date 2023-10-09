@@ -25,9 +25,9 @@ export async function generateMetadata({
 
   if (customOg && customOg?.data) {
     // -- mode simple
-    ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+    ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&name=${owner?.data?.name}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
   } else {
-    ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}`
+    ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}&name=${owner?.data?.name}`
   }
 
   return {

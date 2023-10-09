@@ -15,13 +15,14 @@ export async function GET(request: Request) {
   const searchParams = url.searchParams
   const type = searchParams.get('type')
   const slug = searchParams.get('slug')
+  const name = searchParams.get('name')
   const question = searchParams.get('question')
 
   const theme = searchParams.get('theme')
   const text = searchParams.get('text')
 
   if (type === 'user' && slug && slug !== 'undefined') {
-    return new ImageResponse(<UserOg slug={slug || ''} />, {
+    return new ImageResponse(<UserOg slug={slug || ''} name={name || ''} />, {
       width: 800,
       height: 600,
     })

@@ -14,7 +14,7 @@ export function CustomUserOgSimple({
 }) {
   return (
     <div
-      tw={`flex p-8 flex-col w-full h-full items-center justify-between`}
+      tw={`flex p-8 flex-col w-full h-full items-center justify-between rounded-3xl`}
       style={{
         backgroundImage: GRADIENTS.find((g) => g.id === theme)?.cssNative,
       }}

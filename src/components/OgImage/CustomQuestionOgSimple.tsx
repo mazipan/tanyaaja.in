@@ -10,7 +10,7 @@ export function CustomQuestionOgSimple({
 }) {
   return (
     <div
-      tw="flex p-10 flex-col w-full h-full items-center justify-center"
+      tw="flex p-10 flex-col w-full h-full items-center justify-center rounded-3xl"
       style={{
         backgroundImage: GRADIENTS.find((g) => g.id === theme)?.cssNative,
       }}
