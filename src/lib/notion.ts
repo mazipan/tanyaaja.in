@@ -10,7 +10,7 @@ import {
   UpdateUserArgs,
   UpdateUserCounterArgs,
 } from './types'
-import { addDays } from './utils'
+import { addDays, DEFAULT_AVATAR } from './utils'
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -197,14 +197,16 @@ export const addUser = async (param: AddUserArgs) => {
       ...submitRichTextProp('name', param.name),
       ...submitRichTextProp('email', param.email),
       ...submitRichTextProp('slug', slugify(param.email.split('@')[0] || '')),
-      ...submitRichTextProp('image', param.image),
+      ...submitRichTextProp('image', param?.image || DEFAULT_AVATAR),
       ...submitNumberProp('count', 0),
     },
   })
 }
 
 export const updateUser = async (param: UpdateUserArgs) => {
-  const withImage = param.image ? submitRichTextProp('image', param.image) : {}
+  const withImage = param.image
+    ? submitRichTextProp('image', param?.image || DEFAULT_AVATAR)
+    : {}
   await notion.pages.update({
     page_id: param.pageId,
     properties: {

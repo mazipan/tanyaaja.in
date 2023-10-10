@@ -14,6 +14,7 @@ import {
 import { nanoid } from 'nanoid'
 
 import { UserProfile } from './types'
+import { DEFAULT_AVATAR } from './utils'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -74,7 +75,7 @@ export const createUserInDbIfNotExist = async ({ user }: { user: User }) => {
 
   const newData: UserProfile = {
     uid: user.uid,
-    image: user.photoURL || '',
+    image: user?.photoURL || DEFAULT_AVATAR,
     name: user.displayName || '',
     slug: slugify(user.email?.split('@')[0] || ''),
     count: 0,

@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-// @ts-ignore
-import * as z from 'zod'
+import { maxLength, minLength, object, type Output, string } from 'valibot'
 
+// @ts-ignore
 import { GradientSelection } from '@/components/GradientSelection'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,13 +25,14 @@ import { BASEURL, patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { ClassMap, CustomOg, UserProfile } from '@/lib/types'
 
-const formSchema = z.object({
-  textOgPublik: z.string().min(2, {
-    message: 'Avatar butuh paling tidak 2 karakter.',
-  }),
+const schema = object({
+  textOgPublik: string('Text perlu disi terlebih dahulu.', [
+    minLength(2, 'Text butuh paling tidak 2 karakter.'),
+    maxLength(500, 'Text hanya bisa maksimal 1000 karakter.'),
+  ]),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Output<typeof schema>
 
 export default function SimpleMode({
   isLoading,
@@ -49,20 +50,20 @@ export default function SimpleMode({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: valibotResolver(schema),
     defaultValues: {
       textOgPublik: '',
     },
   })
 
-  const watchTextOgPublik = form.watch('textOgPublik', false)
+  const watchTextOgPublik = form.watch('textOgPublik')
 
   const handleClickGradient = (newGradient: ClassMap) => {
     setActiveGradient(newGradient?.id || '')
   }
 
   async function onSubmit(data: FormValues) {
-    trackEvent('click update account info')
+    trackEvent('click update og image simple')
     if (user) {
       try {
         setIsSubmitting(true)

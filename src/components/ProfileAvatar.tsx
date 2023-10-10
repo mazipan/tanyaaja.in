@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
+import { DEFAULT_AVATAR } from '@/lib/utils'
+
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 
 export const ProfileAvatar = ({
-  image = '',
+  image = DEFAULT_AVATAR,
   name = '',
   size = '38',
 }: {
