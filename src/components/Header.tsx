@@ -15,6 +15,7 @@ import { signOut } from 'firebase/auth'
 
 import { destroyActiveSession } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
+import { DEFAULT_AVATAR } from '@/lib/utils'
 import { useOwner } from '@/queries/useQueries'
 import logoSvg from '~/public/logo/TanyaAja.svg'
 
@@ -84,19 +85,31 @@ export function Header() {
       <div className="flex items-center gap-2">
         {!isLoading ? (
           <>
-            {isLogin && user && user.displayName && user.photoURL ? (
+            {isLogin && user && user.displayName ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar>
-                    <AvatarImage src={user?.photoURL} alt={user?.displayName} />
-                    <AvatarFallback>
-                      {user?.displayName
-                        ?.split(' ')
-                        .map((n: string) => n[0])
-                        .join('')
-                        .substring(2, 0)
-                        .toUpperCase()}
-                    </AvatarFallback>
+                    {!isLoadingOwner && dataOwner && dataOwner.data && (
+                      <>
+                        <AvatarImage
+                          src={
+                            dataOwner?.data?.image ||
+                            user?.photoURL ||
+                            DEFAULT_AVATAR
+                          }
+                          alt={user?.displayName}
+                        />
+
+                        <AvatarFallback>
+                          {user?.displayName
+                            ?.split(' ')
+                            .map((n: string) => n[0])
+                            .join('')
+                            .substring(2, 0)
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </>
+                    )}
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">

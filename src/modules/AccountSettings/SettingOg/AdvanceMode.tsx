@@ -1,17 +1,16 @@
 /* eslint-disable unused-imports/no-unused-vars */
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { ArrowTopRightIcon, InfoCircledIcon } from '@radix-ui/react-icons'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-// @ts-ignore
-import * as z from 'zod'
+import { maxLength, minLength, object, type Output, string } from 'valibot'
 
+// @ts-ignore
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,19 +24,25 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
+import { patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { CustomOg, UserProfile } from '@/lib/types'
 
-const formSchema = z.object({
-  publik: z.string().min(2, {
-    message: 'Og image publik butuh paling tidak 2 karakter.',
-  }),
-  question: z.string().min(2, {
-    message: 'Og image question butuh paling tidak 2 karakter.',
-  }),
+const schema = object({
+  publik: string('Kode laman publik perlu disi terlebih dahulu.', [
+    minLength(2, 'Kode laman publik butuh paling tidak 2 karakter.'),
+    maxLength(10000, 'Kode laman publik hanya bisa maksimal 10000 karakter.'),
+  ]),
+  question: string('Kode laman pertanyaan perlu disi terlebih dahulu.', [
+    minLength(2, 'Kode laman pertanyaan butuh paling tidak 2 karakter.'),
+    maxLength(
+      10000,
+      'Kode laman pertanyaan hanya bisa maksimal 10000 karakter.',
+    ),
+  ]),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Output<typeof schema>
 
 export default function AdvanceMode({
   isLoading,
@@ -51,13 +56,10 @@ export default function AdvanceMode({
   existingOg: CustomOg[] | null | undefined
 }) {
   const { toast } = useToast()
-  const router = useRouter()
-  const [isLoadingInitialData, setIsLoadingInitialData] =
-    useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: valibotResolver(schema),
     defaultValues: {
       publik: '',
       question: '',
@@ -65,38 +67,42 @@ export default function AdvanceMode({
   })
 
   async function onSubmit(data: FormValues) {
-    trackEvent('click update account info')
+    trackEvent('click update og image advance')
     if (user) {
       try {
         setIsSubmitting(true)
         try {
-          // const res = await checkTheSlugOwner(user, data.slug)
-          // if (res && res.data) {
-          //   if (res.data === 'NOT_EXIST') {
-          //     await patchUpdateUser(user, {
-          //       slug: data.slug,
-          //       name: data.name,
-          //       public: data.public ?? false,
-          //       image: data.image || user.photoURL,
-          //     })
-          //     toast({
-          //       title: 'Perubahan berhasil disimpan',
-          //       description: `Berhasil menyimpan perubahan setelan!`,
-          //     })
-          //   } else {
-          //     form.setError('slug', {
-          //       type: 'custom',
-          //       message:
-          //         'Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi',
-          //     })
-          //   }
-          // } else {
-          //   form.setError('slug', {
-          //     type: 'custom',
-          //     message:
-          //       'Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini.',
-          //   })
-          // }
+          if (existingOg && existingOg.length > 0) {
+            // patch
+            await patchUpdateCustomOg(user, {
+              uid: user?.uid,
+              slug: owner?.slug || '',
+              mode: 'advance',
+              theme: '',
+              simpleText: '',
+              codePublic: data?.publik,
+              codeQuestion: data?.question,
+            })
+            toast({
+              title: 'Perubahan berhasil disimpan',
+              description: `Berhasil menyimpan perubahan setelan og image custom!`,
+            })
+          } else {
+            // create
+            await postAddNewCustomOg(user, {
+              uid: user?.uid,
+              slug: owner?.slug || '',
+              mode: 'advance',
+              theme: '',
+              simpleText: '',
+              codePublic: data?.publik,
+              codeQuestion: data?.question,
+            })
+            toast({
+              title: 'Perubahan berhasil disimpan',
+              description: `Berhasil menyimpan perubahan og image custom!`,
+            })
+          }
         } catch (err) {
           toast({
             title: 'Gagal menyimpan',
@@ -113,6 +119,14 @@ export default function AdvanceMode({
       }
     }
   }
+
+  useEffect(() => {
+    if (existingOg && existingOg.length > 0) {
+      form.setValue('publik', existingOg[0].code_public)
+      form.setValue('question', existingOg[0].code_question)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [existingOg])
 
   return (
     <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
@@ -213,13 +227,8 @@ export default function AdvanceMode({
               )}
             />
 
-            <Button
-              type="submit"
-              // disabled={isSubmitting || isLoading}
-              disabled
-            >
-              {/* {isSubmitting ? 'Processing' : 'Simpan Perubahan'} */}
-              Coming soon
+            <Button type="submit" disabled={isSubmitting || isLoading}>
+              {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
             </Button>
           </form>
         </Form>

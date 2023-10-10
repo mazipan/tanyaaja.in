@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-// @ts-ignore
-import * as z from 'zod'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+import { maxLength, minLength, object, type Output, string } from 'valibot'
 
+// @ts-ignore
 import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,25 +25,21 @@ import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 
-const formSchema = z.object({
-  q: z
-    .string()
-    .min(2, {
-      message: 'Pertanyaan butuh minimal 2 karakter',
-    })
-    .max(1000, {
-      message: 'Pertanyaan hanya bisa maksimal 1000 karakter',
-    }),
+const schema = object({
+  q: string('Pertanyaan perlu disi terlebih dahulu.', [
+    minLength(2, 'Pertanyaan butuh paling tidak 2 karakter.'),
+    maxLength(500, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
+  ]),
 })
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = Output<typeof schema>
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: valibotResolver(schema),
     defaultValues: {
       q: '',
     },

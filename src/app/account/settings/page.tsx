@@ -2,10 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { UpdateIcon } from '@radix-ui/react-icons'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-// @ts-ignore
-import * as z from 'zod'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+import {
+  boolean as isBoolean,
+  maxLength,
+  minLength,
+  object,
+  optional,
+  type Output,
+  string,
+} from 'valibot'
 
 import { CopyButton } from '@/components/CopyButton'
 import { useAuth } from '@/components/FirebaseAuth'
@@ -26,43 +34,28 @@ import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
+import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
 import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
 
-const accountFormSchema = z.object({
-  image: z
-    .string()
-    .min(2, {
-      message: 'Avatar butuh paling tidak 2 karakter.',
-    })
-    .max(1000, {
-      message: 'Avatar hanya bisa maksimal 1000 karakter.',
-    }),
-  name: z
-    .string()
-    .min(2, {
-      message: 'Nama butuh paling tidak 2 karakter.',
-    })
-    .max(30, {
-      message: 'Nama hanya bisa maksimal 30 karakter.',
-    }),
-  slug: z
-    .string()
-    .min(3, {
-      message: 'Slug butuh paling tidak 3 karakter.',
-    })
-    .max(100, {
-      message: 'Slug hanya bisa maksimal 100 karakter.',
-    })
-    .refine(
-      (s: string) => !s.includes(' '),
-      'Slug tidak boleh mengandung karakter spasi.',
-    ),
-  public: z.boolean().default(false).optional(),
+const schema = object({
+  image: string('Avatar perlu disi terlebih dahulu.', [
+    minLength(3, 'Avatar butuh paling tidak 2 karakter.'),
+    maxLength(1000, 'Avatar hanya bisa maksimal 1000 karakter.'),
+  ]),
+  name: string('Nama perlu disi terlebih dahulu.', [
+    minLength(2, 'Nama butuh paling tidak 2 karakter.'),
+    maxLength(50, 'Nama hanya bisa maksimal 50 karakter.'),
+  ]),
+  slug: string('Slug perlu disi terlebih dahulu.', [
+    minLength(2, 'Slug butuh paling tidak 2 karakter.'),
+    maxLength(100, 'Slug hanya bisa maksimal 100 karakter.'),
+  ]),
+  public: optional(isBoolean()),
 })
 
-type AccountFormValues = z.infer<typeof accountFormSchema>
+type FormValues = Output<typeof schema>
 
 export default function Account() {
   const { toast } = useToast()
@@ -74,8 +67,8 @@ export default function Account() {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  const form = useForm<AccountFormValues>({
-    resolver: zodResolver(accountFormSchema),
+  const form = useForm<FormValues>({
+    resolver: valibotResolver(schema),
     defaultValues: {
       image: '',
       name: '',
@@ -84,11 +77,11 @@ export default function Account() {
     },
   })
 
-  const watchSlug = form.watch('slug', false)
-  const watchImage = form.watch('image', false)
-  const watchName = form.watch('name', false)
+  const watchSlug = form.watch('slug')
+  const watchImage = form.watch('image')
+  const watchName = form.watch('name')
 
-  async function onSubmit(data: AccountFormValues) {
+  async function onSubmit(data: FormValues) {
     trackEvent('click update account info')
     if (user) {
       try {
@@ -101,7 +94,7 @@ export default function Account() {
                 slug: data.slug,
                 name: data.name,
                 public: data.public ?? false,
-                image: data.image || user.photoURL,
+                image: data?.image || user?.photoURL || DEFAULT_AVATAR,
               })
 
               toast({
@@ -213,6 +206,16 @@ export default function Account() {
                     name={watchName}
                     size="38"
                   />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      form.setValue('image', randomizeAvatar())
+                    }}
+                  >
+                    <UpdateIcon className="h-4 w-4 mr-2" />
+                    Pilih secara acak
+                  </Button>
                 </div>
               ) : null}
 

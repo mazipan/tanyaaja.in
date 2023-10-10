@@ -2,6 +2,7 @@ import { User } from 'firebase/auth'
 
 import { CustomOg, Question, UpdateUserArgs, UserProfile } from './types'
 import { CreateCustomOgArgs } from './types'
+import { DEFAULT_AVATAR } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -75,7 +76,7 @@ export const postAddUser = async (user: User): Promise<{ message: string }> => {
       uid: user.uid,
       name: user.displayName,
       email: user.email,
-      image: user.photoURL,
+      image: user?.photoURL || DEFAULT_AVATAR,
     }),
     headers: {
       'Content-Type': 'application/json',
