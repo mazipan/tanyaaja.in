@@ -262,7 +262,6 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
         type: 'date',
         date: {
           start: new Date().toISOString(),
-          time_zone: 'Asia/Jakarta',
         },
       },
     },
