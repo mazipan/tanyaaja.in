@@ -30,6 +30,8 @@
     "@types/node": "20.6.3",
     "@types/react": "18.2.27",
     "@types/react-dom": "18.2.12",
+    "@upstash/ratelimit": "^0.4.4",
+    "@upstash/redis": "^1.23.3",
     "@vercel/og": "^0.5.17",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
