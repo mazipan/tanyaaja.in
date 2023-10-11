@@ -42,7 +42,7 @@ export default function Home() {
             Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah
           </p>
 
-          <div className="w-full flex gap-2 mt-8 flex-col md:flex-row">
+          <div className="w-full flex gap-2 mt-8 flex-col xl:flex-row">
             <Button className="flex gap-2 items-center" size="lg" asChild>
               <Link href="/login">
                 Mulai dengan cepat
