@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="p-4 border-t">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 container mb-8">
         <div>
-          <h4 className="text-lg font-bold mb-2">Lebih banyak</h4>
+          <h4 className="text-lg font-bold mb-2">Lebih Banyak</h4>
           <ul className="flex flex-col gap-2">
             <li>
               <Link href="/tentang" className="underline">
@@ -35,7 +35,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-bold mb-2">Sumber daya</h4>
+          <h4 className="text-lg font-bold mb-2">Sumber Daya</h4>
           <ul className="flex flex-col gap-2">
             <li>
               <a
@@ -59,12 +59,22 @@ export function Footer() {
             </li>
             <li>
               <a
+                href="https://github.com/mazipan/tanyaaja"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Kode Sumber
+              </a>
+            </li>
+            <li>
+              <a
                 href="https://mazipan.space/support"
                 className="underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Dukung
+                Dukung TanyaAja
               </a>
             </li>
           </ul>

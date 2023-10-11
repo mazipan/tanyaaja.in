@@ -33,7 +33,7 @@ export default function SettingOgImage() {
   }, [])
 
   return (
-    <main className="w-full container py-8">
+    <>
       <div className="w-full space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">Setelan OG Image</h2>
         <p className="text-muted-foreground">
@@ -76,6 +76,6 @@ export default function SettingOgImage() {
           />
         </TabsContent>
       </Tabs>
-    </main>
+    </>
   )
 }
