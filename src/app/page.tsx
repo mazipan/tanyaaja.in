@@ -27,7 +27,7 @@ import logoImage from '~/public/logo/TanyaAja.svg'
 export default function Home() {
   return (
     <main className="">
-      <section className="flex flex-col md:flex-row">
+      <section className="container flex flex-col md:flex-row">
         <div className="flex-1 flex flex-col gap-4 justify-center items-start p-8">
           <Image
             src={logoImage}
