@@ -70,54 +70,46 @@ export default function AdvanceMode({
   async function onSubmit(data: FormValues) {
     trackEvent('click update og image advance')
     if (user) {
+      setIsSubmitting(true)
       try {
-        setIsSubmitting(true)
-        try {
-          if (existingOg && existingOg.length > 0) {
-            // patch
-            await patchUpdateCustomOg(user, {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'advance',
-              theme: existingOg?.[0]?.theme || 'hyper',
-              simpleText: existingOg?.[0]?.simple_text || '',
-              codePublic: data?.publik,
-              codeQuestion: data?.question,
-            })
-            toast({
-              title: 'Perubahan berhasil disimpan',
-              description: `Berhasil menyimpan perubahan setelan og image custom!`,
-            })
-          } else {
-            // create
-            await postAddNewCustomOg(user, {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'advance',
-              theme: 'hyper',
-              simpleText: '',
-              codePublic: data?.publik,
-              codeQuestion: data?.question,
-            })
-            toast({
-              title: 'Perubahan berhasil disimpan',
-              description: `Berhasil menyimpan perubahan og image custom!`,
-            })
-          }
-        } catch (err) {
+        if (existingOg && existingOg.length > 0) {
+          // patch
+          await patchUpdateCustomOg(user, {
+            uid: user?.uid,
+            slug: owner?.slug || '',
+            mode: 'advance',
+            theme: '',
+            simpleText: '',
+            codePublic: data?.publik,
+            codeQuestion: data?.question,
+          })
           toast({
-            title: 'Gagal menyimpan',
-            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`,
+            title: 'Perubahan berhasil disimpan',
+            description: `Berhasil menyimpan perubahan setelan og image custom!`,
+          })
+        } else {
+          // create
+          await postAddNewCustomOg(user, {
+            uid: user?.uid,
+            slug: owner?.slug || '',
+            mode: 'advance',
+            theme: '',
+            simpleText: '',
+            codePublic: data?.publik,
+            codeQuestion: data?.question,
+          })
+          toast({
+            title: 'Perubahan berhasil disimpan',
+            description: `Berhasil menyimpan perubahan og image custom!`,
           })
         }
-        setIsSubmitting(false)
-      } catch (error) {
-        setIsSubmitting(false)
+      } catch (err) {
         toast({
           title: 'Gagal menyimpan',
           description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
         })
       }
+      setIsSubmitting(false)
     }
   }
 

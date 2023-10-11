@@ -28,7 +28,7 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
           <Link2Icon />
           <a
             className="underline text-sm"
-            href={`${BASEURL}/p/${owner?.slug}`}
+            href={`${BASEURL}/p/${owner?.slug || '...'}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -36,7 +36,10 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
           </a>
         </div>
         <div className="mt-4">
-          <CopyButton text={`${BASEURL}/p/${owner?.slug}`} withLabel={true} />
+          <CopyButton
+            text={`${BASEURL}/p/${owner?.slug || '...'}`}
+            withLabel={true}
+          />
         </div>
       </Card>
     </div>

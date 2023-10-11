@@ -12,7 +12,7 @@ import {
 } from '@radix-ui/react-icons'
 
 import { signOut } from 'firebase/auth'
-import { Loader2 } from 'lucide-react'
+import { BellIcon, Loader2 } from 'lucide-react'
 
 import { destroyActiveSession } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
@@ -151,6 +151,12 @@ export function Header() {
                     <Link href="/account/settings/og-image">
                       <CameraIcon className="h-4 w-4 mr-2" />
                       Setelan OG Image
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                    <Link href="/account/settings/notification">
+                      <BellIcon className="h-4 w-4 mr-2" />
+                      Setelan Notifikasi
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

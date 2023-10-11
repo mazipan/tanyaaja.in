@@ -9,6 +9,8 @@ import {
   simplifyResponseObject,
   submitQuestion,
 } from '@/lib/notion'
+import { sendMessageToBot } from '@/lib/telegram'
+import { UserProfile } from '@/lib/types'
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL || '',
@@ -46,13 +48,18 @@ async function sendQuestion(
   // @ts-ignore
   const properties = result.properties
 
-  const simpleDataResponse = simplifyResponseObject(properties)
+  const simpleDataResponse = simplifyResponseObject<UserProfile>(properties)
 
   await submitQuestion({
-    // @ts-ignore
     uid: simpleDataResponse?.uid,
     question: q,
   })
+
+  try {
+    await sendMessageToBot(simpleDataResponse?.uid, q)
+  } catch {
+    // do nothing
+  }
 
   return NextResponse.json(
     { message: 'New question submitted' },

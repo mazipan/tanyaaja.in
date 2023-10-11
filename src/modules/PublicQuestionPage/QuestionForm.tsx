@@ -56,6 +56,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         title: 'Pesan terkirim',
         description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
       })
+      form.reset()
     } catch (error) {
       setIsLoading(false)
       toast({

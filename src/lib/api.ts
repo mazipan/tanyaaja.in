@@ -1,6 +1,14 @@
 import { User } from 'firebase/auth'
 
-import { CustomOg, Question, UpdateUserArgs, UserProfile } from './types'
+import { UpdateItem } from './telegram'
+import {
+  CreateNotifChannelArgs,
+  CustomOg,
+  NotifChannel,
+  Question,
+  UpdateUserArgs,
+  UserProfile,
+} from './types'
 import { CreateCustomOgArgs } from './types'
 import { DEFAULT_AVATAR } from './utils'
 
@@ -351,6 +359,97 @@ export const patchUpdateCustomOg = async (
       Authorization: token,
     },
   })
+
+  return rawRes.json()
+}
+
+export const getExistingChannelNotif = async (
+  user: User,
+): Promise<{ data: NotifChannel[] }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/notification/by-uid/${user.uid}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: [`notif-by-uid-${user.uid}`],
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
+export const postAddNewChannelNotif = async (
+  user: User,
+  param: CreateNotifChannelArgs,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/notification/create`, {
+    method: 'POST',
+    body: JSON.stringify({
+      uid: user.uid,
+      slug: param.slug,
+      telegram_chat_id: param.telegram_chat_id,
+      telegram_username: param.telegram_username,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const patchUpdateChannelNotif = async (
+  user: User,
+  param: CreateNotifChannelArgs,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/notification/update`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      uid: user.uid,
+      slug: param.slug,
+      telegram_chat_id: param.telegram_chat_id,
+      telegram_username: param.telegram_username,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const getCheckChatId = async (
+  user: User,
+  username: string,
+): Promise<{ data: UpdateItem | null }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/notification/get-chatid/${user.uid}?u=${username}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: [`chatid-uid-${user.uid}`],
+      },
+    },
+  )
 
   return rawRes.json()
 }
