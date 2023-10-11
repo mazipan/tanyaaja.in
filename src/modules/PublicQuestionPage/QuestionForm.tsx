@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import Script from 'next/script'
 import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
@@ -45,11 +46,10 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
     },
   })
 
-  async function onSubmit(data: FormValues) {
-    trackEvent('click submit new question')
+  async function sendQuestion(slug: string, q: string, token: string) {
     setIsLoading(true)
     try {
-      await postSendQuestion(owner?.slug || '', data.q)
+      await postSendQuestion(slug || '', q, token)
       setIsLoading(false)
       toast({
         title: 'Pesan terkirim',
@@ -62,11 +62,40 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
       })
     }
+
+    form.reset()
+  }
+
+  async function onSubmit(data: FormValues) {
+    trackEvent('click submit new question')
+    if (process.env.NODE_ENV === 'development') {
+      await sendQuestion(owner?.slug || '', data.q, 'development')
+    } else {
+      // @ts-ignore
+      if (window?.grecaptcha) {
+        // @ts-ignore
+        window?.grecaptcha.ready(function () {
+          // @ts-ignore
+          window?.grecaptcha
+            .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
+              action: 'submit',
+            })
+            .then(async function (token: string) {
+              await sendQuestion(owner?.slug || '', data.q, token)
+            })
+            .catch(() => {
+              setIsLoading(false)
+            })
+        })
+      }
+    }
   }
 
   useEffect(() => {
     if (owner && owner?.slug) {
-      patchHit(owner.slug)
+      setTimeout(() => {
+        patchHit(owner.slug)
+      }, 2000)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -77,6 +106,11 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
 
   return (
     <>
+      {process.env.NODE_ENV !== 'development' ? (
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+        />
+      ) : null}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
