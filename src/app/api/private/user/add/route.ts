@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
     if (userInNotion.results.length === 0) {
       await addUser(res)
-      return NextResponse.json({ message: 'New user added' })
+      return NextResponse.json({ message: 'New user added', isNewUser: true })
     }
 
     return NextResponse.json(
