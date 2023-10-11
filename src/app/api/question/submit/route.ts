@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import {
   getUserBySlug,
@@ -32,7 +32,7 @@ async function sendQuestion(slug: string, q: string) {
   return NextResponse.json({ message: 'New question submitted' })
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const res = await request.json()
 
   try {
@@ -52,11 +52,16 @@ export async function POST(request: Request) {
         const xRealIp = headersInstance.get('x-real-ip')
         const xForwardedFor = headersInstance.get('x-forwarded-for')
 
-        if (xRealIp) {
-          formData.append('remoteip', xRealIp || '')
+        let remoteip = ''
+        if (request.ip) {
+          remoteip = request.ip
+        } else if (xRealIp) {
+          remoteip = xRealIp
         } else if (xForwardedFor) {
-          formData.append('remoteip', `${xForwardedFor || ''}`.split(',')[0])
+          remoteip = `${xForwardedFor || ''}`.split(',')[0]
         }
+
+        formData.append('remoteip', remoteip)
 
         const reCaptchaRes = await fetch(
           `https://www.google.com/recaptcha/api/siteverify`,
