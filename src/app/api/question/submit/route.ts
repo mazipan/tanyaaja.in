@@ -1,3 +1,4 @@
+import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import {
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
   const res = await request.json()
 
   try {
+    const headersInstance = headers()
     if (process.env.NODE_ENV !== 'development') {
       const token = res.token
       if (!token) {
@@ -46,6 +48,15 @@ export async function POST(request: Request) {
         const formData = new URLSearchParams()
         formData.append('secret', process.env.RECAPTCHA_SECRET_KEY || '')
         formData.append('response', token)
+
+        const xRealIp = headersInstance.get('x-real-ip')
+        const xForwardedFor = headersInstance.get('x-forwarded-for')
+
+        if (xRealIp) {
+          formData.append('remoteip', xRealIp || '')
+        } else if (xForwardedFor) {
+          formData.append('remoteip', `${xForwardedFor || ''}`.split(',')[0])
+        }
 
         const reCaptchaRes = await fetch(
           `https://www.google.com/recaptcha/api/siteverify`,
