@@ -124,12 +124,14 @@ export const patchHit = async (slug: string): Promise<{ message: string }> => {
 export const postSendQuestion = async (
   slug: string,
   question: string,
+  token: string,
 ): Promise<{ message: string }> => {
   const rawRes = await fetch(`${BASEURL}/api/question/submit`, {
     method: 'POST',
     body: JSON.stringify({
-      slug: slug,
-      question: question,
+      slug,
+      question,
+      token,
     }),
     headers: {
       'Content-Type': 'application/json',

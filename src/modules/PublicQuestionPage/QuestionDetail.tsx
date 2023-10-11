@@ -25,7 +25,9 @@ export const QuestionDetail = ({
 
   useEffect(() => {
     if (slug) {
-      patchHit(slug)
+      setTimeout(() => {
+        patchHit(slug)
+      }, 2000)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
