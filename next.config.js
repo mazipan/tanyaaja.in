@@ -3,6 +3,9 @@ const CSP_ALLOWED_DOMAINS = [
   'accounts.google.com',
   'analytics.google.com',
   '*.googletagmanager.com',
+  'identitytoolkit.googleapis.com',
+  'www.gstatic.com',
+  'firebase.googleapis.com',
   process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
 ]
