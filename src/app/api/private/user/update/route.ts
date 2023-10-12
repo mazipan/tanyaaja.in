@@ -26,6 +26,7 @@ export async function PATCH(request: Request) {
           pageId: foundPage.id,
           image: res.image,
           public: res.public ?? false,
+          x_username: res.x_username,
         })
 
         revalidatePath(`/p/${res.slug}`)

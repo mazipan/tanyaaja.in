@@ -224,6 +224,7 @@ export const updateUser = async (param: UpdateUserArgs) => {
         checkbox: param.public,
       },
       ...submitRichTextProp('slug', param.slug),
+      ...submitRichTextProp('x_username', param.x_username ?? ''),
       ...withImage,
     },
   })
