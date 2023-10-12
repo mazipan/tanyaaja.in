@@ -25,6 +25,15 @@ export const getExistingUser = async (
     },
   )
 
+  /**
+   * fetch needs to be rejected manually to trigger react-query error
+   * @see https://tanstack.com/query/v4/docs/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
+   */
+  if (!rawRes.ok) {
+    const error = await rawRes.json()
+    throw new Error(error.message)
+  }
+
   return rawRes.json()
 }
 
@@ -67,7 +76,9 @@ export const checkTheSlugOwner = async (
   return rawRes.json()
 }
 
-export const postAddUser = async (user: User): Promise<{ message: string }> => {
+export const postAddUser = async (
+  user: User,
+): Promise<{ message: string; isNewUser?: boolean }> => {
   const token = await user.getIdToken()
 
   const rawRes = await fetch(`${BASEURL}/api/private/user/add`, {
