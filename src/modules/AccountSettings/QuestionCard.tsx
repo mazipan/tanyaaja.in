@@ -65,14 +65,18 @@ export const QuestionPanel = ({
           </CardContent>
 
           <CardFooter className="justify-end gap-2 flex-wrap">
-            <RedirectButton
-              url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-              external
-            />
-            <CopyButton
-              text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-              withLabel
-            />
+            {question?.public ? (
+              <>
+                <RedirectButton
+                  url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                  external
+                />
+                <CopyButton
+                  text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                  withLabel
+                />
+              </>
+            ) : null}
 
             <Button
               type="button"
