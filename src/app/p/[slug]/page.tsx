@@ -93,7 +93,7 @@ export default async function PublicPage({
             Tanya ke {owner?.data?.name}
           </h1>
 
-          {owner.data?.x_username && (
+          {owner?.data?.x_username && (
             <a
               className="flex items-center gap-1 underline"
               href={`https://x.com/${owner.data.x_username}`}
