@@ -71,7 +71,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex justify-between items-center p-4 border-b">
+    <header className="container flex justify-between items-center p-4 border-b">
       <Link href="/" className="flex gap-2 items-center">
         <Image
           src={logoSvg}

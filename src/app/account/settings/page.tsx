@@ -20,6 +20,13 @@ import { useAuth } from '@/components/FirebaseAuth'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { Button } from '@/components/ui/button'
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import {
   Form,
   FormControl,
   FormDescription,
@@ -271,6 +278,46 @@ export default function Account() {
                   </FormItem>
                 )}
               />
+
+              <Card className="border-red-600">
+                <CardHeader>
+                  <CardTitle>Area Berbahaya!</CardTitle>
+
+                  <CardDescription>
+                    Aksi pada bagian ini dapat menghilangkan keseluruhan datamu
+                    yang ada di TanyaAja.in
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-2 flex-wrap flex-col md:flex-row">
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      onClick={() => {
+                        toast({
+                          title:
+                            'Fitur "Hapus semua pertanyaan" belum tersedia',
+                          description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                        })
+                      }}
+                    >
+                      Hapus semua pertanyaan
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      onClick={() => {
+                        toast({
+                          title: 'Fitur "Hapus akun saya" belum tersedia',
+                          description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                        })
+                      }}
+                    >
+                      Hapus akun saya
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
 
               <Button type="submit" disabled={isSubmitting || isLoadingOwner}>
                 {isSubmitting ? 'Processing' : 'Simpan Perubahan'}

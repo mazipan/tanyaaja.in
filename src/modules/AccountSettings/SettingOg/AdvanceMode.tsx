@@ -78,8 +78,8 @@ export default function AdvanceMode({
               uid: user?.uid,
               slug: owner?.slug || '',
               mode: 'advance',
-              theme: '',
-              simpleText: '',
+              theme: existingOg?.[0]?.theme || 'hyper',
+              simpleText: existingOg?.[0]?.simple_text || '',
               codePublic: data?.publik,
               codeQuestion: data?.question,
             })
@@ -93,7 +93,7 @@ export default function AdvanceMode({
               uid: user?.uid,
               slug: owner?.slug || '',
               mode: 'advance',
-              theme: '',
+              theme: 'hyper',
               simpleText: '',
               codePublic: data?.publik,
               codeQuestion: data?.question,
@@ -137,13 +137,13 @@ export default function AdvanceMode({
           <AlertDescription>
             <ul className="list-disc">
               <li className="m-0">
-                <div className="flex items-center gap-2">
+                <div>
                   Kamu bisa mencoba kodemu di{' '}
                   <Link
                     href="https://og-playground.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline flex items-center"
+                    className="hover:underline flex items-center text-blue-400"
                   >
                     og-playground.vercel.app
                     <ArrowTopRightIcon className="h-4 w-4" />
@@ -151,27 +151,25 @@ export default function AdvanceMode({
                 </div>
               </li>
               <li className="m-0">
-                <div className="flex items-center gap-2">
-                  Gunakan ukuran 800x600 (width: 800px, height: 400px)
-                </div>
+                <div>Gunakan ukuran 800x600 (width: 800px, height: 400px)</div>
               </li>
               <li className="m-0">
-                <div className="flex items-center gap-2">
+                <div>
                   Kamu bisa menggunakan{' '}
                   <Link
                     href="https://hypercolor.dev/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline flex items-center"
+                    className="hover:underline flex items-center text-blue-400"
                   >
                     hypercolor.dev
                     <ArrowTopRightIcon className="h-4 w-4" />
                   </Link>
-                  , kalau perlu inspirasi gradient
+                  untuk inspirasi gradient
                 </div>
               </li>
               <li className="m-0">
-                <div className="flex items-center gap-2">
+                <div>
                   Kamu bisa menggunakan parameter{' '}
                   <code className="text-blue-400">[question]</code> untuk
                   menggantikan pertanyaan
