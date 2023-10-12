@@ -10,7 +10,7 @@ import {
   UpdateUserArgs,
   UpdateUserCounterArgs,
 } from './types'
-import { addDays, DEFAULT_AVATAR } from './utils'
+import { addDays, DEFAULT_AVATAR, generateNanoId } from './utils'
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -252,7 +252,7 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
         title: [
           {
             type: 'text',
-            text: { content: nanoid() },
+            text: { content: generateNanoId() },
           },
         ],
       },
