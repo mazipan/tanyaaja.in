@@ -42,6 +42,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
+import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
@@ -87,6 +88,7 @@ export default function Account() {
   const watchSlug = form.watch('slug')
   const watchImage = form.watch('image')
   const watchName = form.watch('name')
+  const watchPublic = form.watch('public')
 
   async function onSubmit(data: FormValues) {
     trackEvent('click update account info')
@@ -258,26 +260,31 @@ export default function Account() {
                 ) : null}
               </div>
 
-              <FormField
-                control={form.control}
-                name="public"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                    <div className="space-y-0.5">
-                      <FormLabel>Bisa dicari publik?</FormLabel>
-                      <FormDescription>
-                        Pengguna anonim dapat mencari akunmu lewat laman eksplor
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className="flex flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="public"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>Bisa dicari publik?</FormLabel>
+                        <FormDescription>
+                          Pengguna anonim dapat mencari akunmu lewat laman
+                          eksplor
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <AccountVisibilityReminder show={!watchPublic} />
+              </div>
 
               <Card className="border-red-600">
                 <CardHeader>
