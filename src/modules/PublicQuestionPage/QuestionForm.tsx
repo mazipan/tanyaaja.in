@@ -6,6 +6,7 @@ import Script from 'next/script'
 import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
+import { Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -138,8 +139,17 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
           />
           <div className="flex flex-wrap justify-between gap-2">
             <Button type="submit" disabled={isLoading}>
-              <PaperPlaneIcon className="mr-2 h-4 w-4" />
-              {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Sedang mengirim...</span>
+                </>
+              ) : (
+                <>
+                  <PaperPlaneIcon className="mr-2 h-4 w-4" />
+                  <span>Kirim pertanyaan</span>
+                </>
+              )}
             </Button>
 
             {owner && owner?.slug ? (

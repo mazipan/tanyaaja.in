@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { UpdateIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
+import { Loader2 } from 'lucide-react'
 import {
   boolean as isBoolean,
   maxLength,
@@ -344,7 +345,16 @@ export default function Account() {
               </Card>
 
               <Button type="submit" disabled={isSubmitting || isLoadingOwner}>
-                {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Simpan Perubahan</span>
+                  </>
+                )}
               </Button>
             </form>
           </Form>
