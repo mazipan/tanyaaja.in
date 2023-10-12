@@ -13,6 +13,7 @@ import {
   object,
   optional,
   type Output,
+  startsWith,
   string,
 } from 'valibot'
 
@@ -60,6 +61,9 @@ const schema = object({
     minLength(2, 'Slug butuh paling tidak 2 karakter.'),
     maxLength(100, 'Slug hanya bisa maksimal 100 karakter.'),
   ]),
+  x_username: optional(
+    string([startsWith('@', 'Username X (Twitter) harus diawali dengan @')]),
+  ),
   public: optional(isBoolean()),
 })
 
@@ -82,6 +86,7 @@ export default function Account() {
       name: '',
       slug: '',
       public: false,
+      x_username: '',
     },
   })
 
@@ -103,6 +108,7 @@ export default function Account() {
                 name: data.name,
                 public: data.public ?? false,
                 image: data?.image || user?.photoURL || DEFAULT_AVATAR,
+                x_username: data.x_username,
               })
 
               toast({
@@ -146,6 +152,7 @@ export default function Account() {
       form.setValue('name', dataOwner.data.name)
       form.setValue('slug', dataOwner.data.slug)
       form.setValue('public', dataOwner.data.public ?? false)
+      form.setValue('x_username', dataOwner.data.x_username)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingOwner, dataOwner])
@@ -226,6 +233,23 @@ export default function Account() {
                   </Button>
                 </div>
               ) : null}
+
+              <FormField
+                control={form.control}
+                name="x_username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username X (Twitter)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="@username" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Username ini akan ditampilkan di laman beranda publikmu.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
