@@ -44,7 +44,7 @@ export default function Home() {
 
           <div className="w-full flex gap-2 mt-8 flex-col xl:flex-row">
             <Button className="flex gap-2 items-center" size="lg" asChild>
-              <Link href="/login">
+              <Link href="/account">
                 Mulai dengan cepat
                 <ArrowRightIcon className="w-6 h-6" />
               </Link>

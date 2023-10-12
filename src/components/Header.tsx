@@ -12,6 +12,7 @@ import {
 } from '@radix-ui/react-icons'
 
 import { signOut } from 'firebase/auth'
+import { Loader2 } from 'lucide-react'
 
 import { destroyActiveSession } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
@@ -168,7 +169,9 @@ export function Header() {
               </Button>
             )}
           </>
-        ) : null}
+        ) : (
+          <Loader2 className="animate-spin" />
+        )}
 
         <ThemeSwitcher />
       </div>
