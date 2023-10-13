@@ -31,7 +31,7 @@ const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
     minLength(2, 'Pertanyaan butuh paling tidak 2 karakter.'),
     maxLength(500, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
-    includes(' ','Pertanyaan membutuhkan lebih dari satu kata'),
+    includes(' ','Pertanyaan membutuhkan lebih dari satu kata.'),
   ]),
 })
 
