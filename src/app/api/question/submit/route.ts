@@ -56,7 +56,7 @@ async function sendQuestion(
   })
 
   try {
-    await sendMessageToBot(simpleDataResponse?.uid, q)
+    await sendMessageToBot(simpleDataResponse, q)
   } catch {
     // do nothing
   }

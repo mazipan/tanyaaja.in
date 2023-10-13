@@ -1,5 +1,6 @@
+import { BASEURL } from './api'
 import { getNotifChannelByUid, simplifyResponseObject } from './notion'
-import { NotifChannel } from './types'
+import { NotifChannel, UserProfile } from './types'
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || ''
 const TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || ''
@@ -75,12 +76,21 @@ export const getChatIdByUid = async (uid: string): Promise<string> => {
   return ''
 }
 
-export const sendMessageToBot = async (uid: string, message: string) => {
+export const sendMessageToBot = async (
+  userProfile: UserProfile,
+  message: string,
+) => {
   if (TELEGRAM_BOT_USERNAME && TELEGRAM_BOT_TOKEN) {
-    const chatID = await getChatIdByUid(uid)
+    const chatID = await getChatIdByUid(userProfile?.uid)
+
     const requestBody = {
       chat_id: chatID,
-      text: message,
+      text: `
+**📥 New Question For You**
+
+**Question**: ${message}
+
+Kunjungi: ${BASEURL}/account`,
     }
 
     if (chatID) {
