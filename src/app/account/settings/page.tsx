@@ -42,7 +42,6 @@ import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
-import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
@@ -88,7 +87,6 @@ export default function Account() {
   const watchSlug = form.watch('slug')
   const watchImage = form.watch('image')
   const watchName = form.watch('name')
-  const watchPublic = form.watch('public')
 
   async function onSubmit(data: FormValues) {
     trackEvent('click update account info')
@@ -282,8 +280,6 @@ export default function Account() {
                     </FormItem>
                   )}
                 />
-
-                <AccountVisibilityReminder show={!watchPublic} />
               </div>
 
               <Card className="border-red-600">

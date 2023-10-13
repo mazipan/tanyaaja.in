@@ -1,6 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+
+import { Info } from 'lucide-react'
 
 import {
   Toast,
@@ -15,7 +18,7 @@ const ONE_WEEK = 604_800_000
 const STORAGE_KEY = 'last-reminder'
 
 export const AccountVisibilityReminder = ({ show }: { show: boolean }) => {
-  const [isShown, setIsShown] = useState(show)
+  const [isShown, setIsShown] = useState(false)
 
   useEffect(() => {
     const lastReminder = localStorage.getItem(STORAGE_KEY)
@@ -43,13 +46,20 @@ export const AccountVisibilityReminder = ({ show }: { show: boolean }) => {
 
   return (
     <ToastProvider duration={Infinity}>
-      <Toast open={isShown} onOpenChange={() => setIsShown(false)}>
-        <div className="flex flex-col gap-4">
-          <ToastTitle>Akun tidak publik</ToastTitle>
-          <ToastDescription>
-            Akun Anda tidak dapat dicari oleh pengguna anonim pada halaman
-            eksplor sampai Anda mengubah akun menjadi publik.
-          </ToastDescription>
+      <Toast open={isShown} onOpenChange={handleReminderClose}>
+        <div className="flex items-start gap-4">
+          <Info className="w-12 h-auto" />
+
+          <div className="flex flex-col gap-2">
+            <ToastTitle className="leading-tight">Akun tidak publik</ToastTitle>
+            <ToastDescription>
+              Ubah akun Anda menjadi publik pada halaman{' '}
+              <Link href="/account/settings" className="underline">
+                pengaturan akun
+              </Link>{' '}
+              agar dapat dilihat oleh pengguna lain pada halaman eksplor.
+            </ToastDescription>
+          </div>
         </div>
 
         <ToastClose onClick={handleReminderClose} />
