@@ -1,10 +1,15 @@
 import { Client } from '@notionhq/client'
+import {
+  PageObjectResponse,
+  type PartialDatabaseObjectResponse,
+} from '@notionhq/client/build/src/api-endpoints'
 import slugify from '@sindresorhus/slugify'
 import { nanoid } from 'nanoid'
 
 import {
   AddUserArgs,
   CreateCustomOgArgs,
+  CreateNotifChannelArgs,
   CreateSessionArgs,
   SubmitQuestionArgs,
   UpdateUserArgs,
@@ -20,6 +25,7 @@ const DB_USER = process.env.NOTION_DB_USERS_ID || ''
 const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
 const DB_SESSION = process.env.NOTION_DB_SESSION_ID || ''
 const DB_CUSTOM_OG = process.env.NOTION_DB_CUSTOM_OG || ''
+const DB_NOTIF_CHANNEL = process.env.NOTION_DB_NOTIF_CHANNEL || ''
 
 const submitRichTextProp = (fieldName: string, value: string) => {
   return {
@@ -42,6 +48,44 @@ const submitNumberProp = (fieldName: string, value: number) => {
       number: value || 0,
     },
   }
+}
+
+export type ResponseProperties =
+  | PartialDatabaseObjectResponse['properties']
+  | PageObjectResponse['properties']
+
+export const simplifyResponseObject = <T>(
+  properties: ResponseProperties,
+): T => {
+  // @ts-ignore
+  const simpleDataResponse: T = {}
+  for (const [key, value] of Object.entries(properties)) {
+    const type = value.type
+    if (type === 'rich_text' || type === 'title') {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type][0]?.text?.content || ''
+    } else if (type === 'last_edited_time' || type === 'created_time') {
+      // @ts-ignore
+      simpleDataResponse[type] = value[type]
+    } else if (type === 'number') {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
+      // @ts-ignore
+    } else if (value[type].name) {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].name
+      // @ts-ignore
+    } else if (value[type].start) {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].start
+      // @ts-ignore
+    } else {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
+    }
+  }
+
+  return simpleDataResponse as T
 }
 
 export const getSession = async (token: string) => {
@@ -336,42 +380,6 @@ export const togglePublicAccessQuestion = async (
   })
 }
 
-// @ts-ignore
-export const simplifyResponseObject = <T>(properties): T => {
-  const simpleDataResponse = {}
-  for (const [key, value] of Object.entries(properties)) {
-    // @ts-ignore
-    const type = value.type
-    // @ts-ignore
-    if (type === 'rich_text' || type === 'title') {
-      // @ts-ignore
-      simpleDataResponse[key] = value[type][0]?.text?.content || ''
-      // @ts-ignore
-    } else if (type === 'last_edited_time' || type === 'created_time') {
-      // @ts-ignore
-      simpleDataResponse[type] = value[type]
-      // @ts-ignore
-    } else if (type === 'number') {
-      // @ts-ignore
-      simpleDataResponse[key] = value[type]
-      // @ts-ignore
-    } else if (value[type].name) {
-      // @ts-ignore
-      simpleDataResponse[key] = value[type].name
-      // @ts-ignore
-    } else if (value[type].start) {
-      // @ts-ignore
-      simpleDataResponse[key] = value[type].start
-      // @ts-ignore
-    } else {
-      // @ts-ignore
-      simpleDataResponse[key] = value[type]
-    }
-  }
-
-  return simpleDataResponse as T
-}
-
 export const getCustomOgByUid = async (uid: string) => {
   const response = await notion.databases.query({
     database_id: DB_CUSTOM_OG,
@@ -448,6 +456,72 @@ export const updateCustomOgByUuid = async (
       ...submitRichTextProp('simple_text', param.simpleText),
       ...submitRichTextProp('code_public', param.codePublic),
       ...submitRichTextProp('code_question', param.codeQuestion),
+    },
+  })
+
+  return response
+}
+
+export const getNotifChannelByUid = async (uid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_NOTIF_CHANNEL,
+    filter: {
+      property: 'uid',
+      title: {
+        equals: uid,
+      },
+    },
+  })
+
+  return response
+}
+
+export const createNotifChannelByUid = async (
+  param: CreateNotifChannelArgs,
+) => {
+  const response = await notion.pages.create({
+    parent: {
+      database_id: DB_NOTIF_CHANNEL,
+    },
+    properties: {
+      uid: {
+        type: 'title',
+        title: [
+          {
+            type: 'text',
+            text: {
+              content: param.uid,
+            },
+          },
+        ],
+      },
+      ...submitRichTextProp('slug', param.slug),
+      ...submitRichTextProp('telegram_chat_id', param.telegram_chat_id),
+      ...submitRichTextProp('telegram_username', param.telegram_username),
+    },
+  })
+
+  return response
+}
+
+export const updateNotifChannelByUuid = async (
+  pageId: string,
+  param: Omit<CreateNotifChannelArgs, 'uid'>,
+) => {
+  const response = await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      slug: {
+        type: 'rich_text',
+        rich_text: [
+          {
+            type: 'text',
+            text: { content: param.slug },
+          },
+        ],
+      },
+      ...submitRichTextProp('telegram_chat_id', param.telegram_chat_id),
+      ...submitRichTextProp('telegram_username', param.telegram_username),
     },
   })
 

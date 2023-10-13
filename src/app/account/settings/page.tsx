@@ -147,7 +147,7 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (!isLoadingOwner && dataOwner) {
+    if (!isLoadingOwner && dataOwner && dataOwner.data) {
       form.setValue('image', dataOwner.data.image)
       form.setValue('name', dataOwner.data.name)
       form.setValue('slug', dataOwner.data.slug)
