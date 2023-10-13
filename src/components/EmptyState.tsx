@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 
-import { Separator } from '@/components/ui/separator'
 import image404 from '~/public/images/404.png'
 
 export default function EmptyState({
@@ -13,12 +12,13 @@ export default function EmptyState({
   description: string
 }) {
   return (
-    <main className="w-full container py-8">
-      <div className="w-full space-y-0.5">
-        <h3 className="text-2xl font-bold tracking-tight">{title}</h3>
-        <p className="text-muted-foreground">{description}</p>
+    <main className="w-full py-8 flex flex-col items-center gap-6">
+      <div className="w-full space-y-0.5 max-w-3xl">
+        <h3 className="text-2xl font-bold tracking-tight text-center">
+          {title}
+        </h3>
+        <p className="text-muted-foreground text-center">{description}</p>
       </div>
-      <Separator className="my-6" />
 
       <div className="w-full flex flex-col gap-4 items-center justify-center">
         <Image

@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Share1Icon, TwitterLogoIcon } from '@radix-ui/react-icons'
+
+import { Share2, Twitter } from 'lucide-react'
 
 import { CopyButton } from './CopyButton'
 import { Button } from './ui/button'
@@ -46,7 +47,7 @@ export function ShareButton({
           className="flex gap-2 items-center"
           onClick={handleShare}
         >
-          <Share1Icon className="h-4 w-4" />
+          <Share2 className="h-4 w-4" />
           Bagikan
         </Button>
       ) : (
@@ -77,7 +78,7 @@ export function ShareButton({
                 url,
               )}`}
             >
-              <TwitterLogoIcon className="h-4 w-4" />
+              <Twitter className="h-4 w-4" />
             </a>
           </Button>
         </>

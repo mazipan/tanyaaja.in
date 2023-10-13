@@ -2,7 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
+
+import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -32,7 +33,7 @@ export default function NotFound() {
         <Button className="flex gap-2 items-center" asChild>
           <Link href="/login">
             Kembali ke beranda
-            <ArrowRightIcon className="w-6 h-6" />
+            <ArrowRight className="w-6 h-6" />
           </Link>
         </Button>
       </div>
