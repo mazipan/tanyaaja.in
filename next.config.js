@@ -5,6 +5,7 @@ const CSP_ALLOWED_DOMAINS = [
   '*.gstatic.com',
   process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  'https://apis.google.com',
 ]
 
 const CSP_ALLOWED_DOMAINS_STRING = CSP_ALLOWED_DOMAINS.filter(Boolean).join(' ')
