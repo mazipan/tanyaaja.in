@@ -112,11 +112,5 @@ module.exports = {
       },
     ],
     // /end Import Sort
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
-    ],
   },
 }

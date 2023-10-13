@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+
+import { MoveUpRight } from 'lucide-react'
 
 import EmptyState from '@/components/EmptyState'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
@@ -62,7 +63,7 @@ export default function PublicUserList() {
 
                 <Button disabled type="button">
                   Kunjungi
-                  <ArrowTopRightIcon className="ml-2" />
+                  <MoveUpRight className="w-4 h-4 ml-2" />
                 </Button>
               </Card>
             ))}
@@ -94,7 +95,7 @@ export default function PublicUserList() {
                     <Button asChild>
                       <Link href={`/p/${up.slug}`}>
                         Kunjungi
-                        <ArrowTopRightIcon className="ml-2" />
+                        <MoveUpRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
                   </Card>

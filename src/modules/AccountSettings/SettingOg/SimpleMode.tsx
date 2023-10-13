@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-import { Loader2 } from 'lucide-react'
+import { Loader2, MoveUpRight } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -156,7 +155,7 @@ export default function SimpleMode({
                   rel="noopener noreferrer"
                 >
                   Preview
-                  <ArrowTopRightIcon className="h-4 w-4" />
+                  <MoveUpRight className="h-4 w-4" />
                 </a>
               </Button>
               <Button type="submit" disabled={isSubmitting || isLoading}>
