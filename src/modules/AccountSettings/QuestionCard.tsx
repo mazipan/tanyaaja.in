@@ -1,8 +1,4 @@
-import {
-  CalendarIcon,
-  LockClosedIcon,
-  LockOpen2Icon,
-} from '@radix-ui/react-icons'
+import { CalendarDays, Lock, Unlock } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
 import { RedirectButton } from '@/components/RedirectButton'
@@ -37,7 +33,11 @@ export const QuestionPanel = ({
           <CardHeader>
             <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
             <CardDescription className="flex gap-1 items-center">
-              {question.public ? <LockOpen2Icon /> : <LockClosedIcon />}
+              {question.public ? (
+                <Unlock className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
               <span className="text-sm">
                 {question.public
                   ? 'Bisa diakses publik'
@@ -45,7 +45,7 @@ export const QuestionPanel = ({
               </span>
             </CardDescription>
             <CardDescription className="flex gap-1 items-center">
-              <CalendarIcon />
+              <CalendarDays className="w-4 h-4" />
               {new Date(question.submitted_date).toLocaleDateString('id-ID', {
                 year: 'numeric',
                 month: 'short',

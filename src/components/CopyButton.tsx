@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckIcon, CopyIcon } from '@radix-ui/react-icons'
+
+import { Check, Copy } from 'lucide-react'
 
 import { copyTextToClipboard } from '@/lib/utils'
 
@@ -37,9 +38,9 @@ export function CopyButton({
         }}
       >
         {isCopied ? (
-          <CheckIcon className="h-4 w-4" />
+          <Check className="h-4 w-4" />
         ) : (
-          <CopyIcon className="h-4 w-4" />
+          <Copy className="h-4 w-4" />
         )}
         {withLabel ? (
           <>{isCopied ? <span>Tersalin</span> : <span>Salin</span>}</>

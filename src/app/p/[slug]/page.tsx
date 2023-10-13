@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { TwitterLogoIcon } from '@radix-ui/react-icons'
+
+import { Twitter } from 'lucide-react'
 
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { BASEURL, getPublicCustomOg, getPublicOwnerUser } from '@/lib/api'
@@ -100,7 +101,7 @@ export default async function PublicPage({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <TwitterLogoIcon className="h-4 w-4" />
+              <Twitter className="h-4 w-4" />
               {owner.data.x_username}
             </a>
           )}
