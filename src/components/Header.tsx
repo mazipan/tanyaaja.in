@@ -3,16 +3,17 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import {
-  ArrowTopRightIcon,
-  CameraIcon,
-  ChatBubbleIcon,
-  ExitIcon,
-  MixerHorizontalIcon,
-} from '@radix-ui/react-icons'
 
 import { signOut } from 'firebase/auth'
-import { BellIcon, Loader2 } from 'lucide-react'
+import {
+  BellIcon,
+  Camera,
+  Loader2,
+  LogOut,
+  MessageCircle,
+  MoveUpRight,
+  Wrench,
+} from 'lucide-react'
 
 import { destroyActiveSession } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
@@ -130,26 +131,26 @@ export function Header() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <ArrowTopRightIcon className="h-4 w-4 mr-2" />
+                        <MoveUpRight className="h-4 w-4 mr-2" />
                         Laman Publik
                       </Link>
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
                     <Link href="/account">
-                      <ChatBubbleIcon className="h-4 w-4 mr-2" />
+                      <MessageCircle className="h-4 w-4 mr-2" />
                       Daftar Pertanyaan
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
                     <Link href="/account/settings">
-                      <MixerHorizontalIcon className="h-4 w-4 mr-2" />
+                      <Wrench className="h-4 w-4 mr-2" />
                       Setelan Akun
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
                     <Link href="/account/settings/og-image">
-                      <CameraIcon className="h-4 w-4 mr-2" />
+                      <Camera className="h-4 w-4 mr-2" />
                       Setelan OG Image
                     </Link>
                   </DropdownMenuItem>
@@ -164,7 +165,7 @@ export function Header() {
                     onClick={handleLogout}
                     className="cursor-pointer py-3"
                   >
-                    <ExitIcon className="h-4 w-4 mr-2" />
+                    <LogOut className="h-4 w-4 mr-2" />
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>

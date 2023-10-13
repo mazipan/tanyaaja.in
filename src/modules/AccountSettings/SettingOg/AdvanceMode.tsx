@@ -4,11 +4,10 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
-import { ArrowTopRightIcon, InfoCircledIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-import { Loader2 } from 'lucide-react'
+import { Info, Loader2, MoveUpRight } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -125,7 +124,7 @@ export default function AdvanceMode({
     <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
       <section className="flex-1 lg:max-w-2xl">
         <Alert className="mb-4">
-          <InfoCircledIcon className="h-4 w-4" />
+          <Info className="h-4 w-4" />
           <AlertTitle>Tips!</AlertTitle>
           <AlertDescription>
             <ul className="list-disc">
@@ -139,7 +138,7 @@ export default function AdvanceMode({
                     className="hover:underline flex items-center text-blue-400"
                   >
                     og-playground.vercel.app
-                    <ArrowTopRightIcon className="h-4 w-4" />
+                    <MoveUpRight className="h-4 w-4" />
                   </Link>
                 </div>
               </li>
@@ -156,7 +155,7 @@ export default function AdvanceMode({
                     className="hover:underline flex items-center text-blue-400"
                   >
                     hypercolor.dev
-                    <ArrowTopRightIcon className="h-4 w-4" />
+                    <MoveUpRight className="h-4 w-4" />
                   </Link>
                   untuk inspirasi gradient
                 </div>

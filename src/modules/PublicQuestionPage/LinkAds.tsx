@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
+
+import { ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -15,7 +16,7 @@ export function LinkAds() {
       >
         <Link href="/login">
           Buat di sini
-          <ArrowRightIcon className="w-6 h-6" />
+          <ArrowRight className="w-6 h-6" />
         </Link>
       </Button>
     </div>

@@ -1,7 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
+
+import { MoveUpRight } from 'lucide-react'
 
 import { Button } from './ui/button'
 
@@ -24,7 +25,7 @@ export function RedirectButton({
         asChild
       >
         <Link href={url} {...externalProps}>
-          <ArrowTopRightIcon className="h-4 w-4" />
+          <MoveUpRight className="h-4 w-4" />
         </Link>
       </Button>
     </div>

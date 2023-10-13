@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { UpdateIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { Loader2 } from 'lucide-react'
+import { Loader2, RefreshCw } from 'lucide-react'
 import {
   boolean as isBoolean,
   maxLength,
@@ -228,7 +227,7 @@ export default function Account() {
                       form.setValue('image', randomizeAvatar())
                     }}
                   >
-                    <UpdateIcon className="h-4 w-4 mr-2" />
+                    <RefreshCw className="h-4 w-4 mr-2" />
                     Pilih secara acak
                   </Button>
                 </div>

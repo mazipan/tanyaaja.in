@@ -1,4 +1,4 @@
-import { Link2Icon } from '@radix-ui/react-icons'
+import { Link } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
 import { Card } from '@/components/ui/card'
@@ -25,7 +25,7 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
           Laman Publik
         </h3>
         <div className="flex gap-2 items-center mt-4">
-          <Link2Icon />
+          <Link className="w-4 h-4" />
           <a
             className="underline text-sm"
             href={`${BASEURL}/p/${owner?.slug || '...'}`}

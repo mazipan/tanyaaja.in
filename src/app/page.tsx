@@ -2,17 +2,18 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+
 import {
-  ArrowRightIcon,
-  CodeIcon,
-  CrumpledPaperIcon,
-  CubeIcon,
-  HandIcon,
-  LightningBoltIcon,
-  Link2Icon,
-  LockOpen1Icon,
-  MagnifyingGlassIcon,
-} from '@radix-ui/react-icons'
+  ArrowRight,
+  Box,
+  Code2,
+  Hand,
+  Link as LinkIcon,
+  ScrollText,
+  Search,
+  Unlock,
+  Zap,
+} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -46,7 +47,7 @@ export default function Home() {
             <Button className="flex gap-2 items-center" size="lg" asChild>
               <Link href="/account">
                 Mulai dengan cepat
-                <ArrowRightIcon className="w-6 h-6" />
+                <ArrowRight className="w-6 h-6" />
               </Link>
             </Button>
 
@@ -58,7 +59,7 @@ export default function Home() {
             >
               <Link href="/eksplor">
                 Eksplor dulu
-                <MagnifyingGlassIcon className="w-6 h-6" />
+                <Search className="w-6 h-6" />
               </Link>
             </Button>
           </div>
@@ -81,7 +82,7 @@ export default function Home() {
         <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3 mt-8">
           <Card>
             <CardHeader>
-              <LightningBoltIcon className="w-14 h-14 mb-4" />
+              <Zap className="w-14 h-14 mb-4" />
               <CardTitle>Gratis Tanpa Iklan</CardTitle>
               <CardDescription>
                 Bisa digunakan secara gratis tanpa gangguan iklan
@@ -90,7 +91,7 @@ export default function Home() {
           </Card>
           <Card>
             <CardHeader>
-              <Link2Icon className="w-14 h-14 mb-4" />
+              <LinkIcon className="w-14 h-14 mb-4" />
               <CardTitle>Mudah Dibagikan</CardTitle>
               <CardDescription>
                 Kamu bisa membagikan laman publik dan pertanyaan kepada siapa
@@ -100,7 +101,7 @@ export default function Home() {
           </Card>
           <Card>
             <CardHeader>
-              <HandIcon className="w-14 h-14 mb-4" />
+              <Hand className="w-14 h-14 mb-4" />
               <CardTitle>Kontrol Penuh</CardTitle>
               <CardDescription>
                 Kamu bisa menentukan apakah sebuah pertanyaan bisa dilihat orang
@@ -111,7 +112,7 @@ export default function Home() {
           </Card>
           <Card>
             <CardHeader>
-              <CrumpledPaperIcon className="w-14 h-14 mb-4" />
+              <ScrollText className="w-14 h-14 mb-4" />
               <CardTitle>Baca dan Buang</CardTitle>
               <CardDescription>
                 Tidak perlu lama-lama menyimpan pertanyaan, setelah dibaca kami
@@ -121,7 +122,7 @@ export default function Home() {
           </Card>
           <Card>
             <CardHeader>
-              <LockOpen1Icon className="w-14 h-14 mb-4" />
+              <Unlock className="w-14 h-14 mb-4" />
               <CardTitle>Otentikasi Mudah</CardTitle>
               <CardDescription>
                 Tidak perlu membuat dan mengingat password baru, cukup login
@@ -131,7 +132,7 @@ export default function Home() {
           </Card>
           <Card>
             <CardHeader>
-              <CubeIcon className="w-14 h-14 mb-4" />
+              <Box className="w-14 h-14 mb-4" />
               <CardTitle>Kode Sumber Terbuka</CardTitle>
               <CardDescription>
                 Penasaran bagaimana cara kerjanya? Langsung saja cek apa yang
@@ -160,7 +161,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <CodeIcon className="w-6 h-6" />
+            <Code2 className="w-6 h-6" />
             Lihat kode sumber
           </a>
         </Button>

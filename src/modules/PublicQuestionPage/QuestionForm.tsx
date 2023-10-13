@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Script from 'next/script'
-import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Lock, SendHorizontal } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -132,7 +131,8 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
                   />
                 </FormControl>
                 <FormDescription className="flex items-center gap-2">
-                  <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
+                  <Lock className="w-4 h-4" /> Pertanyaanmu akan disampaikan
+                  secara anonim
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -147,7 +147,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
                 </>
               ) : (
                 <>
-                  <PaperPlaneIcon className="mr-2 h-4 w-4" />
+                  <SendHorizontal className="mr-2 h-4 w-4" />
                   <span>Kirim pertanyaan</span>
                 </>
               )}
