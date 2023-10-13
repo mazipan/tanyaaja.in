@@ -56,7 +56,7 @@ export const QuestionPanel = ({
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="flex-1">
             <p className="">
               {question.question.length > 100
                 ? `${question.question.substring(0, 300)}...`
