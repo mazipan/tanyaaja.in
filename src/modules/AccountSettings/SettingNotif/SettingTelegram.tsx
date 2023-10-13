@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { InfoCircledIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
+import { Info } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -157,7 +157,7 @@ export default function SettingTelegram({
             />
 
             <Alert className="mb-4">
-              <InfoCircledIcon className="h-4 w-4" />
+              <Info className="h-4 w-4" />
               <AlertTitle>Tips!</AlertTitle>
               <AlertDescription>
                 <ul className="list-disc">
