@@ -7,6 +7,7 @@ import { useAuth } from '@/components/FirebaseAuth'
 import { Separator } from '@/components/ui/separator'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { Question } from '@/lib/types'
+import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
 import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader'
 import { QuestionResponsive } from '@/modules/AccountSettings/QuestionPreview/QuestionResponsive'
@@ -100,6 +101,12 @@ export default function Account() {
           </>
         )}
       </div>
+
+      {!isLoadingOwner && (
+        <AccountVisibilityReminder
+          show={dataOwner ? !dataOwner.data.public : false}
+        />
+      )}
 
       <QuestionResponsive
         isOpen={isOpenDialog}
