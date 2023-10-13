@@ -283,26 +283,29 @@ export default function Account() {
                 ) : null}
               </div>
 
-              <FormField
-                control={form.control}
-                name="public"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                    <div className="space-y-0.5">
-                      <FormLabel>Bisa dicari publik?</FormLabel>
-                      <FormDescription>
-                        Pengguna anonim dapat mencari akunmu lewat laman eksplor
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className="flex flex-col gap-4">
+                <FormField
+                  control={form.control}
+                  name="public"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>Bisa dicari publik?</FormLabel>
+                        <FormDescription>
+                          Pengguna anonim dapat mencari akunmu lewat laman
+                          eksplor
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <Card className="border-red-600">
                 <CardHeader>
