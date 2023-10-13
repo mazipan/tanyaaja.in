@@ -8,6 +8,7 @@ import { ArrowTopRightIcon, InfoCircledIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
+import { Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -226,7 +227,16 @@ export default function AdvanceMode({
             />
 
             <Button type="submit" disabled={isSubmitting || isLoading}>
-              {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <span>Simpan Perubahan</span>
+                </>
+              )}
             </Button>
           </form>
         </Form>

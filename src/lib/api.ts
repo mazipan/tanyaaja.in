@@ -100,7 +100,7 @@ export const postAddUser = async (
 
 export const patchUpdateUser = async (
   user: User,
-  param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>,
+  param: Omit<UpdateUserArgs, 'uid' | 'pageId'>,
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
@@ -112,6 +112,7 @@ export const patchUpdateUser = async (
       slug: param.slug,
       image: param.image,
       public: param.public ?? false,
+      x_username: param.x_username,
     }),
     headers: {
       'Content-Type': 'application/json',
