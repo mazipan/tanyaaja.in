@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { CalendarDays, Lock, Unlock } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
+import PublicAccessToggler from '@/components/PublicAccessToggler'
 import { RedirectButton } from '@/components/RedirectButton'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,13 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Toggle } from '@/components/ui/toggle'
-import { useToast } from '@/components/ui/use-toast'
 import { BASEURL } from '@/lib/api'
-import { trackEvent } from '@/lib/firebase'
 import { Question, UserProfile } from '@/lib/types'
-
-import { usePatchQuestionAsPublicOrPrivate } from './hooks/usePatchQuestionAsPublicOrPrivate'
 
 interface QuestionPanelProps {
   question: Question | null
@@ -33,42 +29,25 @@ export const QuestionPanel = ({
   index,
   owner,
 }: QuestionPanelProps) => {
-  const { toast } = useToast()
-
-  const patchQuestionAsPublicOrPrivateMutation =
-    usePatchQuestionAsPublicOrPrivate()
-
   const queryClient = useQueryClient()
 
-  const handleTogglePrivacy = () => {
-    trackEvent('click toggle public access')
+  const handleUpdateQuestionPrivacy = (question: Question) => {
+    // Find the question and update state
+    queryClient.setQueryData<{ data: Question[] }>(
+      ['/questions', owner?.uid],
+      (oldData) => {
+        const defaultData: { data: Question[] } = { data: [] }
+        if (!oldData) return defaultData
 
-    patchQuestionAsPublicOrPrivateMutation.mutate(question, {
-      onSuccess: () => {
-        // Find the question and update state
-        queryClient.setQueryData<{ data: Question[] }>(
-          ['/questions', owner?.uid],
-          (oldData) => {
-            const defaultData: { data: Question[] } = { data: [] }
-            if (!oldData) return defaultData
-
-            const updatedData = oldData?.data.map((questionItem) =>
-              questionItem.uuid === question?.uuid
-                ? { ...questionItem, public: !questionItem.public }
-                : questionItem,
-            )
-
-            return { ...oldData, data: updatedData }
-          },
+        const updatedData = oldData?.data.map((questionItem) =>
+          questionItem.uuid === question?.uuid
+            ? { ...questionItem, public: !questionItem.public }
+            : questionItem,
         )
+
+        return { ...oldData, data: updatedData }
       },
-      onError: () => {
-        toast({
-          title: 'Gagal menyimpan perubahan',
-          description: `Gagal saat mencoba mengubah hak akses publik ke laman pertanyaan, coba sesaat lagi!`,
-        })
-      },
-    })
+    )
   }
 
   return (
@@ -79,21 +58,10 @@ export const QuestionPanel = ({
             <div className="flex justify-between">
               <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
 
-              <Toggle
-                defaultPressed={question?.public}
-                pressed={question?.public}
-                variant="outline"
-                aria-label="Toggle italic"
-                className="data-[state=on]:bg-success"
-                onPressedChange={handleTogglePrivacy}
-                disabled={patchQuestionAsPublicOrPrivateMutation.isLoading}
-              >
-                {question?.public ? (
-                  <Unlock className="w-4 h-4" />
-                ) : (
-                  <Lock className="w-4 h-4" />
-                )}
-              </Toggle>
+              <PublicAccessToggler
+                question={question}
+                onMutateSuccess={handleUpdateQuestionPrivacy}
+              />
             </div>
 
             <CardDescription className="flex gap-1 items-center">
