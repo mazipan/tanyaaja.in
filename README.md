@@ -42,6 +42,14 @@ An anonymous question bank platform
 - Create new `.env.local` file, copy from the `.env.example` and fill it with your value from Firebase and Notion
 - Run in local, using command `pnpm run dev`
 
+## Contributing
+
+We welcome contributions from the community as they help make our project better. Before you get started, please take a moment to read our contribution guidelines to ensure a smooth and collaborative experience.
+
+See our contribution guidelines in these languages:
+
+- [English](CONTRIBUTING.md)
+
 ## Support Me
 
 - 👉 🇮🇩 [Trakteer](https://trakteer.id/mazipan/tip?utm_source=github-mazipan)
