@@ -132,98 +132,79 @@ export default function SettingTelegram({
   }, [existing])
 
   return (
-    <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
-      <section className="flex-1 lg:max-w-2xl">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username Telegram</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Isi dengan username Telegram"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Tidak perlu menambahkan karakter @ di depan username
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:max-w-2xl">
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username Telegram</FormLabel>
+              <FormControl>
+                <Input placeholder="Isi dengan username Telegram" {...field} />
+              </FormControl>
+              <FormDescription>
+                Tidak perlu menambahkan karakter @ di depan username
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <Alert className="mb-4">
-              <Info className="h-4 w-4" />
-              <AlertTitle>Tips!</AlertTitle>
-              <AlertDescription>
-                <ul className="list-disc">
-                  <li className="m-0">
-                    <div className="flex items-center gap-2">
-                      Kamu perlu mengisi username untuk mendapatkan chat id
-                    </div>
-                  </li>
-                  <li className="m-0">
-                    <div className="flex items-center gap-2">
-                      Kirimkan perintah{' '}
-                      <code className="text-blue-400">/start</code> ke{' '}
-                      <code className="text-blue-400">@tanyaajabot</code> di
-                      Telegram
-                    </div>
-                  </li>
-                  <li className="m-0">
-                    <div className="flex items-center gap-2">
-                      Tekan tombol "Ambil Chat ID" setelah mengirimkan perintah{' '}
-                      <code className="text-blue-400">/start</code>
-                    </div>
-                  </li>
-                </ul>
-              </AlertDescription>
-            </Alert>
+        <Alert className="my-6">
+          <Info className="h-4 w-4" />
+          <AlertTitle className="mb-4">Tips!</AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc list-outside space-y-1.5">
+              <li>Kamu perlu mengisi username untuk mendapatkan chat id</li>
+              <li>
+                Kirimkan perintah <code className="text-blue-400">/start</code>{' '}
+                ke <code className="text-blue-400">@tanyaajabot</code> di
+                Telegram
+              </li>
+              <li>
+                Tekan tombol "Ambil Chat ID" setelah mengirimkan perintah{' '}
+                <code className="text-blue-400">/start</code>
+              </li>
+            </ul>
+          </AlertDescription>
+        </Alert>
 
-            <div className="flex gap-2 items-end flex-wrap">
-              <div className="flex-1">
-                <FormField
-                  control={form.control}
-                  name="chatId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Chat ID Target</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Isi dengan target Chat ID"
-                          disabled={!watchUsername}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="w-[150px]">
+        <FormField
+          control={form.control}
+          name="chatId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Chat ID Target</FormLabel>
+              <div className="flex gap-2">
+                <FormControl className="flex-1">
+                  <Input
+                    placeholder="Isi dengan target Chat ID"
+                    disabled={!watchUsername}
+                    {...field}
+                  />
+                </FormControl>
                 <Button
                   type="button"
                   variant="outline"
                   disabled={!watchUsername || isSubmitting || isLoading}
                   onClick={handleCheckChatId}
+                  className="shrink-0"
                 >
                   Ambil Chat ID
                 </Button>
               </div>
-            </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <div className="flex gap-2 items-center">
-              <Button type="submit" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </section>
-    </div>
+        <div className="mt-8 flex gap-2 items-center">
+          <Button type="submit" disabled={isSubmitting || isLoading}>
+            {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }
