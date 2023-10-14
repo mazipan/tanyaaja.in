@@ -76,8 +76,9 @@ export const QuestionPanel = ({
       {question ? (
         <>
           <CardHeader>
-            <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
-            <CardDescription className="flex gap-1 items-center">
+            <div className="flex justify-between">
+              <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
+
               <Toggle
                 defaultPressed={question?.public}
                 pressed={question?.public}
@@ -93,6 +94,14 @@ export const QuestionPanel = ({
                   <Lock className="w-4 h-4" />
                 )}
               </Toggle>
+            </div>
+
+            <CardDescription className="flex gap-1 items-center">
+              {question.public ? (
+                <Unlock className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
               <span className="text-sm">
                 {question.public
                   ? 'Bisa diakses publik'
