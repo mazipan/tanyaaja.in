@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { CalendarDays, Lock, Unlock } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
@@ -11,8 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Toggle } from '@/components/ui/toggle'
+import { useToast } from '@/components/ui/use-toast'
 import { BASEURL } from '@/lib/api'
+import { trackEvent } from '@/lib/firebase'
 import { Question, UserProfile } from '@/lib/types'
+
+import { usePatchQuestionAsPublicOrPrivate } from './hooks/usePatchQuestionAsPublicOrPrivate'
+
 interface QuestionPanelProps {
   question: Question | null
   owner: UserProfile | null | undefined
@@ -26,6 +33,44 @@ export const QuestionPanel = ({
   index,
   owner,
 }: QuestionPanelProps) => {
+  const { toast } = useToast()
+
+  const patchQuestionAsPublicOrPrivateMutation =
+    usePatchQuestionAsPublicOrPrivate()
+
+  const queryClient = useQueryClient()
+
+  const handleTogglePrivacy = () => {
+    trackEvent('click toggle public access')
+
+    patchQuestionAsPublicOrPrivateMutation.mutate(question, {
+      onSuccess: () => {
+        // Find the question and update state
+        queryClient.setQueryData<{ data: Question[] }>(
+          ['/questions', owner?.uid],
+          (oldData) => {
+            const defaultData: { data: Question[] } = { data: [] }
+            if (!oldData) return defaultData
+
+            const updatedData = oldData?.data.map((questionItem) =>
+              questionItem.uuid === question?.uuid
+                ? { ...questionItem, public: !questionItem.public }
+                : questionItem,
+            )
+
+            return { ...oldData, data: updatedData }
+          },
+        )
+      },
+      onError: () => {
+        toast({
+          title: 'Gagal menyimpan perubahan',
+          description: `Gagal saat mencoba mengubah hak akses publik ke laman pertanyaan, coba sesaat lagi!`,
+        })
+      },
+    })
+  }
+
   return (
     <Card className="relative min-h-[200px] flex flex-col">
       {question ? (
@@ -33,17 +78,28 @@ export const QuestionPanel = ({
           <CardHeader>
             <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
             <CardDescription className="flex gap-1 items-center">
-              {question.public ? (
-                <Unlock className="w-4 h-4" />
-              ) : (
-                <Lock className="w-4 h-4" />
-              )}
+              <Toggle
+                defaultPressed={question?.public}
+                pressed={question?.public}
+                variant="outline"
+                aria-label="Toggle italic"
+                className="data-[state=on]:bg-success"
+                onPressedChange={handleTogglePrivacy}
+                disabled={patchQuestionAsPublicOrPrivateMutation.isLoading}
+              >
+                {question?.public ? (
+                  <Unlock className="w-4 h-4" />
+                ) : (
+                  <Lock className="w-4 h-4" />
+                )}
+              </Toggle>
               <span className="text-sm">
                 {question.public
                   ? 'Bisa diakses publik'
                   : 'Tidak bisa diakses public'}
               </span>
             </CardDescription>
+
             <CardDescription className="flex gap-1 items-center">
               <CalendarDays className="w-4 h-4" />
               {new Date(question.submitted_date).toLocaleDateString('id-ID', {
