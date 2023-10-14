@@ -46,7 +46,7 @@ export default function SettingOgImage() {
       <Tabs defaultValue="telegram" className="space-y-6">
         <div className="-mx-8 -mb-2 overflow-y-auto">
           <div className="px-8 pb-2 inline-block align-middle">
-            <TabsList className="gap-2">
+            <TabsList>
               <TabsTrigger value="telegram">Telegram</TabsTrigger>
             </TabsList>
           </div>

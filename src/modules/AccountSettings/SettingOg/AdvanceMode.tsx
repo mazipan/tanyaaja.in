@@ -121,117 +121,109 @@ export default function AdvanceMode({
   }, [existingOg])
 
   return (
-    <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
-      <section className="flex-1 lg:max-w-2xl">
-        <Alert className="mb-4">
-          <Info className="h-4 w-4" />
-          <AlertTitle>Tips!</AlertTitle>
-          <AlertDescription>
-            <ul className="list-disc">
-              <li className="m-0">
-                <div>
-                  Kamu bisa mencoba kodemu di{' '}
-                  <Link
-                    href="https://og-playground.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline flex items-center text-blue-400"
-                  >
-                    og-playground.vercel.app
-                    <MoveUpRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </li>
-              <li className="m-0">
-                <div>Gunakan ukuran 800x600 (width: 800px, height: 400px)</div>
-              </li>
-              <li className="m-0">
-                <div>
-                  Kamu bisa menggunakan{' '}
-                  <Link
-                    href="https://hypercolor.dev/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:underline flex items-center text-blue-400"
-                  >
-                    hypercolor.dev
-                    <MoveUpRight className="h-4 w-4" />
-                  </Link>
-                  untuk inspirasi gradient
-                </div>
-              </li>
-              <li className="m-0">
-                <div>
-                  Kamu bisa menggunakan parameter{' '}
-                  <code className="text-blue-400">[question]</code> untuk
-                  menggantikan pertanyaan
-                </div>
-              </li>
-            </ul>
-          </AlertDescription>
-        </Alert>
+    <section className="lg:max-w-2xl space-y-6">
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle className="mb-4">Tips!</AlertTitle>
+        <AlertDescription>
+          <ul className="list-disc list-outside space-y-1.5">
+            <li>
+              Kamu bisa mencoba kodemu di{' '}
+              <Link
+                href="https://og-playground.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center text-blue-400"
+              >
+                og-playground.vercel.app
+                <MoveUpRight className="h-4 w-4 shrink-0" />
+              </Link>
+            </li>
+            <li>Gunakan ukuran 800x600 (width: 800px, height: 400px)</li>
+            <li>
+              Kamu bisa menggunakan{' '}
+              <Link
+                href="https://hypercolor.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline inline-flex items-center text-blue-400"
+              >
+                hypercolor.dev
+                <MoveUpRight className="h-4 w-4 shrink-0" />
+              </Link>
+              untuk inspirasi gradient
+            </li>
+            <li>
+              Kamu bisa menggunakan parameter{' '}
+              <code className="text-blue-400">[question]</code> untuk
+              menggantikan pertanyaan
+            </li>
+          </ul>
+        </AlertDescription>
+      </Alert>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="publik"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>OG Image Laman Publik</FormLabel>
-                  <FormDescription>
-                    Kode ini akan digunakan untuk og image laman publik Anda.
-                  </FormDescription>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Kode untuk OG image laman publik Anda"
-                      className="resize-y"
-                      rows={10}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="publik"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>OG Image Laman Publik</FormLabel>
+                <FormDescription>
+                  Kode ini akan digunakan untuk og image laman publik Anda.
+                </FormDescription>
+                <FormControl>
+                  <Textarea
+                    placeholder="Kode untuk OG image laman publik Anda"
+                    className="resize-y"
+                    rows={10}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="question"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>OG Image Laman Pertanyaan</FormLabel>
-                  <FormDescription>
-                    Kode ini akan digunakan untuk og image laman publik Anda.
-                  </FormDescription>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Kode untuk OG image laman pertanyaan Anda"
-                      className="resize-y"
-                      rows={10}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="question"
+            render={({ field }) => (
+              <FormItem className="mt-6">
+                <FormLabel>OG Image Laman Pertanyaan</FormLabel>
+                <FormDescription>
+                  Kode ini akan digunakan untuk og image laman publik Anda.
+                </FormDescription>
+                <FormControl>
+                  <Textarea
+                    placeholder="Kode untuk OG image laman pertanyaan Anda"
+                    className="resize-y"
+                    rows={10}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <Button type="submit" disabled={isSubmitting || isLoading}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  <span>Processing...</span>
-                </>
-              ) : (
-                <>
-                  <span>Simpan Perubahan</span>
-                </>
-              )}
-            </Button>
-          </form>
-        </Form>
-      </section>
-    </div>
+          <Button
+            type="submit"
+            disabled={isSubmitting || isLoading}
+            className="mt-8"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
+          </Button>
+        </form>
+      </Form>
+    </section>
   )
 }
