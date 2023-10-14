@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-import { Info } from 'lucide-react'
+import { Info, Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -199,9 +199,16 @@ export default function SettingTelegram({
           )}
         />
 
-        <div className="mt-8 flex gap-2 items-center">
+        <div className="mt-8">
           <Button type="submit" disabled={isSubmitting || isLoading}>
-            {isSubmitting ? 'Processing' : 'Simpan Perubahan'}
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
           </Button>
         </div>
       </form>
