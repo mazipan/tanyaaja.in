@@ -32,7 +32,7 @@ export default function SettingOgImage() {
   }, [])
 
   return (
-    <main className="w-full container py-8">
+    <>
       <div className="w-full space-y-0.5">
         <h2 className="text-2xl font-bold tracking-tight">
           Setelan Notifikasi
@@ -43,12 +43,16 @@ export default function SettingOgImage() {
       </div>
 
       <Separator className="my-6" />
-      <Tabs defaultValue="telegram">
-        <TabsList className="mb-2">
-          <TabsTrigger value="telegram">Telegram</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="telegram" className="space-y-6">
+        <div className="-mx-8 -mb-2 overflow-y-auto">
+          <div className="px-8 pb-2 inline-block align-middle">
+            <TabsList className="gap-2">
+              <TabsTrigger value="telegram">Telegram</TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
         <TabsContent value="telegram">
-          <div className="w-full space-y-0.5">
+          <div className="mb-6 space-y-0.5">
             <h3 className="text-xl font-bold tracking-tight">
               Notifikasi ke Telegram
             </h3>
@@ -64,6 +68,6 @@ export default function SettingOgImage() {
           />
         </TabsContent>
       </Tabs>
-    </main>
+    </>
   )
 }
