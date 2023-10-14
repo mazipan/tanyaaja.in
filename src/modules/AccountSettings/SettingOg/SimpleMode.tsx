@@ -117,63 +117,57 @@ export default function SimpleMode({
   }, [existingOg])
 
   return (
-    <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
-      <section className="flex-1 lg:max-w-2xl">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Pilih warna latar
-              </label>
-              <GradientSelection
-                activeGradient={activeGradient}
-                onClick={handleClickGradient}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="textOgPublik"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Teks untuk OG Image laman publik</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Teks untuk OG Image laman publik"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:max-w-2xl">
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Pilih warna latar
+          </label>
+          <GradientSelection
+            activeGradient={activeGradient}
+            onClick={handleClickGradient}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="textOgPublik"
+          render={({ field }) => (
+            <FormItem className="mt-6">
+              <FormLabel>Teks untuk OG Image laman publik</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Teks untuk OG Image laman publik"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <div className="flex gap-2 items-center">
-              <Button asChild type="button" variant="secondary">
-                <a
-                  href={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${watchTextOgPublik}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Preview
-                  <MoveUpRight className="h-4 w-4" />
-                </a>
-              </Button>
-              <Button type="submit" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <span>Processing...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Simpan Perubahan</span>
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </section>
-    </div>
+        <div className="mt-8 flex gap-2 flex-col sm:flex-row sm:items-center">
+          <Button asChild type="button" variant="secondary">
+            <a
+              href={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${watchTextOgPublik}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Preview
+              <MoveUpRight className="h-4 w-4" />
+            </a>
+          </Button>
+          <Button type="submit" disabled={isSubmitting || isLoading}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }

@@ -55,8 +55,10 @@ export const QuestionPanel = ({
       {question ? (
         <>
           <CardHeader>
-            <div className="flex justify-between">
-              <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
+            <div className="flex justify-between gap-2">
+              <CardTitle className="text-2xl self-center leading-none">
+                Pertanyaan #{index}
+              </CardTitle>
 
               <PublicAccessToggler
                 question={question}
