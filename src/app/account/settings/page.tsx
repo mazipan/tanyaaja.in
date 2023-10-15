@@ -17,6 +17,7 @@ import {
 } from 'valibot'
 
 import { CopyButton } from '@/components/CopyButton'
+import { useDialog } from '@/components/dialog/DialogStore'
 import { useAuth } from '@/components/FirebaseAuth'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { Button } from '@/components/ui/button'
@@ -70,6 +71,7 @@ type FormValues = Output<typeof schema>
 
 export default function Account() {
   const { toast } = useToast()
+  const dialog = useDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -322,9 +324,20 @@ export default function Account() {
                   type="button"
                   variant="destructive"
                   onClick={() => {
-                    toast({
-                      title: 'Fitur "Hapus semua pertanyaan" belum tersedia',
-                      description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                    dialog({
+                      title:
+                        'Apakah anda yakin ingin menghapus semua pertanyaan?',
+                      description:
+                        'Pertanyaan yang sudah dihapus tidak dapat dikembalikan lagi.',
+                      submitButton: {
+                        label: 'Hapus',
+                        variant: 'destructive',
+                      },
+                    }).then(() => {
+                      toast({
+                        title: 'Fitur "Hapus semua pertanyaan" belum tersedia',
+                        description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                      })
                     })
                   }}
                 >
