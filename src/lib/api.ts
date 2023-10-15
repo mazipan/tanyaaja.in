@@ -198,6 +198,16 @@ export const patchQuestionAsDone = async (
       },
     },
   )
+
+  /**
+   * fetch needs to be rejected manually to trigger react-query error
+   * @see https://tanstack.com/query/v4/docs/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
+   */
+  if (!rawRes.ok) {
+    const error = await rawRes.json()
+    throw new Error(error.message)
+  }
+
   return rawRes.json()
 }
 
