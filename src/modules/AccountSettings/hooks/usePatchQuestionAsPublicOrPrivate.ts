@@ -1,15 +1,25 @@
 import { useMutation } from '@tanstack/react-query'
-import { z } from 'zod'
 
 import { useAuth } from '@/components/FirebaseAuth'
 import { patchQuestionAsPublicOrPrivate } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
 import { Question } from '@/lib/types'
 
-const payloadSchema = z.object({
-  uuid: z.string(),
-  public: z.boolean(),
-})
+const payloadSchema = {
+  uuid: string,
+  public: boolean,
+  fromQuestion(question: Question) : object {
+    if (this.uuid === undefined)
+      throw new Error('uuid is required');
+    if (this.public === undefined)
+      throw new Error('public is required');
+
+    return { 
+      uuid: question.uuid,
+      public: question.public
+    }
+  }
+};
 
 const auth = getFirebaseAuth()
 
@@ -19,7 +29,7 @@ export const usePatchQuestionAsPublicOrPrivate = () => {
   const mutation = useMutation({
     mutationFn: (variable?: Question | null) => {
       // Validate
-      const validatedVariable = payloadSchema.parse(variable)
+      const validatedVariable = payloadSchema.fromQuestion(variable)
 
       if (!user) throw new Error('User is not logged in')
 
