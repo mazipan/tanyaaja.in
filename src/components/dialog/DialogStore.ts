@@ -1,5 +1,4 @@
 /** @see https://github.com/theodorusclarence/aether-design-system/blob/main/src/store/useDialogStore.tsx */
-import { produce } from 'immer'
 import { create } from 'zustand'
 
 import { ButtonProps } from '@/components/ui/button'
@@ -64,35 +63,37 @@ export const useDialogStore = create<DialogStore>((set) => ({
   },
 
   dialog: (overrideOptions) => {
-    set((prev) =>
-      produce(prev, (state) => {
-        state.open = true
-        state.options = { ...state.options, ...overrideOptions }
-      }),
-    )
+    set((prev) => ({
+      ...prev,
+      open: true,
+      options: { ...prev.options, ...overrideOptions },
+    }))
     return new Promise<void>((resolve, reject) => {
-      set((prev) =>
-        produce(prev, (state) => {
-          state.awaitingPromise = { resolve, reject }
-        }),
-      )
+      set((prev) => ({
+        ...prev,
+        awaitingPromise: { resolve, reject },
+      }))
     })
   },
   handleClose: () => {
-    set((prev) =>
-      produce(prev, (state) => {
-        state.options.catchOnCancel && state.awaitingPromise?.reject?.()
-        state.open = false
-      }),
-    )
+    set((prev) => {
+      if (prev.options.catchOnCancel) {
+        prev.awaitingPromise?.reject?.()
+      }
+      return {
+        ...prev,
+        open: false,
+      }
+    })
   },
   handleSubmit: () => {
-    set((prev) =>
-      produce(prev, (state) => {
-        state.awaitingPromise?.resolve?.()
-        state.open = false
-      }),
-    )
+    set((prev) => {
+      prev.awaitingPromise?.resolve?.()
+      return {
+        ...prev,
+        open: false,
+      }
+    })
   },
 }))
 

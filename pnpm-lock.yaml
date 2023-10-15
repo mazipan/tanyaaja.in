@@ -95,9 +95,6 @@ dependencies:
   firebase:
     specifier: ^10.4.0
     version: 10.4.0(encoding@0.1.13)
-  immer:
-    specifier: ^10.0.3
-    version: 10.0.3
   lucide-react:
     specifier: ^0.284.0
     version: 0.284.0(react@18.2.0)
@@ -139,7 +136,7 @@ dependencies:
     version: 3.22.4
   zustand:
     specifier: ^4.4.3
-    version: 4.4.3(@types/react@18.2.27)(immer@10.0.3)(react@18.2.0)
+    version: 4.4.3(@types/react@18.2.27)(react@18.2.0)
 
 devDependencies:
   '@typescript-eslint/eslint-plugin':
@@ -3374,10 +3371,6 @@ packages:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
 
-  /immer@10.0.3:
-    resolution: {integrity: sha512-pwupu3eWfouuaowscykeckFmVTpqbzW+rXFCX8rQLkZzM9ftBmU/++Ra+o+L27mz03zJTlyV4UUr+fdKNffo4A==}
-    dev: false
-
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -5115,7 +5108,7 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  /zustand@4.4.3(@types/react@18.2.27)(immer@10.0.3)(react@18.2.0):
+  /zustand@4.4.3(@types/react@18.2.27)(react@18.2.0):
     resolution: {integrity: sha512-oRy+X3ZazZvLfmv6viIaQmtLOMeij1noakIsK/Y47PWYhT8glfXzQ4j0YcP5i0P0qI1A4rIB//SGROGyZhx91A==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -5131,7 +5124,6 @@ packages:
         optional: true
     dependencies:
       '@types/react': 18.2.27
-      immer: 10.0.3
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
