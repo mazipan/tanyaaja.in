@@ -53,7 +53,8 @@
     "typescript": "5.2.2",
     "usehooks-ts": "^2.9.1",
     "valibot": "^0.19.0",
-    "zod": "3.22.4"
+    "zod": "3.22.4",
+    "zustand": "^4.4.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.5",
