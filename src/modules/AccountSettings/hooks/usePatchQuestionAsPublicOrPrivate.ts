@@ -5,21 +5,12 @@ import { patchQuestionAsPublicOrPrivate } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
 import { Question } from '@/lib/types'
 
-const payloadSchema = {
-  uuid: string,
-  public: boolean,
-  fromQuestion(question: Question) : object {
-    if (this.uuid === undefined)
-      throw new Error('uuid is required');
-    if (this.public === undefined)
-      throw new Error('public is required');
+import { boolean, object, parse, string } from 'valibot';
 
-    return { 
-      uuid: question.uuid,
-      public: question.public
-    }
-  }
-};
+const payloadSchema = object({
+  uuid: string(),
+  public: boolean(),
+});
 
 const auth = getFirebaseAuth()
 
@@ -29,7 +20,7 @@ export const usePatchQuestionAsPublicOrPrivate = () => {
   const mutation = useMutation({
     mutationFn: (variable?: Question | null) => {
       // Validate
-      const validatedVariable = payloadSchema.fromQuestion(variable)
+      const validatedVariable = parse(variable, payloadSchema)
 
       if (!user) throw new Error('User is not logged in')
 
