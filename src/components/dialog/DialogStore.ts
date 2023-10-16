@@ -29,8 +29,8 @@ type DialogOptions = {
    * ```
    */
   catchOnCancel?: boolean
-  onCancel?: () => void
-  onConfirm?: () => void
+  onCancel?: () => Promise<void>
+  onConfirm?: () => Promise<void>
 }
 
 type DialogStoreState = {

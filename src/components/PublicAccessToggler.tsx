@@ -24,13 +24,12 @@ const PublicAccessToggler = ({
   const { toast } = useToast()
   const dialog = useDialog()
 
-  const patchQuestionAsPublicOrPrivateMutation =
-    usePatchQuestionAsPublicOrPrivate()
+  const { mutate, isLoading } = usePatchQuestionAsPublicOrPrivate()
 
-  const hitMutation = () => {
+  const hitMutation = async () => {
     trackEvent('click toggle public access')
 
-    patchQuestionAsPublicOrPrivateMutation.mutate(question, {
+    await mutate(question, {
       onSuccess: () => {
         onSuccess?.(question)
       },
@@ -65,10 +64,10 @@ const PublicAccessToggler = ({
       variant="outline"
       size="sm"
       className={question?.public ? '' : 'border-red-500'}
-      disabled={disabled ?? patchQuestionAsPublicOrPrivateMutation.isLoading}
+      disabled={disabled ?? isLoading}
       onClick={handleTogglePrivacy}
     >
-      {patchQuestionAsPublicOrPrivateMutation.isLoading ? (
+      {isLoading ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         </>
