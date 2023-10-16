@@ -15,7 +15,6 @@ export const QuestionDialog = ({
   user,
   isOpen,
   onOpenChange,
-  onRefetch,
   owner,
 }: QuestionPreviewProps) => {
   return (
@@ -32,7 +31,6 @@ export const QuestionDialog = ({
             question={question}
             user={user}
             onOpenChange={onOpenChange}
-            onRefetch={onRefetch}
           />
         </DialogFooter>
       </DialogContent>
