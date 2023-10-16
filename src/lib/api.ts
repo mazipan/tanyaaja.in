@@ -10,7 +10,7 @@ import {
   UserProfile,
 } from './types'
 import { CreateCustomOgArgs } from './types'
-import { DEFAULT_AVATAR } from './utils'
+import { DEFAULT_AVATAR, httpClient } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -188,7 +188,7 @@ export const patchQuestionAsDone = async (
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(
+  const rawRes = await httpClient(
     `${BASEURL}/api/private/question/mark-done/${uuid}`,
     {
       method: 'PATCH',
@@ -198,15 +198,6 @@ export const patchQuestionAsDone = async (
       },
     },
   )
-
-  /**
-   * fetch needs to be rejected manually to trigger react-query error
-   * @see https://tanstack.com/query/v4/docs/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
-   */
-  if (!rawRes.ok) {
-    const error = await rawRes.json()
-    throw new Error(error.message)
-  }
 
   return rawRes.json()
 }

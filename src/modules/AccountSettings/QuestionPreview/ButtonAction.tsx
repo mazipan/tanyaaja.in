@@ -92,7 +92,11 @@ export const ButtonAction = ({
                 Batal
               </Button>
             </DialogClose>
-            <Button type="button" onClick={markAsDone}>
+            <Button
+              type="button"
+              onClick={markAsDone}
+              disabled={status === 'loading'}
+            >
               {status === 'loading' ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
