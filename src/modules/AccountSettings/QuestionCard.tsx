@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { CalendarDays, Lock, Unlock } from 'lucide-react'
+import { CalendarDays } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
 import PublicAccessToggler from '@/components/PublicAccessToggler'
@@ -55,29 +55,16 @@ export const QuestionPanel = ({
       {question ? (
         <>
           <CardHeader>
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between gap-2 flex-wrap">
               <CardTitle className="text-2xl self-center leading-none">
                 Pertanyaan #{index}
               </CardTitle>
 
               <PublicAccessToggler
                 question={question}
-                onMutateSuccess={handleUpdateQuestionPrivacy}
+                onSuccess={handleUpdateQuestionPrivacy}
               />
             </div>
-
-            <CardDescription className="flex gap-1 items-center">
-              {question.public ? (
-                <Unlock className="w-4 h-4" />
-              ) : (
-                <Lock className="w-4 h-4" />
-              )}
-              <span className="text-sm">
-                {question.public
-                  ? 'Bisa diakses publik'
-                  : 'Tidak bisa diakses public'}
-              </span>
-            </CardDescription>
 
             <CardDescription className="flex gap-1 items-center">
               <CalendarDays className="w-4 h-4" />
