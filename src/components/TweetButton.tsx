@@ -4,6 +4,9 @@ import { Button } from './ui/button'
 
 const POPUP_HEIGHT = 440
 const POPUP_WIDTH = 620
+const BASE_TW_INTENT_URL =
+  'http://twitter.com/intent/tweet?text=Tanyakan apa aja ke saya'
+const BASE_HASHTAG_PARAM = '&hashtags=tanyaaja,izinjawab'
 
 export function TweetButton({
   url,
@@ -12,7 +15,7 @@ export function TweetButton({
   url: string
   hideLabel?: boolean
 }) {
-  const openTweetIntent = () => {
+  const handleClickOpenTweetIntent = () => {
     const dualScreenLeft =
       window.screenLeft !== undefined ? window.screenLeft : window.screenX
     const dualScreenTop =
@@ -34,7 +37,7 @@ export function TweetButton({
     const top = (height - POPUP_HEIGHT) / 2 / systemZoom + dualScreenTop
 
     window.open(
-      `http://twitter.com/intent/tweet?text=Tanyakan apa aja ke saya &url=${url}&hashtags=tanyaaja,izinjawab`,
+      `${BASE_TW_INTENT_URL}&url=${url}${BASE_HASHTAG_PARAM}`,
       '',
       ` popup=yes,
         scrollbars=no,
@@ -49,7 +52,7 @@ export function TweetButton({
 
   return (
     <Button
-      onClick={openTweetIntent}
+      onClick={handleClickOpenTweetIntent}
       variant="outline"
       type="button"
       className="flex gap-2 items-center"
