@@ -29,6 +29,8 @@ type DialogOptions = {
    * ```
    */
   catchOnCancel?: boolean
+  onCancel?: () => Promise<void>
+  onConfirm?: () => Promise<void>
 }
 
 type DialogStoreState = {
@@ -39,6 +41,7 @@ type DialogStoreState = {
   }
   options: DialogOptions
 }
+
 type DialogStoreAction = {
   dialog: (overrideOptions?: Partial<DialogOptions>) => Promise<void>
   handleClose: () => void
@@ -68,6 +71,7 @@ export const useDialogStore = create<DialogStore>((set) => ({
       open: true,
       options: { ...prev.options, ...overrideOptions },
     }))
+
     return new Promise<void>((resolve, reject) => {
       set((prev) => ({
         ...prev,
@@ -75,6 +79,7 @@ export const useDialogStore = create<DialogStore>((set) => ({
       }))
     })
   },
+
   handleClose: () => {
     set((prev) => {
       if (prev.options.catchOnCancel) {
@@ -86,6 +91,7 @@ export const useDialogStore = create<DialogStore>((set) => ({
       }
     })
   },
+
   handleSubmit: () => {
     set((prev) => {
       prev.awaitingPromise?.resolve?.()
