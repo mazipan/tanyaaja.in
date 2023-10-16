@@ -159,3 +159,20 @@ export function generateNanoId(size = 7) {
 
   return nanoid(size)
 }
+
+export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
+  const promise = new Promise<Response>(async (resolve, reject) => {
+    try {
+      const response = await fetch(input, init)
+      if (response.ok) {
+        resolve(response)
+      } else {
+        reject(response)
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+  return promise
+}

@@ -1,11 +1,7 @@
 'use client'
 import { useState } from 'react'
-import {
-  CalendarIcon,
-  DownloadIcon,
-  LockClosedIcon,
-  LockOpen2Icon,
-} from '@radix-ui/react-icons'
+
+import { Calendar, Download, Lock, Unlock } from 'lucide-react'
 
 import { GradientSelection } from '@/components/GradientSelection'
 import { Button } from '@/components/ui/button'
@@ -47,7 +43,7 @@ export const PreviewContent = ({
         <div className="mb-4 mt-2 flex flex-col gap-2">
           <div className="flex justify-between items-center">
             <div className="flex gap-1 items-center">
-              <CalendarIcon />
+              <Calendar className="w-4 h-4" />
               <small>
                 {new Date(question?.submitted_date).toLocaleDateString(
                   'id-ID',
@@ -63,7 +59,11 @@ export const PreviewContent = ({
             </div>
 
             <div className="flex gap-1 items-center">
-              {question.public ? <LockOpen2Icon /> : <LockClosedIcon />}
+              {question.public ? (
+                <Unlock className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
               <small>
                 {question.public
                   ? 'Bisa diakses publik'
@@ -106,7 +106,7 @@ export const PreviewContent = ({
                 }}
               >
                 Download Gambar
-                <DownloadIcon className="h-4 w-4 ml-2" />
+                <Download className="h-4 w-4 ml-2" />
               </Button>
             </div>
           </div>

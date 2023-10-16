@@ -42,13 +42,17 @@ export default function SettingOgImage() {
       </div>
 
       <Separator className="my-6" />
-      <Tabs defaultValue="simple-mode">
-        <TabsList className="mb-2">
-          <TabsTrigger value="simple-mode">Mode Sederhana</TabsTrigger>
-          <TabsTrigger value="advance-mode">Mode Rumit</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="simple-mode" className="space-y-6">
+        <div className="-mx-8 -mb-2 overflow-y-auto">
+          <div className="px-8 pb-2 inline-block align-middle">
+            <TabsList>
+              <TabsTrigger value="simple-mode">Mode Sederhana</TabsTrigger>
+              <TabsTrigger value="advance-mode">Mode Rumit</TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
         <TabsContent value="simple-mode">
-          <div className="w-full space-y-0.5">
+          <div className="mb-6 space-y-0.5">
             <h3 className="text-xl font-bold tracking-tight">Mode Sederhana</h3>
             <p className="text-sm text-muted-foreground">
               Atur OG Image dengan lebih mudah untuk pengguna awam
@@ -62,7 +66,7 @@ export default function SettingOgImage() {
           />
         </TabsContent>
         <TabsContent value="advance-mode">
-          <div className="w-full space-y-0.5">
+          <div className="mb-6 space-y-0.5">
             <h3 className="text-xl font-bold tracking-tight">Mode Rumit</h3>
             <p className="text-sm text-muted-foreground">
               Atur OG Image semaumu untuk pengguna yang familiar dengan coding

@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { ArrowTopRightIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-import { Loader2 } from 'lucide-react'
+import { Loader2, MoveUpRight } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -66,54 +65,46 @@ export default function SimpleMode({
   async function onSubmit(data: FormValues) {
     trackEvent('click update og image simple')
     if (user) {
+      setIsSubmitting(true)
       try {
-        setIsSubmitting(true)
-        try {
-          if (existingOg && existingOg.length > 0) {
-            // patch
-            await patchUpdateCustomOg(user, {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'simple',
-              theme: activeGradient,
-              simpleText: data?.textOgPublik,
-              codePublic: '',
-              codeQuestion: '',
-            })
-            toast({
-              title: 'Perubahan berhasil disimpan',
-              description: `Berhasil menyimpan perubahan setelan og image custom!`,
-            })
-          } else {
-            // create
-            await postAddNewCustomOg(user, {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'simple',
-              theme: activeGradient,
-              simpleText: data?.textOgPublik,
-              codePublic: '',
-              codeQuestion: '',
-            })
-            toast({
-              title: 'Perubahan berhasil disimpan',
-              description: `Berhasil menyimpan perubahan og image custom!`,
-            })
-          }
-        } catch (err) {
+        if (existingOg && existingOg.length > 0) {
+          // patch
+          await patchUpdateCustomOg(user, {
+            uid: user?.uid,
+            slug: owner?.slug || '',
+            mode: 'simple',
+            theme: activeGradient,
+            simpleText: data?.textOgPublik,
+            codePublic: '',
+            codeQuestion: '',
+          })
           toast({
-            title: 'Gagal menyimpan',
-            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`,
+            title: 'Perubahan berhasil disimpan',
+            description: `Berhasil menyimpan perubahan setelan og image custom!`,
+          })
+        } else {
+          // create
+          await postAddNewCustomOg(user, {
+            uid: user?.uid,
+            slug: owner?.slug || '',
+            mode: 'simple',
+            theme: activeGradient,
+            simpleText: data?.textOgPublik,
+            codePublic: '',
+            codeQuestion: '',
+          })
+          toast({
+            title: 'Perubahan berhasil disimpan',
+            description: `Berhasil menyimpan perubahan og image custom!`,
           })
         }
-        setIsSubmitting(false)
-      } catch (error) {
-        setIsSubmitting(false)
+      } catch (err) {
         toast({
           title: 'Gagal menyimpan',
-          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
+          description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
         })
       }
+      setIsSubmitting(false)
     }
   }
 
@@ -126,63 +117,57 @@ export default function SimpleMode({
   }, [existingOg])
 
   return (
-    <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 mt-4">
-      <section className="flex-1 lg:max-w-2xl">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                Pilih warna latar
-              </label>
-              <GradientSelection
-                activeGradient={activeGradient}
-                onClick={handleClickGradient}
-              />
-            </div>
-            <FormField
-              control={form.control}
-              name="textOgPublik"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Teks untuk OG Image laman publik</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Teks untuk OG Image laman publik"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:max-w-2xl">
+        <div className="space-y-2">
+          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            Pilih warna latar
+          </label>
+          <GradientSelection
+            activeGradient={activeGradient}
+            onClick={handleClickGradient}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="textOgPublik"
+          render={({ field }) => (
+            <FormItem className="mt-6">
+              <FormLabel>Teks untuk OG Image laman publik</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Teks untuk OG Image laman publik"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <div className="flex gap-2 items-center">
-              <Button asChild type="button" variant="secondary">
-                <a
-                  href={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${watchTextOgPublik}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Preview
-                  <ArrowTopRightIcon className="h-4 w-4" />
-                </a>
-              </Button>
-              <Button type="submit" disabled={isSubmitting || isLoading}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <span>Processing...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Simpan Perubahan</span>
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </section>
-    </div>
+        <div className="mt-8 flex gap-2 flex-col sm:flex-row sm:items-center">
+          <Button asChild type="button" variant="secondary">
+            <a
+              href={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${watchTextOgPublik}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Preview
+              <MoveUpRight className="h-4 w-4" />
+            </a>
+          </Button>
+          <Button type="submit" disabled={isSubmitting || isLoading}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }

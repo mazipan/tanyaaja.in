@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { UpdateIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { Loader2 } from 'lucide-react'
+import { Loader2, RefreshCw } from 'lucide-react'
 import {
   boolean as isBoolean,
   maxLength,
@@ -18,6 +17,7 @@ import {
 } from 'valibot'
 
 import { CopyButton } from '@/components/CopyButton'
+import { useDialog } from '@/components/dialog/DialogStore'
 import { useAuth } from '@/components/FirebaseAuth'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { Button } from '@/components/ui/button'
@@ -71,6 +71,7 @@ type FormValues = Output<typeof schema>
 
 export default function Account() {
   const { toast } = useToast()
+  const dialog = useDialog()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -147,7 +148,7 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (!isLoadingOwner && dataOwner) {
+    if (!isLoadingOwner && dataOwner && dataOwner.data) {
       form.setValue('image', dataOwner.data.image)
       form.setValue('name', dataOwner.data.name)
       form.setValue('slug', dataOwner.data.slug)
@@ -172,50 +173,49 @@ export default function Account() {
 
       <Separator className="my-6" />
 
-      <div className="w-full flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-        <section className="flex-1 lg:max-w-2xl">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nama Publik</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nama publik" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Nama ini akan ditampilkan di laman beranda publikmu. Kami
-                      akan menggunakan nama dari akun Google bila belum disetel.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="lg:max-w-2xl">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nama Publik</FormLabel>
+                <FormControl>
+                  <Input placeholder="Nama publik" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Nama ini akan ditampilkan di laman beranda publikmu. Kami akan
+                  menggunakan nama dari akun Google bila belum disetel.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="image"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alamat Avatar Publik</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Alamat avatar publik" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Avatar ini akan ditampilkan di laman beranda publikmu.
-                      Kami akan menggunakan gambar akun Google bila belum
-                      disetel.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <div className="mt-6 space-y-3">
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Alamat Avatar Publik</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Alamat avatar publik" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Avatar ini akan ditampilkan di laman beranda publikmu. Kami
+                    akan menggunakan gambar akun Google bila belum disetel.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              {watchImage ? (
-                <div className="flex items-center gap-2 ">
-                  <p>Preview:</p>
+            {watchImage ? (
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <p>Preview:</p>
+                <div className="flex items-center gap-2">
                   <ProfileAvatar
                     image={watchImage}
                     name={watchName}
@@ -227,139 +227,154 @@ export default function Account() {
                     onClick={() => {
                       form.setValue('image', randomizeAvatar())
                     }}
+                    className="shrink-0"
                   >
-                    <UpdateIcon className="h-4 w-4 mr-2" />
+                    <RefreshCw className="h-4 w-4 mr-2 shrink-0" />
                     Pilih secara acak
                   </Button>
                 </div>
-              ) : null}
+              </div>
+            ) : null}
+          </div>
 
-              <FormField
-                control={form.control}
-                name="x_username"
-                render={({ field }) => (
+          <FormField
+            control={form.control}
+            name="x_username"
+            render={({ field }) => (
+              <FormItem className="mt-6">
+                <FormLabel>Username X (Twitter)</FormLabel>
+                <FormControl>
+                  <Input placeholder="@username" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Username ini akan ditampilkan di laman beranda publikmu.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="mt-6 space-y-3">
+            <FormField
+              control={form.control}
+              name="slug"
+              render={({ field }) => {
+                return (
                   <FormItem>
-                    <FormLabel>Username X (Twitter)</FormLabel>
+                    <FormLabel>Slug</FormLabel>
                     <FormControl>
-                      <Input placeholder="@username" {...field} />
+                      <Input placeholder="Slug publik" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Username ini akan ditampilkan di laman beranda publikmu.
+                      Slug ini adalah alamat dari laman publikmu. Bisa diubah
+                      kapan saja, tapi dapat menyebabkan alamat lamamu tidak
+                      dapat dikunjungi lagi.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
-                )}
+                )
+              }}
+            />
+
+            {watchSlug !== '' ? (
+              <CopyButton
+                text={`${BASEURL}/p/${watchSlug}`}
+                withLabel
+                withInput
+                fullWidth
               />
+            ) : null}
+          </div>
 
-              <FormField
-                control={form.control}
-                name="slug"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>Slug</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Slug publik" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Slug ini adalah alamat dari laman publikmu. Bisa diubah
-                        kapan saja, tapi dapat menyebabkan alamat lamamu tidak
-                        dapat dikunjungi lagi.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )
-                }}
-              />
-
-              <div className="flex gap-2 items-center w-full">
-                {watchSlug !== '' ? (
-                  <CopyButton
-                    text={`${BASEURL}/p/${watchSlug}`}
-                    withLabel
-                    withInput
-                    fullWidth
-                  />
-                ) : null}
-              </div>
-
-              <FormField
-                control={form.control}
-                name="public"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                    <div className="space-y-0.5">
-                      <FormLabel>Bisa dicari publik?</FormLabel>
-                      <FormDescription>
-                        Pengguna anonim dapat mencari akunmu lewat laman eksplor
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <Card className="border-red-600">
-                <CardHeader>
-                  <CardTitle>Area Berbahaya!</CardTitle>
-
-                  <CardDescription>
-                    Aksi pada bagian ini dapat menghilangkan keseluruhan datamu
-                    yang ada di TanyaAja.in
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex gap-2 flex-wrap flex-col md:flex-row">
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => {
-                        toast({
-                          title:
-                            'Fitur "Hapus semua pertanyaan" belum tersedia',
-                          description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
-                        })
-                      }}
-                    >
-                      Hapus semua pertanyaan
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => {
-                        toast({
-                          title: 'Fitur "Hapus akun saya" belum tersedia',
-                          description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
-                        })
-                      }}
-                    >
-                      Hapus akun saya
-                    </Button>
+          <div className="mt-6 flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="public"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="space-y-0.5">
+                    <FormLabel>Bisa dicari publik?</FormLabel>
+                    <FormDescription>
+                      Pengguna anonim dapat mencari akunmu lewat laman eksplor
+                    </FormDescription>
                   </div>
-                </CardContent>
-              </Card>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
 
-              <Button type="submit" disabled={isSubmitting || isLoadingOwner}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <span>Processing...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>Simpan Perubahan</span>
-                  </>
-                )}
-              </Button>
-            </form>
-          </Form>
-        </section>
-      </div>
+          <Card className="mt-6 border-red-600">
+            <CardHeader>
+              <CardTitle>Area Berbahaya!</CardTitle>
+
+              <CardDescription>
+                Aksi pada bagian ini dapat menghilangkan keseluruhan datamu yang
+                ada di TanyaAja.in
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex gap-2 flex-wrap flex-col md:flex-row">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => {
+                    dialog({
+                      title:
+                        'Apakah anda yakin ingin menghapus semua pertanyaan?',
+                      description:
+                        'Pertanyaan yang sudah dihapus tidak dapat dikembalikan lagi.',
+                      submitButton: {
+                        label: 'Hapus',
+                        variant: 'destructive',
+                      },
+                    }).then(() => {
+                      toast({
+                        title: 'Fitur "Hapus semua pertanyaan" belum tersedia',
+                        description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                      })
+                    })
+                  }}
+                >
+                  Hapus semua pertanyaan
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => {
+                    toast({
+                      title: 'Fitur "Hapus akun saya" belum tersedia',
+                      description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
+                    })
+                  }}
+                >
+                  Hapus akun saya
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Button
+            type="submit"
+            disabled={isSubmitting || isLoadingOwner}
+            className="mt-8"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
+          </Button>
+        </form>
+      </Form>
     </>
   )
 }

@@ -40,6 +40,14 @@ export interface CustomOg {
   created_time: string
 }
 
+export interface NotifChannel {
+  uid: string
+  slug: string
+  telegram_username: string
+  telegram_chat_id: string
+  created_time: string
+}
+
 export interface UpdateUserArgs {
   pageId: string
   uid: string
@@ -74,4 +82,11 @@ export interface CreateCustomOgArgs {
   simpleText: string
   codePublic: string
   codeQuestion: string
+}
+
+export interface CreateNotifChannelArgs {
+  uid: string
+  slug: string
+  telegram_username: string
+  telegram_chat_id: string
 }
