@@ -1,6 +1,7 @@
 import { Link } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
+import { TweetButton } from '@/components/TweetButton'
 import { Card } from '@/components/ui/card'
 import { BASEURL } from '@/lib/api'
 import { UserProfile } from '@/lib/types'
@@ -35,11 +36,13 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
             {BASEURL}/p/{owner?.slug || '...'}
           </a>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex gap-2">
           <CopyButton
             text={`${BASEURL}/p/${owner?.slug || '...'}`}
             withLabel={true}
           />
+
+          <TweetButton url={`${BASEURL}/p/${owner?.slug || '...'}`} />
         </div>
       </Card>
     </div>
