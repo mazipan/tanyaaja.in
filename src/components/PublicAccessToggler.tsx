@@ -1,36 +1,38 @@
 import React from 'react'
 
-import { Lock, Unlock } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
-import { Toggle } from '@/components/ui/toggle'
 import { trackEvent } from '@/lib/firebase'
 import { Question } from '@/lib/types'
 import { usePatchQuestionAsPublicOrPrivate } from '@/modules/AccountSettings/hooks/usePatchQuestionAsPublicOrPrivate'
 
+import { useDialog } from './dialog/DialogStore'
+import { Button } from './ui/button'
 import { useToast } from './ui/use-toast'
 
 interface PublicAccessTogglerProps {
   question: Question
   disabled?: boolean // allow parent to override
-  onMutateSuccess?: (question: Question) => void
+  onSuccess?: (question: Question) => void
 }
 
 const PublicAccessToggler = ({
   question,
   disabled,
-  onMutateSuccess,
+  onSuccess,
 }: PublicAccessTogglerProps) => {
   const { toast } = useToast()
+  const dialog = useDialog()
 
   const patchQuestionAsPublicOrPrivateMutation =
     usePatchQuestionAsPublicOrPrivate()
 
-  const handleTogglePrivacy = () => {
+  const hitMutation = () => {
     trackEvent('click toggle public access')
 
     patchQuestionAsPublicOrPrivateMutation.mutate(question, {
       onSuccess: () => {
-        onMutateSuccess?.(question)
+        onSuccess?.(question)
       },
       onError: () => {
         toast({
@@ -41,22 +43,38 @@ const PublicAccessToggler = ({
     })
   }
 
+  const handleTogglePrivacy = () => {
+    if (!question?.public) {
+      dialog({
+        title: 'Apakah Anda yakin ingin membuka akses ke publik?',
+        description:
+          'Membuka pertanyaan ke publik berarti memberikan akses ke siapapun untuk bisa melihat pertanyaan Anda.',
+        submitButton: {
+          label: 'Ya, Buka Akses',
+          variant: 'destructive',
+        },
+        onConfirm: hitMutation,
+      })
+    } else {
+      hitMutation()
+    }
+  }
+
   return (
-    <Toggle
+    <Button
       variant="outline"
-      aria-label="Toggle Question Privacy"
-      className="data-[state=on]:bg-success"
-      defaultPressed={question?.public}
-      pressed={question?.public}
+      size="sm"
+      className={question?.public ? '' : 'border-red-500'}
       disabled={disabled ?? patchQuestionAsPublicOrPrivateMutation.isLoading}
-      onPressedChange={handleTogglePrivacy}
+      onClick={handleTogglePrivacy}
     >
-      {question?.public ? (
-        <Unlock className="w-4 h-4" />
-      ) : (
-        <Lock className="w-4 h-4" />
-      )}
-    </Toggle>
+      {patchQuestionAsPublicOrPrivateMutation.isLoading ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        </>
+      ) : null}
+      {question?.public ? <>Larang akses publik</> : <>Buka ke publik</>}
+    </Button>
   )
 }
 

@@ -15,12 +15,38 @@ export function BaseDialog() {
   const handleClose = useDialogStore((state) => state.handleClose)
   const handleSubmit = useDialogStore((state) => state.handleSubmit)
 
-  const { title, description, submitButton, cancelButton } = useDialogStore(
-    (state) => state.options,
-  )
+  const {
+    title,
+    description,
+    submitButton,
+    cancelButton,
+    onCancel,
+    onConfirm,
+  } = useDialogStore((state) => state.options)
+
+  const handleClickCancel = async () => {
+    if (typeof onCancel === 'function') {
+      await onCancel?.()
+    }
+    handleClose()
+  }
+
+  const handleClickSubmit = async () => {
+    if (typeof onConfirm === 'function') {
+      await onConfirm?.()
+    }
+    handleSubmit()
+  }
 
   return (
-    <Dialog open={open} onOpenChange={(open) => !open && handleClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        if (!open) {
+          handleClose()
+        }
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -28,10 +54,10 @@ export function BaseDialog() {
         </DialogHeader>
 
         <div className="flex items-center justify-end gap-2">
-          <Button onClick={handleClose} variant={cancelButton?.variant}>
+          <Button onClick={handleClickCancel} variant={cancelButton?.variant}>
             {cancelButton?.label}
           </Button>
-          <Button onClick={handleSubmit} variant={submitButton?.variant}>
+          <Button onClick={handleClickSubmit} variant={submitButton?.variant}>
             {submitButton?.label}
           </Button>
         </div>
