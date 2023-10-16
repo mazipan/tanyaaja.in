@@ -1,5 +1,7 @@
 name: Auto Comment
-on: [issues]
+on:
+  issues:
+    types: [opened]
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -7,6 +9,7 @@ jobs:
       - uses: wow-actions/auto-comment@v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          issuesOpenedReactions: 'eyes'
           issuesOpened: |
             👋 Hi, all contributors.
             
