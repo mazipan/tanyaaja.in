@@ -88,10 +88,10 @@ export default function Account() {
               {dataPagination.pages.length} pertanyaan belum dijawab
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {dataPagination.pages.map((q, indexParent) => {
+              {dataPagination.pages.map((questionParent, indexParent) => {
                 return (
                   <React.Fragment key={indexParent}>
-                    {q?.data?.map((q, _) => {
+                    {questionParent?.data?.map((q, _) => {
                       return (
                         <QuestionPanel
                           key={count++}
