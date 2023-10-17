@@ -11,7 +11,6 @@ export const QuestionResponsive = ({
   owner,
   isOpen,
   onOpenChange,
-  onRefetch,
 }: QuestionPreviewProps) => {
   const isMd = useMediaQuery('(min-width: 768px)')
 
@@ -23,7 +22,6 @@ export const QuestionResponsive = ({
           onOpenChange={onOpenChange}
           user={user}
           owner={owner}
-          onRefetch={onRefetch}
           question={question}
         />
       ) : (
@@ -32,7 +30,6 @@ export const QuestionResponsive = ({
           onOpenChange={onOpenChange}
           user={user}
           owner={owner}
-          onRefetch={onRefetch}
           question={question}
         />
       )}

@@ -28,7 +28,7 @@ export default function Account() {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  const { data: dataQuestions, isLoading: isLoadingQuestions, refetch } =
+  const { data: dataQuestions, isLoading: isLoadingQuestions } =
     // @ts-ignore
     useQuestionList(user, {
       enabled: !isLoading && isLogin && !!user,
@@ -107,7 +107,6 @@ export default function Account() {
         onOpenChange={setIsOpenDialog}
         user={user}
         owner={dataOwner?.data}
-        onRefetch={refetch}
         question={selectedQuestion}
       />
     </>
