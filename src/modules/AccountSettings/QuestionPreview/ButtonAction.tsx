@@ -31,7 +31,7 @@ export const ButtonAction = ({
     if (question && user) {
       dialog({
         title: 'Tandai pertanyaan sudah dijawab?',
-        description: 'Pertanyaan yang sudah dijawab tidak dapat dibatalkan.',
+        description: 'Pertanyaan yang sudah dijawab akan menghilang dari daftar pertanyaan Anda dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan aksi ini?',
         submitButton: {
           label: 'Ya, Tandai',
           variant: 'destructive',
