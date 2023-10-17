@@ -82,7 +82,7 @@ export default function Account() {
           </div>
         ) : dataPagination?.pages &&
           dataPagination.pages &&
-          dataPagination.pages.length > 0 ? (
+          dataPagination?.pages[0].data.length > 0 ? (
           <div className="space-y-4">
             <h3 className="text-2xl font-bold tracking-tight">
               {dataPagination.pages.length} pertanyaan belum dijawab
