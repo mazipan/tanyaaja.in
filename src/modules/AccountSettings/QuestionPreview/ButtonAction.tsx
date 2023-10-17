@@ -14,7 +14,7 @@ export const ButtonAction = ({
   question,
   user,
   onOpenChange,
-}: Omit<QuestionPreviewProps, 'isOpen' | 'owner' | 'onRefetch'>) => {
+}: Omit<QuestionPreviewProps, 'isOpen' | 'owner'>) => {
   const dialog = useDialog()
   const { mutate } = useMarkQuestionAsDone({
     onMutate: () => {
@@ -31,9 +31,10 @@ export const ButtonAction = ({
     if (question && user) {
       dialog({
         title: 'Tandai pertanyaan sudah dijawab?',
-        description: 'Pertanyaan yang sudah dijawab akan menghilang dari daftar pertanyaan Anda dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan aksi ini?',
+        description:
+          'Pertanyaan yang sudah dijawab akan menghilang dari daftar pertanyaan Anda dan tidak dapat dikembalikan. Apakah Anda yakin ingin melanjutkan aksi ini?',
         submitButton: {
-          label: 'Ya, Tandai',
+          label: 'Ya, Tandai Sudah Dijawab',
           variant: 'destructive',
         },
         onConfirm: () => markAsDone(question, user),
