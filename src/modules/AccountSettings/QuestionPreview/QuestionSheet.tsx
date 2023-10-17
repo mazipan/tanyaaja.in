@@ -15,7 +15,6 @@ export const QuestionSheet = ({
   user,
   isOpen,
   onOpenChange,
-  onRefetch,
   owner,
 }: QuestionPreviewProps) => {
   return (
@@ -32,7 +31,6 @@ export const QuestionSheet = ({
             question={question}
             user={user}
             onOpenChange={onOpenChange}
-            onRefetch={onRefetch}
           />
         </SheetFooter>
       </SheetContent>

@@ -8,5 +8,4 @@ export interface QuestionPreviewProps {
   owner: UserProfile | null | undefined
   onOpenChange: (open: boolean) => void
   isOpen: boolean
-  onRefetch: () => void
 }
