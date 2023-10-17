@@ -36,7 +36,6 @@ export default function Account() {
     isLoading: isLoadingQuestions,
     fetchNextPage,
     isFetching,
-    refetch,
   } = useQuestionListPagination(
     // @ts-ignore
     user,
@@ -145,7 +144,6 @@ export default function Account() {
         onOpenChange={setIsOpenDialog}
         user={user}
         owner={dataOwner?.data}
-        onRefetch={refetch}
         question={selectedQuestion}
       />
     </>
