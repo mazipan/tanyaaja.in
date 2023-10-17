@@ -4,6 +4,7 @@ import { UpdateItem } from './telegram'
 import {
   CreateNotifChannelArgs,
   CustomOg,
+  IResponseGetQuestionPagination,
   NotifChannel,
   Question,
   UpdateUserArgs,
@@ -448,6 +449,34 @@ export const getCheckChatId = async (
       },
       next: {
         tags: [`chatid-uid-${user.uid}`],
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
+export const getAllQuestionsWithPagination = async ({
+  user,
+  limit,
+  cursor,
+}: {
+  user: User
+  limit: number
+  cursor?: string
+}): Promise<IResponseGetQuestionPagination> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/by-uid/pagination/${user.uid}?limit=${limit}&cursor=${cursor}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: ['q-by-uid', user.uid],
       },
     },
   )

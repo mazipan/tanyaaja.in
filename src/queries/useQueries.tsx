@@ -1,4 +1,7 @@
 import {
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   useQuery,
   UseQueryOptions,
   UseQueryResult,
@@ -7,11 +10,16 @@ import { User } from 'firebase/auth'
 
 import {
   getAllQuestions,
+  getAllQuestionsWithPagination,
   getExistingChannelNotif,
-  getExistingCustomOg,
   getExistingUser,
 } from '@/lib/api'
-import { CustomOg, NotifChannel, Question, UserProfile } from '@/lib/types'
+import {
+  IResponseGetQuestionPagination,
+  NotifChannel,
+  Question,
+  UserProfile,
+} from '@/lib/types'
 
 export const useOwner = (
   user: User,
@@ -34,15 +42,30 @@ export const useQuestionList = (
     config,
   )
 }
-
-export const useCustomOgByUser = (
+export const useQuestionListPagination = (
   user: User,
-  config?: UseQueryOptions<{ data: CustomOg[] }, Error>,
-): UseQueryResult<{ data: CustomOg[] }, Error> => {
-  return useQuery<{ data: CustomOg[] }, Error>(
-    ['/user-custom-og', user?.uid],
-    async (): Promise<{ data: CustomOg[] }> => getExistingCustomOg(user),
-    config,
+
+  config?: UseInfiniteQueryOptions<IResponseGetQuestionPagination, Error>,
+): UseInfiniteQueryResult<IResponseGetQuestionPagination, Error> => {
+  return useInfiniteQuery<IResponseGetQuestionPagination, Error>(
+    ['/questionsPagination', user?.uid],
+    async ({ pageParam }): Promise<IResponseGetQuestionPagination> =>
+      getAllQuestionsWithPagination({
+        user: user,
+        limit: 10,
+        cursor: pageParam ?? '',
+      }),
+    {
+      ...config,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+      getPreviousPageParam: (firstPage) => firstPage.next ?? undefined,
+      getNextPageParam: (firstPage) => {
+        return firstPage.next ?? undefined
+      },
+    },
   )
 }
 
