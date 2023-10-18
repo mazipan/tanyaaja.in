@@ -467,7 +467,7 @@ export const getAllQuestionsWithPagination = async ({
 }): Promise<IResponseGetQuestionPagination> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(
+  const rawRes = await httpClient(
     `${BASEURL}/api/private/question/by-uid/pagination/${user.uid}?limit=${limit}&cursor=${cursor}`,
     {
       method: 'GET',

@@ -12,9 +12,11 @@ import {
   getAllQuestions,
   getAllQuestionsWithPagination,
   getExistingChannelNotif,
+  getExistingCustomOg,
   getExistingUser,
 } from '@/lib/api'
 import {
+  CustomOg,
   IResponseGetQuestionPagination,
   NotifChannel,
   Question,
@@ -42,6 +44,7 @@ export const useQuestionList = (
     config,
   )
 }
+
 export const useQuestionListPagination = (
   user: User,
 
@@ -66,6 +69,17 @@ export const useQuestionListPagination = (
         return firstPage.next ?? undefined
       },
     },
+  )
+}
+
+export const useCustomOgByUser = (
+  user: User,
+  config?: UseQueryOptions<{ data: CustomOg[] }, Error>,
+): UseQueryResult<{ data: CustomOg[] }, Error> => {
+  return useQuery<{ data: CustomOg[] }, Error>(
+    ['/user-custom-og', user?.uid],
+    async (): Promise<{ data: CustomOg[] }> => getExistingCustomOg(user),
+    config,
   )
 }
 
