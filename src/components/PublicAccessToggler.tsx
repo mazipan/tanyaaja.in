@@ -29,7 +29,7 @@ const PublicAccessToggler = ({
   const hitMutation = async () => {
     trackEvent('click toggle public access')
 
-    await mutate(question, {
+    mutate(question, {
       onSuccess: () => {
         onSuccess?.(question)
       },

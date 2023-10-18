@@ -1,9 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { Loader2 } from 'lucide-react'
 
 import EmptyState from '@/components/EmptyState'
 import { useAuth } from '@/components/FirebaseAuth'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { Question } from '@/lib/types'
@@ -12,9 +15,10 @@ import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
 import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader'
 import { QuestionResponsive } from '@/modules/AccountSettings/QuestionPreview/QuestionResponsive'
 import { StatisticPanel } from '@/modules/AccountSettings/StatisticPanel'
-import { useOwner, useQuestionList } from '@/queries/useQueries'
+import { useOwner, useQuestionListPagination } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
+const LIMIT = 10
 
 export default function Account() {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)
@@ -28,11 +32,19 @@ export default function Account() {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  const { data: dataQuestions, isLoading: isLoadingQuestions } =
+  const {
+    data: dataPagination,
+    isLoading: isLoadingQuestions,
+    fetchNextPage,
+    isFetching,
+  } = useQuestionListPagination(
     // @ts-ignore
-    useQuestionList(user, {
+    user,
+    LIMIT,
+    {
       enabled: !isLoading && isLogin && !!user,
-    })
+    },
+  )
 
   const handleClickQuestion = (question: Question) => {
     setSelectedQuestion(question)
@@ -69,23 +81,49 @@ export default function Account() {
               ))}
             </div>
           </div>
-        ) : dataQuestions &&
-          dataQuestions.data &&
-          dataQuestions.data.length > 0 ? (
+        ) : dataPagination?.pages &&
+          dataPagination.pages &&
+          dataPagination?.pages[0].data.length > 0 ? (
           <div className="space-y-4">
             <h3 className="text-2xl font-bold tracking-tight">
-              {dataQuestions.data.length} pertanyaan belum dijawab
+              {dataPagination.pages.length} pertanyaan belum dijawab
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {dataQuestions.data.map((q: Question, index) => (
-                <QuestionPanel
-                  key={q.uuid}
-                  owner={dataOwner?.data}
-                  question={q}
-                  onClick={handleClickQuestion}
-                  index={index + 1}
-                />
-              ))}
+              {dataPagination.pages.map((questionParent, indexParent) => {
+                return (
+                  <React.Fragment key={indexParent}>
+                    {questionParent?.data?.map((q, indexQuestion) => {
+                      return (
+                        <QuestionPanel
+                          key={q.uid}
+                          owner={dataOwner?.data}
+                          question={q}
+                          onClick={handleClickQuestion}
+                          index={indexParent * LIMIT + indexQuestion + 1}
+                        />
+                      )
+                    })}
+                  </React.Fragment>
+                )
+              })}
+            </div>
+            <div className="flex  justify-center">
+              {dataPagination?.pages[dataPagination?.pages.length - 1]
+                .hasMore ? (
+                <Button
+                  disabled={isFetching}
+                  onClick={() => fetchNextPage()}
+                  className="w-[400px]"
+                >
+                  {!isFetching ? (
+                    'Load More'
+                  ) : (
+                    <>
+                      <Loader2 className="animate-spin" size={20} /> Loading
+                    </>
+                  )}
+                </Button>
+              ) : null}
             </div>
           </div>
         ) : (
