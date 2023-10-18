@@ -18,6 +18,7 @@ import { StatisticPanel } from '@/modules/AccountSettings/StatisticPanel'
 import { useOwner, useQuestionListPagination } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
+const LIMIT = 10
 
 export default function Account() {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)
@@ -39,6 +40,7 @@ export default function Account() {
   } = useQuestionListPagination(
     // @ts-ignore
     user,
+    LIMIT,
     {
       enabled: !isLoading && isLogin && !!user,
     },
@@ -53,7 +55,6 @@ export default function Account() {
     trackEvent('view account page')
   }, [])
 
-  let count = 1
   return (
     <>
       <div className="w-full space-y-0.5">
@@ -91,14 +92,14 @@ export default function Account() {
               {dataPagination.pages.map((questionParent, indexParent) => {
                 return (
                   <React.Fragment key={indexParent}>
-                    {questionParent?.data?.map((q, _) => {
+                    {questionParent?.data?.map((q, indexQuestion) => {
                       return (
                         <QuestionPanel
-                          key={count++}
+                          key={q.uid}
                           owner={dataOwner?.data}
                           question={q}
                           onClick={handleClickQuestion}
-                          index={count}
+                          index={indexParent * LIMIT + indexQuestion + 1}
                         />
                       )
                     })}

@@ -47,7 +47,7 @@ export const useQuestionList = (
 
 export const useQuestionListPagination = (
   user: User,
-
+  limit: number,
   config?: UseInfiniteQueryOptions<IResponseGetQuestionPagination, Error>,
 ): UseInfiniteQueryResult<IResponseGetQuestionPagination, Error> => {
   return useInfiniteQuery<IResponseGetQuestionPagination, Error>(
@@ -55,7 +55,7 @@ export const useQuestionListPagination = (
     async ({ pageParam }): Promise<IResponseGetQuestionPagination> =>
       getAllQuestionsWithPagination({
         user: user,
-        limit: 10,
+        limit: limit,
         cursor: pageParam ?? '',
       }),
     {
