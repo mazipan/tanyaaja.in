@@ -35,6 +35,7 @@ export async function GET(
         count: simpleDataResponse?.count,
         slug: simpleDataResponse?.slug,
         public: simpleDataResponse?.public ?? false,
+        x_username: simpleDataResponse?.x_username,
       },
     })
   } catch (error) {

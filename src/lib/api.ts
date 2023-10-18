@@ -1,8 +1,16 @@
 import { User } from 'firebase/auth'
 
-import { CustomOg, Question, UpdateUserArgs, UserProfile } from './types'
+import { UpdateItem } from './telegram'
+import {
+  CreateNotifChannelArgs,
+  CustomOg,
+  NotifChannel,
+  Question,
+  UpdateUserArgs,
+  UserProfile,
+} from './types'
 import { CreateCustomOgArgs } from './types'
-import { DEFAULT_AVATAR } from './utils'
+import { DEFAULT_AVATAR, httpClient } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -24,6 +32,15 @@ export const getExistingUser = async (
       },
     },
   )
+
+  /**
+   * fetch needs to be rejected manually to trigger react-query error
+   * @see https://tanstack.com/query/v4/docs/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
+   */
+  if (!rawRes.ok) {
+    const error = await rawRes.json()
+    throw new Error(error.message)
+  }
 
   return rawRes.json()
 }
@@ -67,7 +84,9 @@ export const checkTheSlugOwner = async (
   return rawRes.json()
 }
 
-export const postAddUser = async (user: User): Promise<{ message: string }> => {
+export const postAddUser = async (
+  user: User,
+): Promise<{ message: string; isNewUser?: boolean }> => {
   const token = await user.getIdToken()
 
   const rawRes = await fetch(`${BASEURL}/api/private/user/add`, {
@@ -89,7 +108,7 @@ export const postAddUser = async (user: User): Promise<{ message: string }> => {
 
 export const patchUpdateUser = async (
   user: User,
-  param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>,
+  param: Omit<UpdateUserArgs, 'uid' | 'pageId'>,
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
@@ -101,6 +120,7 @@ export const patchUpdateUser = async (
       slug: param.slug,
       image: param.image,
       public: param.public ?? false,
+      x_username: param.x_username,
     }),
     headers: {
       'Content-Type': 'application/json',
@@ -168,7 +188,7 @@ export const patchQuestionAsDone = async (
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(
+  const rawRes = await httpClient(
     `${BASEURL}/api/private/question/mark-done/${uuid}`,
     {
       method: 'PATCH',
@@ -178,6 +198,7 @@ export const patchQuestionAsDone = async (
       },
     },
   )
+
   return rawRes.json()
 }
 
@@ -339,6 +360,97 @@ export const patchUpdateCustomOg = async (
       Authorization: token,
     },
   })
+
+  return rawRes.json()
+}
+
+export const getExistingChannelNotif = async (
+  user: User,
+): Promise<{ data: NotifChannel[] }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/notification/by-uid/${user.uid}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: [`notif-by-uid-${user.uid}`],
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
+export const postAddNewChannelNotif = async (
+  user: User,
+  param: CreateNotifChannelArgs,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/notification/create`, {
+    method: 'POST',
+    body: JSON.stringify({
+      uid: user.uid,
+      slug: param.slug,
+      telegram_chat_id: param.telegram_chat_id,
+      telegram_username: param.telegram_username,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const patchUpdateChannelNotif = async (
+  user: User,
+  param: CreateNotifChannelArgs,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/notification/update`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      uid: user.uid,
+      slug: param.slug,
+      telegram_chat_id: param.telegram_chat_id,
+      telegram_username: param.telegram_username,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const getCheckChatId = async (
+  user: User,
+  username: string,
+): Promise<{ data: UpdateItem | null }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/notification/get-chatid/${user.uid}?u=${username}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: [`chatid-uid-${user.uid}`],
+      },
+    },
+  )
 
   return rawRes.json()
 }

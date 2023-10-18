@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
+import slugify from '@sindresorhus/slugify'
+import { useQueryClient } from '@tanstack/react-query'
 import { signInWithPopup } from 'firebase/auth'
 
 import { useAuth } from '@/components/FirebaseAuth'
@@ -14,6 +16,7 @@ import {
   getGoogleAuthProvider,
   trackEvent,
 } from '@/lib/firebase'
+import { DEFAULT_AVATAR } from '@/lib/utils'
 
 const GoogleIcon = () => {
   return (
@@ -51,23 +54,34 @@ const auth = getFirebaseAuth()
 export const LoginButtonWithRedirect = () => {
   const router = useRouter()
   const { toast } = useToast()
-  const { isLogin, isLoading } = useAuth(auth)
+  const { isLogin, isLoading, user } = useAuth(auth)
+  const queryClient = useQueryClient()
 
   const handleLogin = () => {
     trackEvent('click login button')
     signInWithPopup(auth, getGoogleAuthProvider())
       .then(async (result) => {
         const user = result.user
+        queryClient.setQueryData(['/owner', user.uid], {
+          data: {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            image: user.photoURL || DEFAULT_AVATAR,
+            slug: slugify(user.email?.split('@')[0] || ''),
+            count: 0,
+          },
+        })
         toast({
           title: 'Success Login',
           description: `Berhasil login. Selamat datang ${user.displayName}!`,
         })
 
-        await postAddUser(user)
-
-        setTimeout(() => {
-          router.push('/account')
-        }, 500)
+        postAddUser(user).then((result) => {
+          if (result.isNewUser) {
+            queryClient.refetchQueries(['/owner', user.uid])
+          }
+        })
       })
       .catch((error) => {
         toast({
@@ -85,7 +99,7 @@ export const LoginButtonWithRedirect = () => {
         router.push('/account')
       }
     }
-  }, [isLogin, isLoading, router])
+  }, [isLogin, isLoading, router, user])
 
   useEffect(() => {
     trackEvent('view login page')

@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+import { BaseDialog } from '@/components/dialog/BaseDialog'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -64,8 +67,10 @@ export default function RootLayout({
               <article className="min-h-screen">{children}</article>
               <Footer />
             </main>
+            <BaseDialog />
             <Toaster />
           </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryProvider>
         <Script id="sw-registration">
           {`

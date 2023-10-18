@@ -3,10 +3,17 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Script from 'next/script'
-import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { maxLength, minLength, object, type Output, string } from 'valibot'
+import { Loader2, Lock, SendHorizontal } from 'lucide-react'
+import {
+  includes,
+  maxLength,
+  minLength,
+  object,
+  type Output,
+  string,
+} from 'valibot'
 
 // @ts-ignore
 import { ShareButton } from '@/components/ShareButton'
@@ -30,6 +37,7 @@ const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
     minLength(2, 'Pertanyaan butuh paling tidak 2 karakter.'),
     maxLength(500, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
+    includes(' ', 'Pertanyaan membutuhkan lebih dari satu kata.'),
   ]),
 })
 
@@ -63,6 +71,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       })
     }
 
+    // Reset from whatever success or failed
     form.reset()
   }
 
@@ -130,7 +139,8 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
                   />
                 </FormControl>
                 <FormDescription className="flex items-center gap-2">
-                  <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
+                  <Lock className="w-4 h-4" /> Pertanyaanmu akan disampaikan
+                  secara anonim
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -138,8 +148,17 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
           />
           <div className="flex flex-wrap justify-between gap-2">
             <Button type="submit" disabled={isLoading}>
-              <PaperPlaneIcon className="mr-2 h-4 w-4" />
-              {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Sedang mengirim...</span>
+                </>
+              ) : (
+                <>
+                  <SendHorizontal className="mr-2 h-4 w-4" />
+                  <span>Kirim pertanyaan</span>
+                </>
+              )}
             </Button>
 
             {owner && owner?.slug ? (

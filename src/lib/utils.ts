@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from 'clsx'
 // eslint-disable-next-line
 // @ts-ignore
 import domtoimage from 'dom-to-image-more'
+import { customAlphabet } from 'nanoid'
 import { twMerge } from 'tailwind-merge'
 
 import { ClassMap } from './types'
@@ -148,4 +149,30 @@ export const RANDOM_AVATARS = [
 export const randomizeAvatar = () => {
   const randomIndex = Math.floor(Math.random() * RANDOM_AVATARS.length)
   return RANDOM_AVATARS[randomIndex]
+}
+
+export function generateNanoId(size = 7) {
+  const nanoid = customAlphabet(
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
+    size,
+  )
+
+  return nanoid(size)
+}
+
+export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
+  const promise = new Promise<Response>(async (resolve, reject) => {
+    try {
+      const response = await fetch(input, init)
+      if (response.ok) {
+        resolve(response)
+      } else {
+        reject(response)
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+  return promise
 }

@@ -1,10 +1,8 @@
-import {
-  CalendarIcon,
-  LockClosedIcon,
-  LockOpen2Icon,
-} from '@radix-ui/react-icons'
+import { useQueryClient } from '@tanstack/react-query'
+import { CalendarDays } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
+import PublicAccessToggler from '@/components/PublicAccessToggler'
 import { RedirectButton } from '@/components/RedirectButton'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,6 +15,7 @@ import {
 } from '@/components/ui/card'
 import { BASEURL } from '@/lib/api'
 import { Question, UserProfile } from '@/lib/types'
+
 interface QuestionPanelProps {
   question: Question | null
   owner: UserProfile | null | undefined
@@ -30,22 +29,45 @@ export const QuestionPanel = ({
   index,
   owner,
 }: QuestionPanelProps) => {
+  const queryClient = useQueryClient()
+
+  const handleUpdateQuestionPrivacy = (question: Question) => {
+    // Find the question and update state
+    queryClient.setQueryData<{ data: Question[] }>(
+      ['/questions', owner?.uid],
+      (oldData) => {
+        const defaultData: { data: Question[] } = { data: [] }
+        if (!oldData) return defaultData
+
+        const updatedData = oldData?.data.map((questionItem) =>
+          questionItem.uuid === question?.uuid
+            ? { ...questionItem, public: !questionItem.public }
+            : questionItem,
+        )
+
+        return { ...oldData, data: updatedData }
+      },
+    )
+  }
+
   return (
     <Card className="relative min-h-[200px] flex flex-col">
       {question ? (
         <>
           <CardHeader>
-            <CardTitle className="text-2xl">Pertanyaan #{index}</CardTitle>
+            <div className="flex justify-between gap-2 flex-wrap">
+              <CardTitle className="text-2xl self-center leading-none">
+                Pertanyaan #{index}
+              </CardTitle>
+
+              <PublicAccessToggler
+                question={question}
+                onSuccess={handleUpdateQuestionPrivacy}
+              />
+            </div>
+
             <CardDescription className="flex gap-1 items-center">
-              {question.public ? <LockOpen2Icon /> : <LockClosedIcon />}
-              <span className="text-sm">
-                {question.public
-                  ? 'Bisa diakses publik'
-                  : 'Tidak bisa diakses public'}
-              </span>
-            </CardDescription>
-            <CardDescription className="flex gap-1 items-center">
-              <CalendarIcon />
+              <CalendarDays className="w-4 h-4" />
               {new Date(question.submitted_date).toLocaleDateString('id-ID', {
                 year: 'numeric',
                 month: 'short',
@@ -56,7 +78,7 @@ export const QuestionPanel = ({
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="flex-1">
             <p className="">
               {question.question.length > 100
                 ? `${question.question.substring(0, 300)}...`
@@ -65,14 +87,18 @@ export const QuestionPanel = ({
           </CardContent>
 
           <CardFooter className="justify-end gap-2 flex-wrap">
-            <RedirectButton
-              url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-              external
-            />
-            <CopyButton
-              text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-              withLabel
-            />
+            {question?.public ? (
+              <>
+                <RedirectButton
+                  url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                  external
+                />
+                <CopyButton
+                  text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                  withLabel
+                />
+              </>
+            ) : null}
 
             <Button
               type="button"

@@ -1,0 +1,21 @@
+name: Auto Comment
+on:
+  issues:
+    types: [opened]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: wow-actions/auto-comment@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          issuesOpenedReactions: 'eyes'
+          issuesOpened: |
+            👋 Hi, all contributors.
+            
+            As mentioned in the contributor guidelines, I will NOT assign any issues unless it is for my self.
+            If you are interest to working in this issue, please raise a **Draft Pull Request** as a sign the you are working on it.
+
+            Thank you, I really appreciate every help 🎉
+            
+            *Auto comment on behalf of the author @mazipan*

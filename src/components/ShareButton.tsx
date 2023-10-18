@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Share1Icon, TwitterLogoIcon } from '@radix-ui/react-icons'
+
+import { Share2 } from 'lucide-react'
 
 import { CopyButton } from './CopyButton'
+import { TweetButton } from './TweetButton'
 import { Button } from './ui/button'
 
 export function ShareButton({
@@ -46,7 +48,7 @@ export function ShareButton({
           className="flex gap-2 items-center"
           onClick={handleShare}
         >
-          <Share1Icon className="h-4 w-4" />
+          <Share2 className="h-4 w-4" />
           Bagikan
         </Button>
       ) : (
@@ -66,20 +68,7 @@ export function ShareButton({
               <ChatBubbleIcon className="h-4 w-4" />
             </a>
           </Button> */}
-          <Button
-            variant="outline"
-            type="button"
-            className="flex gap-2 items-center"
-            asChild
-          >
-            <a
-              href={`https://twitter.com/intent/tweet?text=${text}+%0A+${encodeURIComponent(
-                url,
-              )}`}
-            >
-              <TwitterLogoIcon className="h-4 w-4" />
-            </a>
-          </Button>
+          <TweetButton url={url} hideLabel />
         </>
       )}
     </div>

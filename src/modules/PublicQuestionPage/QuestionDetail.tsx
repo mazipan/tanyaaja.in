@@ -3,7 +3,8 @@
 import { Fragment, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { PaperPlaneIcon } from '@radix-ui/react-icons'
+
+import { SendHorizontal } from 'lucide-react'
 
 import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
@@ -48,7 +49,7 @@ export const QuestionDetail = ({
             <div className="flex gap-2 items-center">
               <Button asChild>
                 <Link href={`/p/${slug}`}>
-                  <PaperPlaneIcon className="mr-2 h-4 w-4" />
+                  <SendHorizontal className="mr-2 h-4 w-4" />
                   Buat pertanyaan baru
                 </Link>
               </Button>
@@ -76,7 +77,7 @@ export const QuestionDetail = ({
 
           <Button asChild>
             <Link href={`/p/${slug}`}>
-              <PaperPlaneIcon className="mr-2 h-4 w-4" />
+              <SendHorizontal className="mr-2 h-4 w-4" />
               Buat pertanyaan baru
             </Link>
           </Button>

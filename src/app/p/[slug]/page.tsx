@@ -1,6 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
+import { Twitter } from 'lucide-react'
+
 import { ProfileAvatar } from '@/components/ProfileAvatar'
 import { BASEURL, getPublicCustomOg, getPublicOwnerUser } from '@/lib/api'
 import { LinkAds } from '@/modules/PublicQuestionPage/LinkAds'
@@ -91,6 +93,18 @@ export default async function PublicPage({
           <h1 className="text-3xl font-extrabold text-center">
             Tanya ke {owner?.data?.name}
           </h1>
+
+          {owner?.data?.x_username && (
+            <a
+              className="flex items-center gap-1 underline"
+              href={`https://x.com/${owner.data.x_username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Twitter className="h-4 w-4" />
+              {owner.data.x_username}
+            </a>
+          )}
 
           {owner && owner?.data ? <QuestionForm owner={owner?.data} /> : null}
 

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckIcon, CopyIcon } from '@radix-ui/react-icons'
+
+import { Check, Copy } from 'lucide-react'
 
 import { copyTextToClipboard } from '@/lib/utils'
 
@@ -22,7 +23,7 @@ export function CopyButton({
   const [isCopied, setIsCopied] = useState(false)
 
   return (
-    <div className={`flex space-x-2 ${fullWidth ? 'w-full' : ''}`}>
+    <div className={`flex gap-2 ${fullWidth ? 'w-full' : ''}`}>
       {withInput ? <Input value={text} readOnly /> : null}
       <Button
         variant="outline"
@@ -37,9 +38,9 @@ export function CopyButton({
         }}
       >
         {isCopied ? (
-          <CheckIcon className="h-4 w-4" />
+          <Check className="h-4 w-4 shrink-0" />
         ) : (
-          <CopyIcon className="h-4 w-4" />
+          <Copy className="h-4 w-4 shrink-0" />
         )}
         {withLabel ? (
           <>{isCopied ? <span>Tersalin</span> : <span>Salin</span>}</>
