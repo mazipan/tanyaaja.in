@@ -99,6 +99,30 @@ export const GRADIENTS: ClassMap[] = [
     cssNative:
       'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
   },
+  {
+    id: 'witch',
+    class:
+      'bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900',
+    cssNative:
+      'conic-gradient(at left top, rgb(15, 23, 42), rgb(88, 28, 135), rgb(15, 23, 42))',
+  },
+  {
+    id: 'space',
+    class: 'bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r',
+    cssNative: 'linear-gradient(rgb(17, 24, 39), rgb(75, 85, 99))',
+  },
+  {
+    id: 'ice',
+    class: 'bg-gradient-to-tr from-rose-100 to-teal-100 text-black',
+    cssNative:
+      'linear-gradient(to right top, rgb(255, 228, 230), rgb(204, 251, 241))',
+  },
+  {
+    id: 'midnight',
+    class: 'bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900',
+    cssNative:
+      'linear-gradient(to right, rgb(29, 78, 216), rgb(30, 64, 175), rgb(17, 24, 39))',
+  },
 ]
 
 export const CARD_SCALES: ClassMap[] = [
