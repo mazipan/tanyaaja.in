@@ -5,7 +5,7 @@ import domtoimage from 'dom-to-image-more'
 import { customAlphabet } from 'nanoid'
 import { twMerge } from 'tailwind-merge'
 
-import { ClassMap } from './types'
+import { ClassMap, IResponseGetQuestionPagination } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -202,4 +202,14 @@ export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
   })
 
   return promise
+}
+
+export function countQuestion(arr: IResponseGetQuestionPagination[]) {
+  let totalQuestion = 0
+
+  for (let i = 0; i < arr.length; i++) {
+    totalQuestion += arr[i].data.length
+  }
+
+  return totalQuestion
 }
