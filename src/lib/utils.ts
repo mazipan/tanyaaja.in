@@ -100,28 +100,31 @@ export const GRADIENTS: ClassMap[] = [
       'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
   },
   {
-    id: 'witch',
+    id: 'peachpie',
     class:
-      'bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900',
+      'bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-purple-600 via-gray-600 to-red-200',
     cssNative:
-      'conic-gradient(at left top, rgb(15, 23, 42), rgb(88, 28, 135), rgb(15, 23, 42))',
+      'conic-gradient(at right bottom, rgb(245, 245, 244), rgb(154, 52, 18), rgb(49, 46, 129))',
+  },
+
+  {
+    id: 'stone',
+    class:
+      'bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-stone-100 via-orange-600 to-indigo-800',
+    cssNative:
+      'linear-gradient(to right, rgb(68, 64, 60), rgb(12, 74, 110), rgb(31, 41, 55))',
   },
   {
-    id: 'space',
-    class: 'bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r',
-    cssNative: 'linear-gradient(rgb(17, 24, 39), rgb(75, 85, 99))',
+    id: 'watermelon',
+    class: 'bg-gradient-to-r from-red-500 to-green-500',
+    cssNative: 'linear-gradient(to right, rgb(239, 68, 68), rgb(34, 197, 94))',
   },
   {
-    id: 'ice',
-    class: 'bg-gradient-to-tr from-rose-100 to-teal-100 text-black',
+    id: 'softmetal',
+    class:
+      'bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-indigo-200 via-slate-600 to-indigo-200',
     cssNative:
-      'linear-gradient(to right top, rgb(255, 228, 230), rgb(204, 251, 241))',
-  },
-  {
-    id: 'midnight',
-    class: 'bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900',
-    cssNative:
-      'linear-gradient(to right, rgb(29, 78, 216), rgb(30, 64, 175), rgb(17, 24, 39))',
+      'conic-gradient(at right center, rgb(199, 210, 254), rgb(71, 85, 105), rgb(199, 210, 254))',
   },
 ]
 
