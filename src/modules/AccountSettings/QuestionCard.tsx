@@ -1,4 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { InfiniteData, useQueryClient } from '@tanstack/react-query'
 import { CalendarDays } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
@@ -14,7 +14,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { BASEURL } from '@/lib/api'
-import { Question, UserProfile } from '@/lib/types'
+import {
+  IResponseGetQuestionPagination,
+  Question,
+  UserProfile,
+} from '@/lib/types'
 
 interface QuestionPanelProps {
   question: Question | null
@@ -33,21 +37,30 @@ export const QuestionPanel = ({
 
   const handleUpdateQuestionPrivacy = (question: Question) => {
     // Find the question and update state
-    queryClient.setQueryData<{ data: Question[] }>(
-      ['/questions', owner?.uid],
-      (oldData) => {
-        const defaultData: { data: Question[] } = { data: [] }
-        if (!oldData) return defaultData
+    queryClient.setQueryData<
+      InfiniteData<IResponseGetQuestionPagination> | undefined
+    >(['/questions', owner?.uid], (oldData) => {
+      const defaultData:
+        | InfiniteData<IResponseGetQuestionPagination>
+        | undefined = { pages: [], pageParams: [] }
+      if (!oldData) return defaultData
 
-        const updatedData = oldData?.data.map((questionItem) =>
-          questionItem.uuid === question?.uuid
-            ? { ...questionItem, public: !questionItem.public }
-            : questionItem,
+      const updatedListQuestion = oldData.pages.map((oldQuestionItem) => {
+        const updatedChildQuestion = oldQuestionItem.data.map(
+          (questionItem) => {
+            return questionItem.uuid === question.uuid
+              ? { ...questionItem, public: !questionItem.public }
+              : questionItem
+          },
         )
+        return { ...oldQuestionItem, data: updatedChildQuestion }
+      })
 
-        return { ...oldData, data: updatedData }
-      },
-    )
+      return {
+        pages: updatedListQuestion,
+        pageParams: oldData.pageParams,
+      }
+    })
   }
 
   return (

@@ -99,7 +99,6 @@ export const GRADIENTS: ClassMap[] = [
     cssNative:
       'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
   },
-
   {
     id: 'peachpie',
     class:
@@ -109,7 +108,7 @@ export const GRADIENTS: ClassMap[] = [
   },
 
   {
-    id: 'batu',
+    id: 'stone',
     class:
       'bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-stone-100 via-orange-600 to-indigo-800',
     cssNative:
@@ -120,7 +119,6 @@ export const GRADIENTS: ClassMap[] = [
     class: 'bg-gradient-to-r from-red-500 to-green-500',
     cssNative: 'linear-gradient(to right, rgb(239, 68, 68), rgb(34, 197, 94))',
   },
-
   {
     id: 'softmetal',
     class:
