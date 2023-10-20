@@ -4,14 +4,16 @@ import type { UserProfile } from '@/lib/types'
 function generateSitemap(data: UserProfile[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
-    ${data.map((user) => {
-      return `
+    ${data
+      .map((user) => {
+        return `
            <url>
               <loc>${`${BASEURL}/p/${user.slug}`}</loc>
                <lastmod>${new Date()}</lastmod>
            </url>
          `
-    })}
+      })
+      .join('\n')}
    </urlset>`
 }
 
