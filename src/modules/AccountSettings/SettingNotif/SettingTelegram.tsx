@@ -22,13 +22,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import {
-  getCheckChatId,
-  patchUpdateChannelNotif,
-  postAddNewChannelNotif,
-} from '@/lib/api'
+import { getCheckChatId, postAddNewChannelNotif } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { NotifChannel, UserProfile } from '@/lib/types'
+
+import { usePatchUpdateChannelNotif } from '../hooks/usePatchUpdateChannelNotif'
 
 const schema = object({
   username: string('Username perlu disi terlebih dahulu.', [
@@ -56,6 +54,7 @@ export default function SettingTelegram({
 }) {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { mutate: mutateUpdateChannelNotif } = usePatchUpdateChannelNotif()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -74,15 +73,14 @@ export default function SettingTelegram({
       try {
         if (existing && existing.length > 0) {
           // patch
-          await patchUpdateChannelNotif(user, {
-            uid: user?.uid,
-            slug: owner?.slug || '',
-            telegram_chat_id: data?.chatId || '',
-            telegram_username: data?.username,
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan setelan notifikasi ke Telegram!`,
+          mutateUpdateChannelNotif({
+            user,
+            param: {
+              uid: user?.uid,
+              slug: owner?.slug || '',
+              telegram_chat_id: data?.chatId || '',
+              telegram_username: data?.username,
+            },
           })
         } else {
           // create
