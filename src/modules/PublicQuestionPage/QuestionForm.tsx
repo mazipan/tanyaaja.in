@@ -15,6 +15,7 @@ import {
   string,
 } from 'valibot'
 
+import { useAuth } from '@/components/FirebaseAuth'
 // @ts-ignore
 import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
@@ -30,7 +31,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
-import { trackEvent } from '@/lib/firebase'
+import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 
 const schema = object({
@@ -43,8 +44,11 @@ const schema = object({
 
 type FormValues = Output<typeof schema>
 
+const auth = getFirebaseAuth()
+
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()
+  const { isLogin, user } = useAuth(auth)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const form = useForm<FormValues>({
@@ -80,6 +84,15 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
     if (process.env.NODE_ENV === 'development') {
       await sendQuestion(owner?.slug || '', data.q, 'development')
     } else {
+      if (isLogin && user?.email?.includes(owner.slug)) {
+        toast({
+          title: 'Preview mode:',
+          description: `Tidak dapat mengirimkan pertanyaan kepada diri sendiri!`,
+        })
+
+        return
+      }
+
       // @ts-ignore
       if (window?.grecaptcha) {
         // @ts-ignore
