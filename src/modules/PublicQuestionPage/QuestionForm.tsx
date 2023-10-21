@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import Script from 'next/script'
 
@@ -29,9 +29,10 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
-import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
+import { BASEURL, patchHit } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
+import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
 
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
@@ -45,7 +46,7 @@ type FormValues = Output<typeof schema>
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { mutate, isLoading } = useSendQuestion()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -55,24 +56,25 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   })
 
   async function sendQuestion(slug: string, q: string, token: string) {
-    setIsLoading(true)
-    try {
-      await postSendQuestion(slug || '', q, token)
-      setIsLoading(false)
-      toast({
-        title: 'Pesan terkirim',
-        description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
-      })
-    } catch (error) {
-      setIsLoading(false)
-      toast({
-        title: 'Pesan gagal terkirim',
-        description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
-      })
-    }
+    return mutate(
+      { slug, q, token },
+      {
+        onSuccess: () => {
+          toast({
+            title: 'Pesan terkirim',
+            description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
+          })
 
-    // Reset from whatever success or failed
-    form.reset()
+          form.reset()
+        },
+        onError: () => {
+          toast({
+            title: 'Pesan gagal terkirim',
+            description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
+          })
+        },
+      },
+    )
   }
 
   async function onSubmit(data: FormValues) {
@@ -91,9 +93,6 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
             })
             .then(async function (token: string) {
               await sendQuestion(owner?.slug || '', data.q, token)
-            })
-            .catch(() => {
-              setIsLoading(false)
             })
         })
       }
