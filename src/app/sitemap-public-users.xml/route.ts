@@ -19,6 +19,7 @@ function generateSitemap(data: UserProfile[]) {
 
 export async function GET() {
   const allPublicUsers = await getAllPublicUsersForSiteMap()
+
   const sitemap = generateSitemap(allPublicUsers.data || [])
 
   return new Response(sitemap, {

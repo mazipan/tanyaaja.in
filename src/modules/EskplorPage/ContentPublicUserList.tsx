@@ -21,6 +21,7 @@ const ContentPublicUserList = () => {
     limit: 20,
     name,
   })
+
   return (
     <div>
       <SearchName setName={setName} name={name} />
