@@ -96,3 +96,15 @@ export interface IResponseGetQuestionPagination {
   hasMore: boolean
   next: string
 }
+
+export interface IRequestPublicUserList {
+  name: string
+  limit: number
+  offset: string | undefined
+}
+
+export interface IResponseGetPublicUserList {
+  data: UserProfile[]
+  hasMore: boolean
+  next: string
+}

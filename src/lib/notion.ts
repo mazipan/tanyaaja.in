@@ -11,6 +11,7 @@ import {
   CreateCustomOgArgs,
   CreateNotifChannelArgs,
   CreateSessionArgs,
+  IRequestPublicUserList,
   SubmitQuestionArgs,
   UpdateUserArgs,
   UpdateUserCounterArgs,
@@ -209,15 +210,31 @@ export const getUserBySlug = async (slug: string) => {
   return response
 }
 
-export const getPublicUserList = async () => {
+export const getPublicUserList = async ({
+  limit = 10,
+  name = '',
+  offset = undefined,
+}: IRequestPublicUserList) => {
   const response = await notion.databases.query({
     database_id: DB_USER,
     filter: {
-      property: 'public',
-      checkbox: {
-        equals: true,
-      },
+      and: [
+        {
+          property: 'name',
+          rich_text: {
+            contains: name,
+          },
+        },
+        {
+          property: 'public',
+          checkbox: {
+            equals: true,
+          },
+        },
+      ],
     },
+    page_size: limit,
+    start_cursor: offset,
   })
 
   return response
