@@ -263,6 +263,22 @@ export const destroyActiveSession = async (
   return rawRes.json()
 }
 
+export const getAllPublicUsersForSiteMap = async (): Promise<{
+  data: UserProfile[]
+}> => {
+  const rawRes = await fetch(`${BASEURL}/api/user/public-list`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['public-users'],
+    },
+  })
+
+  return rawRes.json()
+}
+
 export const getAllPublicUsers = async ({
   limit,
   name,

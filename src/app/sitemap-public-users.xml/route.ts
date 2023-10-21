@@ -1,4 +1,4 @@
-import { BASEURL, getAllPublicUsers } from '@/lib/api'
+import { BASEURL, getAllPublicUsersForSiteMap } from '@/lib/api'
 import type { UserProfile } from '@/lib/types'
 
 function generateSitemap(data: UserProfile[]) {
@@ -18,7 +18,7 @@ function generateSitemap(data: UserProfile[]) {
 }
 
 export async function GET() {
-  const allPublicUsers = await getAllPublicUsers()
+  const allPublicUsers = await getAllPublicUsersForSiteMap()
   const sitemap = generateSitemap(allPublicUsers.data || [])
 
   return new Response(sitemap, {

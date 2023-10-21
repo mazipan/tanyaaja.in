@@ -239,6 +239,19 @@ export const getPublicUserList = async ({
 
   return response
 }
+export const getPublicUserListForSiteMap = async () => {
+  const response = await notion.databases.query({
+    database_id: DB_USER,
+    filter: {
+      property: 'public',
+      checkbox: {
+        equals: true,
+      },
+    },
+  })
+
+  return response
+}
 
 export const addUser = async (param: AddUserArgs) => {
   await notion.pages.create({
