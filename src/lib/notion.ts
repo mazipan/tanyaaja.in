@@ -527,3 +527,37 @@ export const updateNotifChannelByUuid = async (
 
   return response
 }
+
+export const getQuestionsByUuidWithPagination = async ({
+  uid,
+  limit = 10,
+  cursor,
+}: {
+  uid: string
+  limit: number
+  cursor: string | undefined
+}) => {
+  const response = await notion.databases.query({
+    database_id: DB_QUESTION,
+    filter: {
+      and: [
+        {
+          property: 'uid',
+          rich_text: {
+            equals: uid,
+          },
+        },
+        {
+          property: 'status',
+          status: {
+            equals: 'Not started',
+          },
+        },
+      ],
+    },
+    page_size: limit,
+    start_cursor: cursor,
+  })
+
+  return response
+}

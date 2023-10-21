@@ -90,3 +90,9 @@ export interface CreateNotifChannelArgs {
   telegram_username: string
   telegram_chat_id: string
 }
+
+export interface IResponseGetQuestionPagination {
+  data: Question[]
+  hasMore: boolean
+  next: string
+}

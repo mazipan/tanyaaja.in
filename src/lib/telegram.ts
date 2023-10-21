@@ -85,12 +85,13 @@ export const sendMessageToBot = async (
 
     const requestBody = {
       chat_id: chatID,
+      parse_mode: 'MarkdownV2',
       text: `
-**📥 New Question For You**
+              *📥 New Question For You*
 
-**Question**: ${message}
+              *Question*: ${message}
 
-Kunjungi: ${BASEURL}/account`,
+              Kunjungi: ${BASEURL}/account`,
     }
 
     if (chatID) {

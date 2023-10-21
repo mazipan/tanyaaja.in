@@ -1,4 +1,5 @@
 import {
+  InfiniteData,
   useMutation,
   UseMutationOptions,
   useQueryClient,
@@ -7,7 +8,7 @@ import { User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { patchQuestionAsDone } from '@/lib/api'
-import { Question } from '@/lib/types'
+import { IResponseGetQuestionPagination } from '@/lib/types'
 
 export const useMarkQuestionAsDone = <
   TData = unknown,
@@ -29,21 +30,27 @@ export const useMarkQuestionAsDone = <
 
       await queryClient.cancelQueries({ queryKey: ['/questions', user.uid] })
 
-      const prevQuestions = queryClient.getQueryData<{ data: Question[] }>([
-        '/questions',
-        user.uid,
-      ])
+      const prevQuestions = queryClient.getQueryData<
+        InfiniteData<IResponseGetQuestionPagination> | undefined
+      >(['/questions', user.uid])
 
       if (prevQuestions) {
-        const filteredQuestions = prevQuestions.data.filter(
-          (question) => question.uuid !== uuid,
-        )
+        const updatedListQuestion = prevQuestions.pages.map((prevQuestion) => {
+          const filteredPrevQuestion = prevQuestion.data.filter(
+            (questionItem) => {
+              return questionItem.uuid !== uuid
+            },
+          )
+          return { ...prevQuestion, data: filteredPrevQuestion }
+        })
 
         // optimistically update questions list
-        queryClient.setQueryData<{ data: Question[] }>(
-          ['/questions', user.uid],
-          { ...prevQuestions, data: filteredQuestions },
-        )
+        queryClient.setQueryData<
+          InfiniteData<IResponseGetQuestionPagination> | undefined
+        >(['/questions', user.uid], {
+          ...prevQuestions,
+          pages: updatedListQuestion,
+        })
       }
 
       if (typeof onMutate === 'function') {

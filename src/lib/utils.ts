@@ -5,7 +5,7 @@ import domtoimage from 'dom-to-image-more'
 import { customAlphabet } from 'nanoid'
 import { twMerge } from 'tailwind-merge'
 
-import { ClassMap } from './types'
+import { ClassMap, IResponseGetQuestionPagination } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -99,6 +99,33 @@ export const GRADIENTS: ClassMap[] = [
     cssNative:
       'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
   },
+  {
+    id: 'peachpie',
+    class:
+      'bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-purple-600 via-gray-600 to-red-200',
+    cssNative:
+      'conic-gradient(at right bottom, rgb(245, 245, 244), rgb(154, 52, 18), rgb(49, 46, 129))',
+  },
+
+  {
+    id: 'stone',
+    class:
+      'bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-stone-100 via-orange-600 to-indigo-800',
+    cssNative:
+      'linear-gradient(to right, rgb(68, 64, 60), rgb(12, 74, 110), rgb(31, 41, 55))',
+  },
+  {
+    id: 'watermelon',
+    class: 'bg-gradient-to-r from-red-500 to-green-500',
+    cssNative: 'linear-gradient(to right, rgb(239, 68, 68), rgb(34, 197, 94))',
+  },
+  {
+    id: 'softmetal',
+    class:
+      'bg-[conic-gradient(at_right,_var(--tw-gradient-stops))] from-indigo-200 via-slate-600 to-indigo-200',
+    cssNative:
+      'conic-gradient(at right center, rgb(199, 210, 254), rgb(71, 85, 105), rgb(199, 210, 254))',
+  },
 ]
 
 export const CARD_SCALES: ClassMap[] = [
@@ -175,4 +202,14 @@ export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
   })
 
   return promise
+}
+
+export function countQuestion(arr: IResponseGetQuestionPagination[]) {
+  let totalQuestion = 0
+
+  for (let i = 0; i < arr.length; i++) {
+    totalQuestion += arr[i].data.length
+  }
+
+  return totalQuestion
 }
