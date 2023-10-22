@@ -21,9 +21,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import { BASEURL, patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
+import { BASEURL } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { ClassMap, CustomOg, UserProfile } from '@/lib/types'
+
+import useAddNewCustomOg from './hooks/useAddNewCustomOg'
+import useUpdateCustomOg from './hooks/useUpdatecustomOg'
 
 const schema = object({
   textOgPublik: string('Text perlu disi terlebih dahulu.', [
@@ -47,7 +50,12 @@ export default function SimpleMode({
 }) {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { mutate: addNewOgMutation, isLoading: isAddingNewOg } =
+    useAddNewCustomOg()
+  const { mutate: updateCustomOgMutation, isLoading: isUpdatingCustomOg } =
+    useUpdateCustomOg()
+
+  const isSubmitting = isAddingNewOg || isUpdatingCustomOg
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -65,18 +73,20 @@ export default function SimpleMode({
   async function onSubmit(data: FormValues) {
     trackEvent('click update og image simple')
     if (user) {
-      setIsSubmitting(true)
       try {
         if (existingOg && existingOg.length > 0) {
           // patch
-          await patchUpdateCustomOg(user, {
-            uid: user?.uid,
-            slug: owner?.slug || '',
-            mode: 'simple',
-            theme: activeGradient,
-            simpleText: data?.textOgPublik,
-            codePublic: '',
-            codeQuestion: '',
+          await updateCustomOgMutation({
+            user,
+            params: {
+              uid: user?.uid,
+              slug: owner?.slug || '',
+              mode: 'simple',
+              theme: activeGradient,
+              simpleText: data?.textOgPublik,
+              codePublic: '',
+              codeQuestion: '',
+            },
           })
           toast({
             title: 'Perubahan berhasil disimpan',
@@ -84,14 +94,17 @@ export default function SimpleMode({
           })
         } else {
           // create
-          await postAddNewCustomOg(user, {
-            uid: user?.uid,
-            slug: owner?.slug || '',
-            mode: 'simple',
-            theme: activeGradient,
-            simpleText: data?.textOgPublik,
-            codePublic: '',
-            codeQuestion: '',
+          await addNewOgMutation({
+            user,
+            params: {
+              uid: user?.uid,
+              slug: owner?.slug || '',
+              mode: 'simple',
+              theme: activeGradient,
+              simpleText: data?.textOgPublik,
+              codePublic: '',
+              codeQuestion: '',
+            },
           })
           toast({
             title: 'Perubahan berhasil disimpan',
@@ -104,7 +117,6 @@ export default function SimpleMode({
           description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
         })
       }
-      setIsSubmitting(false)
     }
   }
 
