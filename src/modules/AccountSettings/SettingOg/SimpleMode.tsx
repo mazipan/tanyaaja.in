@@ -70,46 +70,59 @@ export default function SimpleMode({
     setActiveGradient(newGradient?.id || '')
   }
 
+  const mutationOptions = {
+    onSuccess: () => {
+      toast({
+        title: 'Perubahan berhasil disimpan',
+        description: `Berhasil menyimpan perubahan setelan og image custom!`,
+      })
+    },
+    onError: () => {
+      toast({
+        title: 'Gagal menyimpan',
+        description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+      })
+    },
+  }
+
   async function onSubmit(data: FormValues) {
     trackEvent('click update og image simple')
     if (user) {
       try {
         if (existingOg && existingOg.length > 0) {
           // patch
-          await updateCustomOgMutation({
-            user,
-            params: {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'simple',
-              theme: activeGradient,
-              simpleText: data?.textOgPublik,
-              codePublic: '',
-              codeQuestion: '',
+          await updateCustomOgMutation(
+            {
+              user,
+              params: {
+                uid: user?.uid,
+                slug: owner?.slug || '',
+                mode: 'simple',
+                theme: activeGradient,
+                simpleText: data?.textOgPublik,
+                codePublic: '',
+                codeQuestion: '',
+              },
             },
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan setelan og image custom!`,
-          })
+            mutationOptions,
+          )
         } else {
           // create
-          await addNewOgMutation({
-            user,
-            params: {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              mode: 'simple',
-              theme: activeGradient,
-              simpleText: data?.textOgPublik,
-              codePublic: '',
-              codeQuestion: '',
+          await addNewOgMutation(
+            {
+              user,
+              params: {
+                uid: user?.uid,
+                slug: owner?.slug || '',
+                mode: 'simple',
+                theme: activeGradient,
+                simpleText: data?.textOgPublik,
+                codePublic: '',
+                codeQuestion: '',
+              },
             },
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan og image custom!`,
-          })
+            mutationOptions,
+          )
         }
       } catch (err) {
         toast({
