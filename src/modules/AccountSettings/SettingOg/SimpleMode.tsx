@@ -50,12 +50,12 @@ export default function SimpleMode({
 }) {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const { toast } = useToast()
-  const { mutate: addNewOgMutation, isLoading: isAddingNewOg } =
+  const { mutate: addNewOgMutation, isLoading: isAddingNewCustomOg } =
     useAddNewCustomOg()
   const { mutate: updateCustomOgMutation, isLoading: isUpdatingCustomOg } =
     useUpdateCustomOg()
 
-  const isSubmitting = isAddingNewOg || isUpdatingCustomOg
+  const isSubmitting = isAddingNewCustomOg || isUpdatingCustomOg
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
