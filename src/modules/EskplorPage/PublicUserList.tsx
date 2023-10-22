@@ -13,7 +13,7 @@ import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { trackEvent } from '@/lib/firebase'
 import { IResponseGetPublicUserList } from '@/lib/types'
-import { countPublicUser } from '@/lib/utils'
+import { calculatePageItemCount } from '@/lib/utils'
 
 interface PublicUserListProps {
   dataPublicUsers: InfiniteData<IResponseGetPublicUserList> | undefined
@@ -31,7 +31,7 @@ export default function PublicUserList({
     trackEvent('view eksplor page')
   }, [])
 
-  const totalUser = countPublicUser(dataPublicUsers?.pages ?? [])
+  const totalUser = calculatePageItemCount(dataPublicUsers?.pages ?? [])
   return (
     <div className="w-full flex flex-col gap-4">
       {isInitialLoading ? (

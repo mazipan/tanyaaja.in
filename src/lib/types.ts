@@ -108,3 +108,9 @@ export interface IResponseGetPublicUserList {
   hasMore: boolean
   next: string
 }
+
+export interface ICalculatePageItemCount<T> {
+  data: T[]
+  hasMore: boolean
+  next: string
+}
