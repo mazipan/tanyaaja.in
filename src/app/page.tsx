@@ -21,7 +21,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { getPublicStatistics } from '@/lib/api'
-import imagehero from '~/public/images/pexels-rdne-stock-project-5756742.jpg'
+import imagehero from '~/public/images/ai-asking-question.jpeg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
 export default async function Home() {
@@ -67,11 +67,11 @@ export default async function Home() {
             </Button>
           </div>
         </div>
-        <div className="p-4">
+        <div className="p-4 mx-auto">
           <Image
             src={imagehero}
-            alt="Laki-laki sedang mengacungkan tangan"
-            className="rounded-3xl"
+            alt="Laki-laki dan perempuan yang sedang berdiskusi"
+            className="rounded-3xl w-full max-w-[500px]"
           />
         </div>
       </section>
@@ -173,8 +173,8 @@ export default async function Home() {
           Kode Sumber Terbuka
         </h2>
         <p className="max-w-[85%] text-center text-md md:text-lg lg:text-xl text-muted-foreground">
-          TanyaAja adalah aplikasi dengan kode sumber terbuka yang didukung pula
-          dengan banyak pustaka kode sumber terbuka.
+          TanyaAja adalah aplikasi dengan kode sumber terbuka, kodenya bisa kamu
+          lihat dengan gratis untuk kepentingan pembelajaran
         </p>
         <Button
           variant="outline"
