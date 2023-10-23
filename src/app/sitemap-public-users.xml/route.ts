@@ -9,7 +9,7 @@ function generateSitemap(data: UserProfile[]) {
         return `
            <url>
               <loc>${`${BASEURL}/p/${user.slug}`}</loc>
-               <lastmod>${new Date()}</lastmod>
+               <lastmod>${new Date().toISOString()}</lastmod>
            </url>
          `
       })
