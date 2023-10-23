@@ -1,32 +1,19 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { getUserByUid, simplifyResponseObject } from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { simplifyResponseObject } from '@/lib/notion'
 import { getNotifChannelByUid } from '@/lib/notion'
 import { NotifChannel } from '@/lib/types'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uid: string } },
-) {
-  const uid = params.uid || ''
+export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')
   try {
     if (token) {
-      const userInNotion = await getUserByUid(uid)
+      const decodedToken = await verifyIdToken(token)
 
-      if (userInNotion.results.length === 0) {
-        return NextResponse.json(
-          {
-            message: `Can not found any custom og for user ${uid}`,
-            data: null,
-          },
-          { status: 400 },
-        )
-      }
-
-      const dataInNotion = await getNotifChannelByUid(uid)
+      const dataInNotion = await getNotifChannelByUid(decodedToken.uid)
       const results = dataInNotion?.results || []
       // @ts-ignore
       const simpleResults: NotifChannel[] = []
@@ -42,7 +29,7 @@ export async function GET(
       })
 
       return NextResponse.json({
-        message: `Found notif channel for user ${uid}`,
+        message: `Found notif channel for user ${decodedToken.uid}`,
         data: simpleResults,
       })
     }
