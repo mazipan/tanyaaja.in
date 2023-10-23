@@ -54,8 +54,10 @@ export default function SettingTelegram({
   existing: NotifChannel[] | null | undefined
 }) {
   const { toast } = useToast()
-  const { mutate: mutateUpdateChannelNotif } = usePatchUpdateChannelNotif()
-  const { mutate: mutateAddNewChannelNotif } = usePostAddNewChannelNotif()
+  const { mutate: mutateUpdateChannelNotif, isLoading: isLoadingUpdate } =
+    usePatchUpdateChannelNotif()
+  const { mutate: mutateAddNewChannelNotif, isLoading: isLoadingAdd } =
+    usePostAddNewChannelNotif()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -174,7 +176,12 @@ export default function SettingTelegram({
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={!watchUsername || isLoading}
+                  disabled={
+                    !watchUsername ||
+                    isLoading ||
+                    isLoadingAdd ||
+                    isLoadingUpdate
+                  }
                   onClick={handleCheckChatId}
                   className="shrink-0"
                 >
@@ -187,7 +194,10 @@ export default function SettingTelegram({
         />
 
         <div className="mt-8">
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            type="submit"
+            disabled={isLoading || isLoadingAdd || isLoadingUpdate}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
