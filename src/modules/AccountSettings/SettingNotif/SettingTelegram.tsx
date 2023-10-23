@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
@@ -22,13 +22,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import {
-  getCheckChatId,
-  patchUpdateChannelNotif,
-  postAddNewChannelNotif,
-} from '@/lib/api'
+import { getCheckChatId } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { NotifChannel, UserProfile } from '@/lib/types'
+
+import { usePatchUpdateChannelNotif } from '../hooks/usePatchUpdateChannelNotif'
+import { usePostAddNewChannelNotif } from '../hooks/usePostAddNewChannelNotif'
 
 const schema = object({
   username: string('Username perlu disi terlebih dahulu.', [
@@ -55,7 +54,8 @@ export default function SettingTelegram({
   existing: NotifChannel[] | null | undefined
 }) {
   const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const { mutate: mutateUpdateChannelNotif } = usePatchUpdateChannelNotif()
+  const { mutate: mutateAddNewChannelNotif } = usePostAddNewChannelNotif()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -70,46 +70,34 @@ export default function SettingTelegram({
   async function onSubmit(data: FormValues) {
     trackEvent('click update notif channel telegram')
     if (user) {
-      setIsSubmitting(true)
-      try {
-        if (existing && existing.length > 0) {
-          // patch
-          await patchUpdateChannelNotif(user, {
+      if (existing && existing.length > 0) {
+        // patch
+        mutateUpdateChannelNotif({
+          user,
+          param: {
             uid: user?.uid,
             slug: owner?.slug || '',
             telegram_chat_id: data?.chatId || '',
             telegram_username: data?.username,
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan setelan notifikasi ke Telegram!`,
-          })
-        } else {
-          // create
-          await postAddNewChannelNotif(user, {
+          },
+        })
+      } else {
+        // create
+        mutateAddNewChannelNotif({
+          user,
+          param: {
             uid: user?.uid,
             slug: owner?.slug || '',
             telegram_chat_id: data?.chatId || '',
             telegram_username: data?.username,
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan notifikasi ke Telegram!`,
-          })
-        }
-      } catch (err) {
-        toast({
-          title: 'Gagal menyimpan',
-          description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+          },
         })
       }
-      setIsSubmitting(false)
     }
   }
 
   async function handleCheckChatId() {
     if (user) {
-      setIsSubmitting(true)
       try {
         const res = await getCheckChatId(user, form.getValues('username'))
         form.setValue('chatId', `${res?.data?.message?.chat?.id || ''}`)
@@ -120,7 +108,6 @@ export default function SettingTelegram({
         })
       }
     }
-    setIsSubmitting(false)
   }
 
   useEffect(() => {
@@ -187,7 +174,7 @@ export default function SettingTelegram({
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={!watchUsername || isSubmitting || isLoading}
+                  disabled={!watchUsername || isLoading}
                   onClick={handleCheckChatId}
                   className="shrink-0"
                 >
@@ -200,8 +187,8 @@ export default function SettingTelegram({
         />
 
         <div className="mt-8">
-          <Button type="submit" disabled={isSubmitting || isLoading}>
-            {isSubmitting ? (
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
                 <span>Menyimpan...</span>

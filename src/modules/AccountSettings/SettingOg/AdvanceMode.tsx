@@ -1,6 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
@@ -26,6 +25,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
+import { deparse } from '@/lib/jsx-deparse'
+import JSXParser from '@/lib/jsx-parser'
 import { CustomOg, UserProfile } from '@/lib/types'
 
 const schema = object({
@@ -70,6 +71,10 @@ export default function AdvanceMode({
     trackEvent('click update og image advance')
     if (user) {
       setIsSubmitting(true)
+      // @ts-ignore
+      const codePublik = JSON.stringify(JSXParser(data?.publik))
+      // @ts-ignore
+      const codeQuestion = JSON.stringify(JSXParser(data?.question))
       try {
         if (existingOg && existingOg.length > 0) {
           // patch
@@ -79,8 +84,8 @@ export default function AdvanceMode({
             mode: 'advance',
             theme: existingOg?.[0]?.theme || 'hyper',
             simpleText: existingOg?.[0]?.simple_text || '',
-            codePublic: data?.publik,
-            codeQuestion: data?.question,
+            codePublic: codePublik,
+            codeQuestion: codeQuestion,
           })
           toast({
             title: 'Perubahan berhasil disimpan',
@@ -94,8 +99,8 @@ export default function AdvanceMode({
             mode: 'advance',
             theme: 'hyper',
             simpleText: '',
-            codePublic: data?.publik,
-            codeQuestion: data?.question,
+            codePublic: codePublik,
+            codeQuestion: codeQuestion,
           })
           toast({
             title: 'Perubahan berhasil disimpan',
@@ -114,8 +119,8 @@ export default function AdvanceMode({
 
   useEffect(() => {
     if (existingOg && existingOg.length > 0) {
-      form.setValue('publik', existingOg[0].code_public)
-      form.setValue('question', existingOg[0].code_question)
+      form.setValue('publik', deparse(existingOg[0].code_public), {})
+      form.setValue('question', deparse(existingOg[0].code_question), {})
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingOg])

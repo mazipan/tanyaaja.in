@@ -1,19 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-import { getPublicUserList, simplifyResponseObject } from '@/lib/notion'
+import {
+  getPublicUserListForSiteMap,
+  simplifyResponseObject,
+} from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const limit = Number(request.nextUrl.searchParams.get('limit'))
-    const offset = request.nextUrl.searchParams.get('offset') ?? ''
-    const name = request.nextUrl.searchParams.get('name') ?? ''
-
-    const publicUsers = await getPublicUserList({
-      limit: limit < 1 ? 1 : limit,
-      name: name,
-      offset: offset === '' ? undefined : offset,
-    })
+    const publicUsers = await getPublicUserListForSiteMap()
 
     if (publicUsers.results.length === 0) {
       return NextResponse.json(
@@ -23,7 +18,6 @@ export async function GET(request: NextRequest) {
     }
 
     const results = publicUsers?.results || []
-
     const simpleResults: UserProfile[] = []
 
     results.forEach((result) => {
@@ -46,8 +40,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       message: `Found public users`,
       data: simpleResults,
-      next: publicUsers.next_cursor,
-      hasMore: publicUsers.has_more,
     })
   } catch (error) {
     console.error(request.url, error)

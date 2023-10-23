@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 import { Separator } from '@/components/ui/separator'
 import { BASEURL } from '@/lib/api'
-import PublicUserList from '@/modules/EskplorPage/PublicUserList'
+import ContentPublicUserList from '@/modules/EskplorPage/ContentPublicUserList'
 
 export const metadata: Metadata = {
   title: 'Eksplor Pengguna di TanyaAja',
@@ -35,7 +35,7 @@ export default function EksplorPage() {
 
       <Separator className="my-6" />
 
-      <PublicUserList />
+      <ContentPublicUserList />
     </main>
   )
 }
