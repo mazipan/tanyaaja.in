@@ -1,5 +1,3 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -22,10 +20,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { getPublicStatistics } from '@/lib/api'
 import imagehero from '~/public/images/pexels-rdne-stock-project-5756742.jpg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
-export default function Home() {
+export default async function Home() {
+  const statsPromise = getPublicStatistics()
+
+  const [stats] = await Promise.all([statsPromise])
+
   return (
     <main className="">
       <section className="container flex flex-col md:flex-row">
@@ -142,6 +145,29 @@ export default function Home() {
           </Card>
         </div>
       </section>
+
+      <section className="container mx-auto max-w-[58rem] my-24 flex flex-col justify-center items-center gap-4">
+        <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
+          Statistik
+        </h2>
+        <h3 className="font-light text-xl md:text-2xl lg:text-3xl text-center mt-4">
+          Pengguna Terdaftar
+        </h3>
+        <div className="font-extrabold max-w-[85%] text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          {new Intl.NumberFormat('id-ID', {}).format(
+            stats?.data?.usersCount | 0,
+          )}
+        </div>
+        <h3 className="font-light text-xl md:text-2xl lg:text-3xl text-center">
+          Pertanyaan Terdaftar
+        </h3>
+        <div className="font-extrabold max-w-[85%] text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          {new Intl.NumberFormat('id-ID', {}).format(
+            stats?.data?.questionsCount | 0,
+          )}
+        </div>
+      </section>
+
       <section className="container mx-auto max-w-[58rem] my-24 flex flex-col justify-center items-center gap-4">
         <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
           Kode Sumber Terbuka

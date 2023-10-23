@@ -508,3 +508,19 @@ export const getAllQuestionsWithPagination = async ({
 
   return rawRes.json()
 }
+
+export const getPublicStatistics = async (): Promise<{
+  data: { usersCount: number; questionsCount: number }
+}> => {
+  const rawRes = await httpClient(`${BASEURL}/api/statistics`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['public-stats'],
+    },
+  })
+
+  return rawRes.json()
+}
