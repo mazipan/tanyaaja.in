@@ -1,6 +1,3 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -23,30 +20,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { getUserCount } from '@/lib/api'
+import { getPublicStatistics } from '@/lib/api'
 import imagehero from '~/public/images/pexels-rdne-stock-project-5756742.jpg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
-export default function Home() {
-  // Stores registered users count
-  const [userCount, setUserCount] = useState('0')
+export default async function Home() {
+  const statsPromise = getPublicStatistics()
 
-  useEffect(() => {
-    async function fetchUserCount() {
-      const countFromCache = localStorage.getItem('registeredUsersCount')
-      if (countFromCache) {
-        // Use cached count
-        setUserCount(countFromCache)
-      } else {
-        // Call api to get fresh count
-        const users = await getUserCount()
-        const count = users['data']['usersCount']
-        localStorage.setItem('registeredUsersCount', count)
-        setUserCount(count)
-      }
-    }
-    fetchUserCount()
-  }, [userCount])
+  const [stats] = await Promise.all([statsPromise])
 
   return (
     <main className="">
@@ -63,9 +44,6 @@ export default function Home() {
           </h1>
           <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
             Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah
-          </p>
-          <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
-            Total Pengguna Terdaftar: {userCount}
           </p>
 
           <div className="w-full flex gap-2 mt-8 flex-col xl:flex-row">
@@ -167,6 +145,29 @@ export default function Home() {
           </Card>
         </div>
       </section>
+
+      <section className="container mx-auto max-w-[58rem] my-24 flex flex-col justify-center items-center gap-4">
+        <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
+          Statistik
+        </h2>
+        <h3 className="font-light text-xl md:text-2xl lg:text-3xl text-center mt-4">
+          Pengguna Terdaftar
+        </h3>
+        <div className="font-extrabold max-w-[85%] text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          {new Intl.NumberFormat('id-ID', {}).format(
+            stats?.data?.usersCount | 0,
+          )}
+        </div>
+        <h3 className="font-light text-xl md:text-2xl lg:text-3xl text-center">
+          Pertanyaan Terdaftar
+        </h3>
+        <div className="font-extrabold max-w-[85%] text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          {new Intl.NumberFormat('id-ID', {}).format(
+            stats?.data?.questionsCount | 0,
+          )}
+        </div>
+      </section>
+
       <section className="container mx-auto max-w-[58rem] my-24 flex flex-col justify-center items-center gap-4">
         <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
           Kode Sumber Terbuka
