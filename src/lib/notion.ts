@@ -561,3 +561,26 @@ export const getQuestionsByUuidWithPagination = async ({
 
   return response
 }
+
+export const countDatabaseRows = async ({
+  databaseId,
+}: {
+  databaseId: string
+}) => {
+  let hasMore: boolean = true
+  let rowsCount: number = 0
+  let nextCursor: string | undefined = undefined
+
+  while (hasMore) {
+    const response = await notion.databases.query({
+      database_id: databaseId,
+      start_cursor: nextCursor,
+    })
+
+    hasMore = response.has_more
+    nextCursor = response.next_cursor as string
+    rowsCount += response.results.length
+  }
+
+  return rowsCount
+}
