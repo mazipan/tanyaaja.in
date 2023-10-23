@@ -15,5 +15,11 @@ export const usePatchUpdateChannelNotif = () => {
         description: `Berhasil menyimpan perubahan notifikasi ke Telegram!`,
       })
     },
+    onError: () => {
+      toast({
+        title: 'Gagal menyimpan',
+        description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+      })
+    },
   })
 }
