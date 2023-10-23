@@ -68,7 +68,7 @@ export const checkTheSlugOwner = async (
 ): Promise<{ data: 'NOT_EXIST' | 'EXIST' | null }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(
+  const rawRes = await httpClient(
     `${BASEURL}/api/private/user/slug-checker/${slug}`,
     {
       method: 'POST',
@@ -113,7 +113,7 @@ export const patchUpdateUser = async (
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(`${BASEURL}/api/private/user/update`, {
+  const rawRes = await httpClient(`${BASEURL}/api/private/user/update`, {
     method: 'PATCH',
     body: JSON.stringify({
       uid: user.uid,
