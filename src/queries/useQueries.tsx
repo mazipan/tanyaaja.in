@@ -66,7 +66,6 @@ export const useQuestionListPagination = (
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       retry: false,
-      getPreviousPageParam: (firstPage) => firstPage.next ?? undefined,
       getNextPageParam: (firstPage) => {
         return firstPage.next ?? undefined
       },
@@ -115,7 +114,6 @@ export const useGetPublicUser = (
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       retry: false,
-      getPreviousPageParam: (firstPage) => firstPage.next ?? undefined,
       getNextPageParam: (firstPage) => {
         return firstPage.next ?? undefined
       },
