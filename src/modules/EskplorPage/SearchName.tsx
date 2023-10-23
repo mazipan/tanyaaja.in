@@ -33,12 +33,12 @@ const SearchName: React.FC<SearchNameProps> = ({ name, setName }) => {
   return (
     <div className="relative h-fit mb-4 ">
       <Input
-        placeholder="Search User"
+        placeholder="Cari Pengguna"
         className="pl-[50px]"
         value={tempSearch}
         onChange={(event) => setTempSearch(event.target.value)}
       />
-      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black dark:text-white" />
     </div>
   )
 }
