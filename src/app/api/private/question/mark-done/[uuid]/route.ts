@@ -2,6 +2,7 @@ import { revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUuid, markStatusQuestionAsRead } from '@/lib/notion'
 
 export async function PATCH(
@@ -13,6 +14,8 @@ export async function PATCH(
     const headersInstance = headers()
     const token = headersInstance.get('Authorization')
     if (token) {
+      await verifyIdToken(token)
+
       const existingQuestion = await getQuestionsByUuid(uuid)
 
       if (existingQuestion.results.length === 0) {
