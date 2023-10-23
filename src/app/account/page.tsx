@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { Question } from '@/lib/types'
-import { countQuestion } from '@/lib/utils'
+import { calculatePageItemCount } from '@/lib/utils'
 import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
 import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader'
@@ -87,7 +87,8 @@ export default function Account() {
           dataPagination?.pages[0].data.length > 0 ? (
           <div className="space-y-4">
             <h3 className="text-2xl font-bold tracking-tight">
-              {countQuestion(dataPagination.pages)} pertanyaan belum dijawab
+              {calculatePageItemCount(dataPagination.pages)} pertanyaan belum
+              dijawab
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {dataPagination.pages.map((questionParent, indexParent) => {

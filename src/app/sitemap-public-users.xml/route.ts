@@ -1,4 +1,4 @@
-import { BASEURL, getAllPublicUsers } from '@/lib/api'
+import { BASEURL, getAllPublicUsersForSiteMap } from '@/lib/api'
 import type { UserProfile } from '@/lib/types'
 
 function generateSitemap(data: UserProfile[]) {
@@ -18,14 +18,24 @@ function generateSitemap(data: UserProfile[]) {
 }
 
 export async function GET() {
-  const allPublicUsers = await getAllPublicUsers()
-  const sitemap = generateSitemap(allPublicUsers.data || [])
+  try {
+    const allPublicUsers = await getAllPublicUsersForSiteMap()
+    const sitemap = generateSitemap(allPublicUsers?.data || [])
 
-  return new Response(sitemap, {
-    status: 200,
-    headers: {
-      'Cache-control': 'public, s-maxage=86400, stale-while-revalidate',
-      'content-type': 'application/xml',
-    },
-  })
+    return new Response(sitemap, {
+      status: 200,
+      headers: {
+        'Cache-control': 'public, s-maxage=86400, stale-while-revalidate',
+        'content-type': 'application/xml',
+      },
+    })
+  } catch (error) {
+    return new Response(generateSitemap([]), {
+      status: 200,
+      headers: {
+        'Cache-control': 'no-store',
+        'content-type': 'application/xml',
+      },
+    })
+  }
 }

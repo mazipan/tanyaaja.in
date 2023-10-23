@@ -90,7 +90,7 @@ export function Header() {
             {isLogin && user && user.displayName ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar>
+                  <Avatar className="cursor-pointer border">
                     {!isLoadingOwner && dataOwner && dataOwner.data && (
                       <>
                         <AvatarImage
@@ -100,6 +100,7 @@ export function Header() {
                             DEFAULT_AVATAR
                           }
                           alt={user?.displayName}
+                          className="bg-white"
                         />
 
                         <AvatarFallback>
