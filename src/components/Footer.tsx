@@ -9,12 +9,12 @@ export function Footer() {
           <ul className="flex flex-col gap-2">
             <li>
               <Link href="/tentang" className="underline">
-                Tentang
+                Tentang TanyaAja
               </Link>
             </li>
             <li>
               <Link href="/eksplor" className="underline">
-                Eksplor
+                Eksplor Pengguna
               </Link>
             </li>
           </ul>
@@ -49,22 +49,22 @@ export function Footer() {
             </li>
             <li>
               <a
-                href="https://github.com/mazipan/tanyaaja/issues/new"
-                className="underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Laporkan Isu
-              </a>
-            </li>
-            <li>
-              <a
                 href="https://github.com/mazipan/tanyaaja"
                 className="underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Kode Sumber
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/mazipan/tanyaaja/issues/new"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Laporkan Isu
               </a>
             </li>
             <li>

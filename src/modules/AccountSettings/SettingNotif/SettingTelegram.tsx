@@ -22,11 +22,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
-import { getCheckChatId, postAddNewChannelNotif } from '@/lib/api'
+import { getCheckChatId } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { NotifChannel, UserProfile } from '@/lib/types'
 
 import { usePatchUpdateChannelNotif } from '../hooks/usePatchUpdateChannelNotif'
+import { usePostAddNewChannelNotif } from '../hooks/usePostAddNewChannelNotif'
 
 const schema = object({
   username: string('Username perlu disi terlebih dahulu.', [
@@ -53,7 +54,10 @@ export default function SettingTelegram({
   existing: NotifChannel[] | null | undefined
 }) {
   const { toast } = useToast()
-  const { mutate: mutateUpdateChannelNotif } = usePatchUpdateChannelNotif()
+  const { mutate: mutateUpdateChannelNotif, isLoading: isLoadingUpdate } =
+    usePatchUpdateChannelNotif()
+  const { mutate: mutateAddNewChannelNotif, isLoading: isLoadingAdd } =
+    usePostAddNewChannelNotif()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -68,35 +72,27 @@ export default function SettingTelegram({
   async function onSubmit(data: FormValues) {
     trackEvent('click update notif channel telegram')
     if (user) {
-      try {
-        if (existing && existing.length > 0) {
-          // patch
-          mutateUpdateChannelNotif({
-            user,
-            param: {
-              uid: user?.uid,
-              slug: owner?.slug || '',
-              telegram_chat_id: data?.chatId || '',
-              telegram_username: data?.username,
-            },
-          })
-        } else {
-          // create
-          await postAddNewChannelNotif(user, {
+      if (existing && existing.length > 0) {
+        // patch
+        mutateUpdateChannelNotif({
+          user,
+          param: {
             uid: user?.uid,
             slug: owner?.slug || '',
             telegram_chat_id: data?.chatId || '',
             telegram_username: data?.username,
-          })
-          toast({
-            title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan notifikasi ke Telegram!`,
-          })
-        }
-      } catch (err) {
-        toast({
-          title: 'Gagal menyimpan',
-          description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+          },
+        })
+      } else {
+        // create
+        mutateAddNewChannelNotif({
+          user,
+          param: {
+            uid: user?.uid,
+            slug: owner?.slug || '',
+            telegram_chat_id: data?.chatId || '',
+            telegram_username: data?.username,
+          },
         })
       }
     }
@@ -180,7 +176,12 @@ export default function SettingTelegram({
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={!watchUsername || isLoading}
+                  disabled={
+                    !watchUsername ||
+                    isLoading ||
+                    isLoadingAdd ||
+                    isLoadingUpdate
+                  }
                   onClick={handleCheckChatId}
                   className="shrink-0"
                 >
@@ -193,7 +194,10 @@ export default function SettingTelegram({
         />
 
         <div className="mt-8">
-          <Button type="submit" disabled={isLoading}>
+          <Button
+            type="submit"
+            disabled={isLoading || isLoadingAdd || isLoadingUpdate}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />

@@ -22,8 +22,9 @@ export const ProfileAvatar = ({
           width: `${size}px`,
           height: `${size}px`,
         }}
+        className="border"
       >
-        <AvatarImage src={image} alt={fallbackName} />
+        <AvatarImage src={image} alt={fallbackName} className="bg-white" />
         <AvatarFallback>
           {fallbackName
             ?.replace('@', '')

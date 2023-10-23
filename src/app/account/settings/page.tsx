@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
@@ -41,9 +41,13 @@ import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
-import { BASEURL, checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
+import { BASEURL } from '@/lib/api'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
+import {
+  isErrorResponse,
+  useUpdateUser,
+} from '@/modules/AccountSettings/hooks/useUpdateUser'
 import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
@@ -72,13 +76,14 @@ type FormValues = Output<typeof schema>
 export default function Account() {
   const { toast } = useToast()
   const dialog = useDialog()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const { isLogin, isLoading, user } = useAuth(auth)
 
   // @ts-ignore
   const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
     enabled: !isLoading && isLogin && !!user,
   })
+
+  const { mutate: updateUser, isLoading: isSubmitting } = useUpdateUser()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -95,55 +100,32 @@ export default function Account() {
   const watchImage = form.watch('image')
   const watchName = form.watch('name')
 
-  async function onSubmit(data: FormValues) {
+  function onSubmit(data: FormValues) {
     trackEvent('click update account info')
     if (user) {
-      try {
-        setIsSubmitting(true)
-        try {
-          const res = await checkTheSlugOwner(user, data.slug)
-          if (res && res.data) {
-            if (res.data === 'NOT_EXIST') {
-              await patchUpdateUser(user, {
-                slug: data.slug,
-                name: data.name,
-                public: data.public ?? false,
-                image: data?.image || user?.photoURL || DEFAULT_AVATAR,
-                x_username: data.x_username,
-              })
-
-              toast({
-                title: 'Perubahan berhasil disimpan',
-                description: `Berhasil menyimpan perubahan setelan!`,
-              })
-            } else {
+      updateUser(
+        {
+          user,
+          slug: data.slug,
+          bodyToUpdate: {
+            slug: data.slug,
+            name: data.name,
+            public: data.public ?? false,
+            image: data?.image || user?.photoURL || DEFAULT_AVATAR,
+            x_username: data.x_username,
+          },
+        },
+        {
+          onError: (error) => {
+            if (isErrorResponse(error) && error.type === 'form-field') {
               form.setError('slug', {
                 type: 'custom',
-                message:
-                  'Slug ini sepertinya sudah digunakan oleh orang lain. Ganti slug lain dan coba lagi',
+                message: error.message,
               })
             }
-          } else {
-            form.setError('slug', {
-              type: 'custom',
-              message:
-                'Gagal mengecek ketersediaan slug, coba logout dan login kembali, kemudian coba ulangi melakukan perubahan ini.',
-            })
-          }
-        } catch (err) {
-          toast({
-            title: 'Gagal menyimpan',
-            description: `Gagal saat mencoba mengecek ketersediaan slug, silahkan coba beberapa saat lagi!`,
-          })
-        }
-        setIsSubmitting(false)
-      } catch (error) {
-        setIsSubmitting(false)
-        toast({
-          title: 'Gagal menyimpan',
-          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
-        })
-      }
+          },
+        },
+      )
     }
   }
 

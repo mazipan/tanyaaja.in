@@ -1,5 +1,8 @@
-import { BASEURL, getAllPublicUsers } from '@/lib/api'
+import { BASEURL, getAllPublicUsersForSiteMap } from '@/lib/api'
 import type { UserProfile } from '@/lib/types'
+
+const TODAY = new Date()
+TODAY.setHours(0, 0, 0, 0)
 
 function generateSitemap(data: UserProfile[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -9,7 +12,7 @@ function generateSitemap(data: UserProfile[]) {
         return `
            <url>
               <loc>${`${BASEURL}/p/${user.slug}`}</loc>
-               <lastmod>${new Date()}</lastmod>
+               <lastmod>${TODAY.toISOString()}</lastmod>
            </url>
          `
       })
@@ -18,14 +21,24 @@ function generateSitemap(data: UserProfile[]) {
 }
 
 export async function GET() {
-  const allPublicUsers = await getAllPublicUsers()
-  const sitemap = generateSitemap(allPublicUsers.data || [])
+  try {
+    const allPublicUsers = await getAllPublicUsersForSiteMap()
+    const sitemap = generateSitemap(allPublicUsers?.data || [])
 
-  return new Response(sitemap, {
-    status: 200,
-    headers: {
-      'Cache-control': 'public, s-maxage=86400, stale-while-revalidate',
-      'content-type': 'application/xml',
-    },
-  })
+    return new Response(sitemap, {
+      status: 200,
+      headers: {
+        'Cache-control': 'public, s-maxage=86400, stale-while-revalidate',
+        'content-type': 'application/xml',
+      },
+    })
+  } catch (error) {
+    return new Response(generateSitemap([]), {
+      status: 200,
+      headers: {
+        'Cache-control': 'no-store',
+        'content-type': 'application/xml',
+      },
+    })
+  }
 }

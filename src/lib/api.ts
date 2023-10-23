@@ -4,6 +4,8 @@ import { UpdateItem } from './telegram'
 import {
   CreateNotifChannelArgs,
   CustomOg,
+  IRequestPublicUserList,
+  IResponseGetPublicUserList,
   IResponseGetQuestionPagination,
   NotifChannel,
   Question,
@@ -68,7 +70,7 @@ export const checkTheSlugOwner = async (
 ): Promise<{ data: 'NOT_EXIST' | 'EXIST' | null }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(
+  const rawRes = await httpClient(
     `${BASEURL}/api/private/user/slug-checker/${slug}`,
     {
       method: 'POST',
@@ -113,7 +115,7 @@ export const patchUpdateUser = async (
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await fetch(`${BASEURL}/api/private/user/update`, {
+  const rawRes = await httpClient(`${BASEURL}/api/private/user/update`, {
     method: 'PATCH',
     body: JSON.stringify({
       uid: user.uid,
@@ -261,8 +263,10 @@ export const destroyActiveSession = async (
   return rawRes.json()
 }
 
-export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
-  const rawRes = await fetch(`${BASEURL}/api/user/public-list`, {
+export const getAllPublicUsersForSiteMap = async (): Promise<{
+  data: UserProfile[]
+}> => {
+  const rawRes = await httpClient(`${BASEURL}/api/user/site-map/public-list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -271,6 +275,27 @@ export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
       tags: ['public-users'],
     },
   })
+
+  return rawRes.json()
+}
+
+export const getAllPublicUsers = async ({
+  limit,
+  name,
+  offset,
+}: IRequestPublicUserList): Promise<IResponseGetPublicUserList> => {
+  const rawRes = await httpClient(
+    `${BASEURL}/api/user/public-list?limit=${limit}&name=${name}&offset=${offset}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      next: {
+        tags: ['public-users'],
+      },
+    },
+  )
 
   return rawRes.json()
 }
@@ -480,6 +505,22 @@ export const getAllQuestionsWithPagination = async ({
       },
     },
   )
+
+  return rawRes.json()
+}
+
+export const getPublicStatistics = async (): Promise<{
+  data: { usersCount: number; questionsCount: number }
+}> => {
+  const rawRes = await httpClient(`${BASEURL}/api/statistics`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['public-stats'],
+    },
+  })
 
   return rawRes.json()
 }
