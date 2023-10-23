@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -22,10 +23,31 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { getUserCount } from '@/lib/api'
 import imagehero from '~/public/images/pexels-rdne-stock-project-5756742.jpg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
 export default function Home() {
+  // Stores registered users count
+  const [userCount, setUserCount] = useState('0')
+
+  useEffect(() => {
+    async function fetchUserCount() {
+      const countFromCache = localStorage.getItem('registeredUsersCount')
+      if (countFromCache) {
+        // Use cached count
+        setUserCount(countFromCache)
+      } else {
+        // Call api to get fresh count
+        const users = await getUserCount()
+        const count = users['data'].toString()
+        localStorage.setItem('registeredUsersCount', count)
+        setUserCount(count)
+      }
+    }
+    fetchUserCount()
+  }, [userCount])
+
   return (
     <main className="">
       <section className="container flex flex-col md:flex-row">
@@ -41,6 +63,9 @@ export default function Home() {
           </h1>
           <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
             Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah
+          </p>
+          <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
+            Total Pengguna Terdaftar: {userCount}
           </p>
 
           <div className="w-full flex gap-2 mt-8 flex-col xl:flex-row">

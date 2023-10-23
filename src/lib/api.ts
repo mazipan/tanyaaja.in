@@ -483,3 +483,11 @@ export const getAllQuestionsWithPagination = async ({
 
   return rawRes.json()
 }
+
+export const getUserCount = async (): Promise<{ data: number }> => {
+  const rawRes = await httpClient(`${BASEURL}/api/private/user/count`, {
+    method: 'GET',
+  })
+
+  return rawRes.json()
+}
