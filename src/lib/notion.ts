@@ -614,16 +614,3 @@ export const countDatabaseRows = async ({
 
   return rowsCount
 }
-
-// Use notion search API to get all registered users
-export const getRegisteredUsers = async () => {
-  const response = await notion.search({
-    query: DB_USER,
-    filter: {
-      value: 'page',
-      property: 'object',
-    },
-  })
-
-  return response
-}

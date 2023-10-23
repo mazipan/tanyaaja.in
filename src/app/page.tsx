@@ -40,7 +40,7 @@ export default function Home() {
       } else {
         // Call api to get fresh count
         const users = await getUserCount()
-        const count = users['data'].toString()
+        const count = users['data']['usersCount']
         localStorage.setItem('registeredUsersCount', count)
         setUserCount(count)
       }
