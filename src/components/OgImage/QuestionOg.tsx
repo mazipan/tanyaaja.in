@@ -9,8 +9,8 @@ export function QuestionOg({ question }: { question: string }) {
     >
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
         <p>
-          {question?.length > 500
-            ? `${question?.substring(0, 500)}...`
+          {question?.length > 700
+            ? `${question?.substring(0, 700)}...`
             : `${question}`}
         </p>
       </div>

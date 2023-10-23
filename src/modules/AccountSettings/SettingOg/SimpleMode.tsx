@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
-import { Loader2, MoveUpRight } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
 // @ts-ignore
@@ -143,44 +143,52 @@ export default function SimpleMode({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="lg:max-w-2xl">
-        <div className="space-y-2">
-          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-            Pilih warna latar
-          </label>
-          <GradientSelection
-            activeGradient={activeGradient}
-            onClick={handleClickGradient}
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-col md:flex-row gap-2 justify-between">
+          <div className="flex-1 lg:max-w-2xl">
+            <div className="space-y-2">
+              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Pilih warna latar
+              </label>
+              <GradientSelection
+                activeGradient={activeGradient}
+                onClick={handleClickGradient}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="textOgPublik"
+              render={({ field }) => (
+                <FormItem className="mt-6">
+                  <FormLabel>Teks untuk OG Image laman publik</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Teks untuk OG Image laman publik"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex-1 max-w-[400px]">
+            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Pratinjau
+            </label>
+            <img
+              src={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${
+                watchTextOgPublik ||
+                'Kumpulkan pertanyaan anonim dengan lebih mudah'
+              }`}
+              alt="Pratinjau Og Image"
+              loading="lazy"
+              width={400}
+              height="auto"
+            />
+          </div>
         </div>
-        <FormField
-          control={form.control}
-          name="textOgPublik"
-          render={({ field }) => (
-            <FormItem className="mt-6">
-              <FormLabel>Teks untuk OG Image laman publik</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Teks untuk OG Image laman publik"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <div className="mt-8 flex gap-2 flex-col sm:flex-row sm:items-center">
-          <Button asChild type="button" variant="secondary">
-            <a
-              href={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${watchTextOgPublik}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Preview
-              <MoveUpRight className="h-4 w-4" />
-            </a>
-          </Button>
           <Button type="submit" disabled={isSubmitting || isLoading}>
             {isSubmitting ? (
               <>
