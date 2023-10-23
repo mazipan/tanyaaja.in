@@ -1,6 +1,9 @@
 import { BASEURL, getAllPublicUsersForSiteMap } from '@/lib/api'
 import type { UserProfile } from '@/lib/types'
 
+const TODAY = new Date()
+TODAY.setHours(0, 0, 0, 0)
+
 function generateSitemap(data: UserProfile[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
@@ -9,7 +12,7 @@ function generateSitemap(data: UserProfile[]) {
         return `
            <url>
               <loc>${`${BASEURL}/p/${user.slug}`}</loc>
-               <lastmod>${new Date().toISOString()}</lastmod>
+               <lastmod>${TODAY.toISOString()}</lastmod>
            </url>
          `
       })
