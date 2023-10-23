@@ -2,6 +2,7 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUserByUid, updateUser } from '@/lib/notion'
 
 export async function PATCH(request: Request) {
@@ -11,7 +12,9 @@ export async function PATCH(request: Request) {
     const token = headersInstance.get('Authorization')
 
     if (token) {
-      const userInNotion = await getUserByUid(res.uid)
+      const decodedToken = await verifyIdToken(token)
+
+      const userInNotion = await getUserByUid(decodedToken.uid)
       if (userInNotion.results.length === 0) {
         return NextResponse.json(
           { message: 'User is not exist' },
@@ -22,7 +25,7 @@ export async function PATCH(request: Request) {
         await updateUser({
           name: res.name,
           slug: res.slug,
-          uid: res.uid,
+          uid: decodedToken.uid,
           pageId: foundPage.id,
           image: res.image,
           public: res.public ?? false,
