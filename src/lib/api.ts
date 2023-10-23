@@ -4,6 +4,8 @@ import { UpdateItem } from './telegram'
 import {
   CreateNotifChannelArgs,
   CustomOg,
+  IRequestPublicUserList,
+  IResponseGetPublicUserList,
   IResponseGetQuestionPagination,
   NotifChannel,
   Question,
@@ -261,8 +263,10 @@ export const destroyActiveSession = async (
   return rawRes.json()
 }
 
-export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
-  const rawRes = await fetch(`${BASEURL}/api/user/public-list`, {
+export const getAllPublicUsersForSiteMap = async (): Promise<{
+  data: UserProfile[]
+}> => {
+  const rawRes = await httpClient(`${BASEURL}/api/user/site-map/public-list`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -271,6 +275,27 @@ export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
       tags: ['public-users'],
     },
   })
+
+  return rawRes.json()
+}
+
+export const getAllPublicUsers = async ({
+  limit,
+  name,
+  offset,
+}: IRequestPublicUserList): Promise<IResponseGetPublicUserList> => {
+  const rawRes = await httpClient(
+    `${BASEURL}/api/user/public-list?limit=${limit}&name=${name}&offset=${offset}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      next: {
+        tags: ['public-users'],
+      },
+    },
+  )
 
   return rawRes.json()
 }

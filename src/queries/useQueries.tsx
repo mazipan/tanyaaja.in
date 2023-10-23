@@ -9,6 +9,7 @@ import {
 import { User } from 'firebase/auth'
 
 import {
+  getAllPublicUsers,
   getAllQuestions,
   getAllQuestionsWithPagination,
   getExistingChannelNotif,
@@ -17,6 +18,7 @@ import {
 } from '@/lib/api'
 import {
   CustomOg,
+  IResponseGetPublicUserList,
   IResponseGetQuestionPagination,
   NotifChannel,
   Question,
@@ -92,5 +94,31 @@ export const useNotifChannelByUser = (
     async (): Promise<{ data: NotifChannel[] }> =>
       getExistingChannelNotif(user),
     config,
+  )
+}
+
+export const useGetPublicUser = (
+  param: { limit: number; name: string },
+  config?: UseInfiniteQueryOptions<IResponseGetPublicUserList, Error>,
+): UseInfiniteQueryResult<IResponseGetPublicUserList, Error> => {
+  return useInfiniteQuery<IResponseGetPublicUserList, Error>(
+    ['/public-user', param.name === '' ? 'empty-search' : param.name],
+    async ({ pageParam }): Promise<IResponseGetPublicUserList> =>
+      getAllPublicUsers({
+        limit: param.limit,
+        name: param.name,
+        offset: pageParam ?? '',
+      }),
+    {
+      ...config,
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+      getPreviousPageParam: (firstPage) => firstPage.next ?? undefined,
+      getNextPageParam: (firstPage) => {
+        return firstPage.next ?? undefined
+      },
+    },
   )
 }
