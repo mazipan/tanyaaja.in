@@ -2,7 +2,8 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { createCustomOgByUid, getSession } from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { createCustomOgByUid } from '@/lib/notion'
 
 export async function POST(request: Request) {
   const res = await request.json()
@@ -11,8 +12,9 @@ export async function POST(request: Request) {
 
   try {
     if (token) {
-      const session = await getSession(token)
-      if (session.results.length > 0) {
+      const decodedToken = await verifyIdToken(token)
+
+      if (decodedToken?.uid) {
         await createCustomOgByUid(res)
 
         revalidatePath(`/p/${res.slug}`)

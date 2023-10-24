@@ -1,35 +1,18 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import {
-  getQuestionsByUid,
-  getUserByUid,
-  simplifyResponseObject,
-} from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { getQuestionsByUid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uid: string } },
-) {
-  const uid = params.uid || ''
+export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')
   try {
     if (token) {
-      const userInNotion = await getUserByUid(uid)
+      const decodedToken = await verifyIdToken(token)
 
-      if (userInNotion.results.length === 0) {
-        return NextResponse.json(
-          {
-            message: `Can not found any questions for user ${uid}`,
-            data: null,
-          },
-          { status: 400 },
-        )
-      }
-
-      const questionsInNotion = await getQuestionsByUid(uid)
+      const questionsInNotion = await getQuestionsByUid(decodedToken.uid)
       const results = questionsInNotion?.results || []
       // @ts-ignore
       const simpleResults: Question[] = []
@@ -44,7 +27,7 @@ export async function GET(
       })
 
       return NextResponse.json({
-        message: `Found questions for user ${uid}`,
+        message: `Found questions for user ${decodedToken.uid}`,
         data: simpleResults,
       })
     }

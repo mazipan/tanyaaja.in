@@ -1,39 +1,25 @@
 import { headers } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
+import { verifyIdToken } from '@/lib/firebase-admin'
 import {
   getQuestionsByUuidWithPagination,
-  getUserByUid,
   simplifyResponseObject,
 } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { uid: string } },
-) {
+export async function GET(request: NextRequest) {
   const limit = Number(request.nextUrl.searchParams.get('limit')) ?? 1
   const cursor = request.nextUrl.searchParams.get('cursor') ?? ''
-  const uid = params.uid || ''
 
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')
   try {
     if (token) {
-      const userInNotion = await getUserByUid(uid)
-
-      if (userInNotion.results.length === 0) {
-        return NextResponse.json(
-          {
-            message: `Can not found any questions for user ${uid}`,
-            data: null,
-          },
-          { status: 400 },
-        )
-      }
+      const decodedToken = await verifyIdToken(token)
 
       const questionsInNotion = await getQuestionsByUuidWithPagination({
-        uid,
+        uid: decodedToken.uid,
         limit,
         cursor: cursor === '' ? undefined : cursor,
       })
@@ -53,7 +39,7 @@ export async function GET(
       })
 
       return NextResponse.json({
-        message: `Found questions for user ${uid}`,
+        message: `Found questions for user ${decodedToken.uid}`,
         data: simpleResults,
         next: questionsInNotion.next_cursor,
         hasMore: questionsInNotion.has_more,

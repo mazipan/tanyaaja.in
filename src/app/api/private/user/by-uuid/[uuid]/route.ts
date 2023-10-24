@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
+import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUserByUid, simplifyResponseObject } from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
@@ -14,6 +15,8 @@ export async function GET(
     const token = headersInstance.get('Authorization')
 
     if (token) {
+      await verifyIdToken(token)
+
       const userInNotion = await getUserByUid(uid)
 
       if (userInNotion.results.length === 0) {

@@ -1,13 +1,8 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import {
-  addUser,
-  getSessionByUid,
-  getUserByUid,
-  updateSessionToken,
-} from '@/lib/notion'
-import { createSession } from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { addUser, getUserByUid } from '@/lib/notion'
 
 export async function POST(request: Request) {
   const res = await request.json()
@@ -15,25 +10,16 @@ export async function POST(request: Request) {
   const token = headersInstance.get('Authorization')
 
   try {
-    const userInNotion = await getUserByUid(res.uid)
-
+    let shouldAddUser = true
     if (token) {
-      // Check session, kalau ada --> jangan create baru --> update aja tokennya
-      const session = await getSessionByUid(res.uid)
-      if (session.results.length > 0) {
-        const foundPage = session.results[0]
-        if (foundPage) {
-          await updateSessionToken(foundPage?.id, token)
-        }
-      } else {
-        await createSession({
-          token,
-          uid: res?.uid,
-        })
-      }
+      const decodedToken = await verifyIdToken(token)
+
+      const userInNotion = await getUserByUid(decodedToken?.uid)
+
+      shouldAddUser = userInNotion.results.length === 0
     }
 
-    if (userInNotion.results.length === 0) {
+    if (shouldAddUser) {
       await addUser(res)
       return NextResponse.json({ message: 'New user added', isNewUser: true })
     }

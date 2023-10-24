@@ -1,35 +1,18 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import {
-  getCustomOgByUid,
-  getUserByUid,
-  simplifyResponseObject,
-} from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { getCustomOgByUid, simplifyResponseObject } from '@/lib/notion'
 import { CustomOg } from '@/lib/types'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uid: string } },
-) {
-  const uid = params.uid || ''
+export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')
   try {
     if (token) {
-      const userInNotion = await getUserByUid(uid)
+      const decodedToken = await verifyIdToken(token)
 
-      if (userInNotion.results.length === 0) {
-        return NextResponse.json(
-          {
-            message: `Can not found any custom og for user ${uid}`,
-            data: null,
-          },
-          { status: 400 },
-        )
-      }
-
-      const dataInNotion = await getCustomOgByUid(uid)
+      const dataInNotion = await getCustomOgByUid(decodedToken.uid)
       const results = dataInNotion?.results || []
       // @ts-ignore
       const simpleResults: CustomOg[] = []
@@ -44,7 +27,7 @@ export async function GET(
       })
 
       return NextResponse.json({
-        message: `Found custom og for user ${uid}`,
+        message: `Found custom og for user ${decodedToken.uid}`,
         data: simpleResults,
       })
     }
