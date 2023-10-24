@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
-import { BAD_WORDS } from '@/lib/constants'
+import { BAD_WORDS_SET } from '@/lib/constants'
 import {
   getUserBySlug,
   simplifyResponseObject,
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
   const isQuestionContainsBadWord =
     res.question
       .split(' ')
-      .filter((word: string) => BAD_WORDS.includes(word.toLowerCase())).length >
+      .filter((word: string) => BAD_WORDS_SET.has(word.toLowerCase())).length >
     0
 
   if (isQuestionContainsBadWord) {

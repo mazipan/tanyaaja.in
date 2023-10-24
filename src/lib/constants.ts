@@ -1,7 +1,7 @@
 // Indonesian Bad Words List is provided for free by: Free Web Headers – www.freewebheaders.com
 // URL: https://www.freewebheaders.com/indonesian-bad-words-list-and-curse-words-free-download/
 
-export const BAD_WORDS = [
+export const BAD_WORDS_ARRAY = [
   'adult',
   'akouka',
   'alkohol',
@@ -371,3 +371,5 @@ export const BAD_WORDS = [
   'zakar kecil',
   'zoofilia',
 ]
+
+export const BAD_WORDS_SET = new Set(BAD_WORDS_ARRAY)
