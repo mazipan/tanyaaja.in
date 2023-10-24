@@ -2,6 +2,7 @@ import { User } from 'firebase/auth'
 
 import { UpdateItem } from './telegram'
 import {
+  CreateCustomOgArgs,
   CreateNotifChannelArgs,
   CustomOg,
   IRequestPublicUserList,
@@ -12,10 +13,10 @@ import {
   UpdateUserArgs,
   UserProfile,
 } from './types'
-import { CreateCustomOgArgs } from './types'
 import { DEFAULT_AVATAR, httpClient } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
+export const API_KEY = `${process.env.NEXT_API_KEY}`
 
 export const getExistingUser = async (
   user: User,
@@ -28,6 +29,7 @@ export const getExistingUser = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -55,6 +57,7 @@ export const getPublicOwnerUser = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
     next: {
       tags: ['user-by-slug', slug],
@@ -79,6 +82,7 @@ export const checkTheSlugOwner = async (
       }),
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
     },
@@ -102,6 +106,7 @@ export const postAddUser = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -127,6 +132,7 @@ export const patchUpdateUser = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -139,6 +145,7 @@ export const patchHit = async (slug: string): Promise<{ message: string }> => {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
   })
   return rawRes.json()
@@ -158,6 +165,7 @@ export const postSendQuestion = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
   })
   return rawRes.json()
@@ -174,6 +182,7 @@ export const getAllQuestions = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -197,6 +206,7 @@ export const patchQuestionAsDone = async (
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
     },
@@ -221,6 +231,7 @@ export const patchQuestionAsPublicOrPrivate = async (
       }),
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
     },
@@ -235,6 +246,7 @@ export const getQuestionDetail = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
     next: {
       tags: ['q-by-uuid', uuid],
@@ -256,6 +268,7 @@ export const destroyActiveSession = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -270,6 +283,7 @@ export const getAllPublicUsersForSiteMap = async (): Promise<{
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
     next: {
       tags: ['public-users'],
@@ -290,6 +304,7 @@ export const getAllPublicUsers = async ({
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
       },
       next: {
         tags: ['public-users'],
@@ -307,6 +322,7 @@ export const getPublicCustomOg = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
     next: {
       tags: [`custom-og-by-slug-${slug}`],
@@ -327,6 +343,7 @@ export const getExistingCustomOg = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -357,6 +374,7 @@ export const postAddNewCustomOg = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -383,6 +401,7 @@ export const patchUpdateCustomOg = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -401,6 +420,7 @@ export const getExistingChannelNotif = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -428,6 +448,7 @@ export const postAddNewChannelNotif = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -451,6 +472,7 @@ export const patchUpdateChannelNotif = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
       Authorization: token,
     },
   })
@@ -470,6 +492,7 @@ export const getCheckChatId = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -498,6 +521,7 @@ export const getAllQuestionsWithPagination = async ({
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'X-API-KEY': API_KEY,
         Authorization: token,
       },
       next: {
@@ -516,6 +540,7 @@ export const getPublicStatistics = async (): Promise<{
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
     next: {
       tags: ['public-stats'],
