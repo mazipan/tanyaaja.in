@@ -177,10 +177,10 @@ export default function SimpleMode({
               Pratinjau
             </label>
             <img
-              src={`${BASEURL}/api/og?type=custom-user&slug=irfan-maulana&theme=${activeGradient}&text=${
+              src={`${BASEURL}/api/og?type=custom-user&slug=${owner?.slug}&theme=${activeGradient}&text=${
                 watchTextOgPublik ||
                 'Kumpulkan pertanyaan anonim dengan lebih mudah'
-              }`}
+              }&r=${new Date().getTime()}`}
               alt="Pratinjau Og Image"
               loading="lazy"
               width={400}
