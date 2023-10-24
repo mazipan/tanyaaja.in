@@ -30,7 +30,9 @@ An anonymous question bank platform
 - `node`, minimum version `18.16.0`
 - `pnpm`, [see installation instruction](https://pnpm.io/installation)
 - Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
-  - Activate the authentication for the web
+  1. Activate the authentication for the web
+  2. [Firebase Admin] Go to Project settings -> Service accounts -> Generate new private key
+  3. [Firebase Admin] Copy the downloaded Private key to the Project root directory, rename to 'TanyaAja-firebase-adminsdk.json'
 - Notion Account
   - [Create a notion integration](https://developers.notion.com/docs/create-a-notion-integration)
   - Duplicate the template from: [TanyaAja DB Template](https://general-lady-e21.notion.site/TanyaAja-Template-d6454b3d41934057badb0e389ada5e73)
@@ -40,6 +42,10 @@ An anonymous question bank platform
 
 - Install all dependencies, by running `pnpm install`
 - Create new `.env.local` file, copy from the `.env.example` and fill it with your value from Firebase and Notion
+- [Firebase Admin] Fill the `GOOGLE_APPLICATION_CREDENTIALS` in the `.env.local` with path to the `*-firebase-adminsdk.json` file, e.g.
+```
+GOOGLE_APPLICATION_CREDENTIALS=tanyaaja-firebase-adminsdk.json
+```
 - Run in local, using command `pnpm run dev`
 
 ## Contributing
