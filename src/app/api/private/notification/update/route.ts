@@ -2,11 +2,8 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import {
-  getNotifChannelByUid,
-  getSession,
-  updateNotifChannelByUuid,
-} from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { getNotifChannelByUid, updateNotifChannelByUuid } from '@/lib/notion'
 
 export async function PATCH(request: Request) {
   const res = await request.json()
@@ -15,8 +12,9 @@ export async function PATCH(request: Request) {
     const token = headersInstance.get('Authorization')
 
     if (token) {
-      const session = await getSession(token)
-      if (session.results.length > 0) {
+      const decodedToken = await verifyIdToken(token)
+
+      if (decodedToken?.uid) {
         const existing = await getNotifChannelByUid(res?.uid)
         if (existing.results.length === 0) {
           return NextResponse.json(
@@ -29,7 +27,7 @@ export async function PATCH(request: Request) {
 
           revalidatePath(`/p/${res.slug}`)
           revalidateTag(res.slug)
-          revalidateTag(`notif-by-uid-${res.uid}`)
+          revalidateTag(`notif-by-uid-${decodedToken.uid}`)
 
           return NextResponse.json({ message: 'Notif channel updated' })
         }

@@ -1,7 +1,8 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { getSession, getUserBySlug, simplifyResponseObject } from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
 export async function POST(
@@ -15,8 +16,9 @@ export async function POST(
 
   try {
     if (token) {
-      const session = await getSession(token)
-      if (session.results.length > 0) {
+      const decodedToken = await verifyIdToken(token)
+
+      if (decodedToken?.uid) {
         const userInNotion = await getUserBySlug(slug)
 
         if (userInNotion.results.length === 0) {

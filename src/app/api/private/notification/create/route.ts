@@ -2,7 +2,8 @@ import { revalidateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-import { createNotifChannelByUid, getSession } from '@/lib/notion'
+import { verifyIdToken } from '@/lib/firebase-admin'
+import { createNotifChannelByUid } from '@/lib/notion'
 
 export async function POST(request: Request) {
   const res = await request.json()
@@ -11,8 +12,9 @@ export async function POST(request: Request) {
 
   try {
     if (token) {
-      const session = await getSession(token)
-      if (session.results.length > 0) {
+      const decodedToken = await verifyIdToken(token)
+
+      if (decodedToken?.uid) {
         await createNotifChannelByUid(res)
 
         revalidateTag(`notif-by-uid-${res.uid}`)
