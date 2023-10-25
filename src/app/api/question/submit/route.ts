@@ -34,7 +34,7 @@ async function sendQuestion(
 
   if (userInNotion.results.length === 0) {
     return NextResponse.json(
-      { message: 'Owner of this page can not be found' },
+      { message: 'Owner of this page can not be found', data: null },
       {
         status: 400,
         headers: {
@@ -63,7 +63,7 @@ async function sendQuestion(
   }
 
   return NextResponse.json(
-    { message: 'New question submitted' },
+    { message: 'New question submitted', data: null },
     {
       status: 200,
       headers: {
@@ -85,7 +85,10 @@ export async function POST(request: NextRequest) {
 
   if (isQuestionContainsBadWord) {
     return NextResponse.json(
-      { message: 'The question contains a bad word' },
+      {
+        message: 'The question contains a bad word',
+        data: 'CONTAINS_BAD_WORD',
+      },
       { status: 400 },
     )
   }
@@ -96,7 +99,7 @@ export async function POST(request: NextRequest) {
       const token = res.token
       if (!token) {
         return NextResponse.json(
-          { message: 'The request have been blocked by captcha' },
+          { message: 'The request have been blocked by captcha', data: null },
           { status: 403 },
         )
       } else {
@@ -178,7 +181,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json(
-      { message: 'Error while submitting new question' },
+      { message: 'Error while submitting new question', data: null },
       { status: 500 },
     )
   }

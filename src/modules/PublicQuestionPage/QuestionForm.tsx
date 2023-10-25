@@ -34,6 +34,8 @@ import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
 
+import { isErrorResponse } from '../AccountSettings/hooks/useUpdateUser'
+
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
     minLength(2, 'Pertanyaan butuh paling tidak 2 karakter.'),
@@ -67,11 +69,18 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
 
           form.reset()
         },
-        onError: () => {
+        onError: (error) => {
+          let errorMessage = `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`
+          if (isErrorResponse(error) && error.type === 'toast') {
+            errorMessage = error.message
+          }
+
           toast({
             title: 'Pesan gagal terkirim',
-            description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
+            description: errorMessage,
           })
+
+          form.reset()
         },
       },
     )

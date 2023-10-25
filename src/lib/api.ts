@@ -2,6 +2,7 @@ import { User } from 'firebase/auth'
 
 import { UpdateItem } from './telegram'
 import {
+  CreateCustomOgArgs,
   CreateNotifChannelArgs,
   CustomOg,
   IRequestPublicUserList,
@@ -12,7 +13,6 @@ import {
   UpdateUserArgs,
   UserProfile,
 } from './types'
-import { CreateCustomOgArgs } from './types'
 import { DEFAULT_AVATAR, httpClient } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
@@ -148,7 +148,7 @@ export const postSendQuestion = async (
   slug: string,
   question: string,
   token: string,
-): Promise<{ message: string }> => {
+): Promise<{ message: string; data: 'CONTAINS_BAD_WORD' | number | null }> => {
   const rawRes = await httpClient(`${BASEURL}/api/question/submit`, {
     method: 'POST',
     body: JSON.stringify({

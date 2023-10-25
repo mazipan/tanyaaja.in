@@ -18,7 +18,7 @@ type MutationFnBody = {
   bodyToUpdate: UpdateUserBody
 }
 
-type ErrorResponse = {
+export type ErrorResponse = {
   type: 'form-field' | 'toast'
   message: string
 }
