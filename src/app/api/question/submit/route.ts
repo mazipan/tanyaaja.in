@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
+import { BAD_WORDS_SET } from '@/lib/constants'
 import {
   getUserBySlug,
   simplifyResponseObject,
@@ -75,6 +76,19 @@ async function sendQuestion(
 
 export async function POST(request: NextRequest) {
   const res = await request.json()
+
+  const isQuestionContainsBadWord =
+    res.question
+      .split(' ')
+      .filter((word: string) => BAD_WORDS_SET.has(word.toLowerCase())).length >
+    0
+
+  if (isQuestionContainsBadWord) {
+    return NextResponse.json(
+      { message: 'The question contains a bad word' },
+      { status: 400 },
+    )
+  }
 
   try {
     const headersInstance = headers()

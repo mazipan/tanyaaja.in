@@ -149,7 +149,7 @@ export const postSendQuestion = async (
   question: string,
   token: string,
 ): Promise<{ message: string }> => {
-  const rawRes = await fetch(`${BASEURL}/api/question/submit`, {
+  const rawRes = await httpClient(`${BASEURL}/api/question/submit`, {
     method: 'POST',
     body: JSON.stringify({
       slug,
