@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
+import { deleteUser } from '@/lib/firebase-auth-edge';
 import { archivePage, deleteQuestionsByUid, getUserByUid } from '@/lib/notion'
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +20,7 @@ export async function DELETE(request: Request) {
       const userInNotion = await getUserByUid(decodedToken.uid)
       if (userInNotion.results.length === 0) {
         return NextResponse.json(
-          { message: 'User is not exist' },
+          { message: 'User does not exist' },
           { status: 400 },
         )
       }
@@ -28,7 +29,8 @@ export async function DELETE(request: Request) {
       await Promise.allSettled([
         deleteQuestionsByUid(decodedToken.uid),
         archivePage(foundPage.id),
-      ])
+        deleteUser(decodedToken.uid),
+      ]);
 
       revalidatePath(`/p/${res.slug}`)
       revalidateTag(res.slug)
