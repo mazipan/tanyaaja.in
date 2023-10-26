@@ -30,6 +30,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, patchHit } from '@/lib/api'
+import { isErrorResponse } from '@/lib/error'
 import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
@@ -67,11 +68,18 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
 
           form.reset()
         },
-        onError: () => {
+        onError: (error) => {
+          let errorMessage = `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`
+          if (isErrorResponse(error) && error.type === 'toast') {
+            errorMessage = error.message
+          }
+
           toast({
             title: 'Pesan gagal terkirim',
-            description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
+            description: errorMessage,
           })
+
+          form.reset()
         },
       },
     )
