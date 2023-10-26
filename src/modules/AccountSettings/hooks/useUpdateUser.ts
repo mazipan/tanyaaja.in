@@ -3,6 +3,7 @@ import { User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { checkTheSlugOwner, patchUpdateUser } from '@/lib/api'
+import { ErrorResponse, isErrorResponse } from '@/lib/error'
 
 type UpdateUserBody = {
   name: string
@@ -18,11 +19,6 @@ type MutationFnBody = {
   bodyToUpdate: UpdateUserBody
 }
 
-export type ErrorResponse = {
-  type: 'form-field' | 'toast'
-  message: string
-}
-
 const updateUser = async (user: User, body: UpdateUserBody) => {
   try {
     const res = await patchUpdateUser(user, body)
@@ -36,12 +32,6 @@ const updateUser = async (user: User, body: UpdateUserBody) => {
 
     throw errorResponse
   }
-}
-
-export const isErrorResponse = (err: unknown): err is ErrorResponse => {
-  return (
-    typeof err === 'object' && err !== null && 'type' in err && 'message' in err
-  )
 }
 
 export const useUpdateUser = () => {

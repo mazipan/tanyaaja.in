@@ -42,12 +42,10 @@ import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL } from '@/lib/api'
+import { isErrorResponse } from '@/lib/error'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
-import {
-  isErrorResponse,
-  useUpdateUser,
-} from '@/modules/AccountSettings/hooks/useUpdateUser'
+import { useUpdateUser } from '@/modules/AccountSettings/hooks/useUpdateUser'
 import { useOwner } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()

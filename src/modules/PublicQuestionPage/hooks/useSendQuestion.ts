@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import { postSendQuestion } from '@/lib/api'
-import { ErrorResponse } from '@/modules/AccountSettings/hooks/useUpdateUser'
+import { ErrorResponse } from '@/lib/error'
 
 type SendQuestionInput = {
   slug: string
@@ -21,7 +21,7 @@ const useSendQuestion = () => {
             const errorResponse: ErrorResponse = {
               type: 'toast',
               message:
-                'Pertanyaan mengandung perkataan buruk. Harap gunakan perkataan yang baik',
+                'Pertanyaan sepertinya mengandung kata-kata yang kami block, silahkan periksa ulang pertanyaan Anda.',
             }
 
             throw errorResponse

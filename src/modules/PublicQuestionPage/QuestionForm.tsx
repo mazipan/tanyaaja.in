@@ -30,11 +30,10 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, patchHit } from '@/lib/api'
+import { isErrorResponse } from '@/lib/error'
 import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
-
-import { isErrorResponse } from '../AccountSettings/hooks/useUpdateUser'
 
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
