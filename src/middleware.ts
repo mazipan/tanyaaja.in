@@ -1,31 +1,63 @@
-import { type NextRequest, NextResponse, userAgent } from 'next/server'
+import { headers } from 'next/headers';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
-  // eslint-disable-next-line no-console
-  console.log('>>> Middleware...', request.url)
-  const requestHeaders = new Headers(request.headers)
+import { verifyIdToken } from '@/lib/firebase-auth-edge';
 
-  const response = NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  })
+export async function middleware(request: NextRequest) {
+  try {
+    const headersInstance = headers();
+    const token = headersInstance.get('Authorization');
 
-  const acceptHeader = requestHeaders.get('accept') || '*/*'
-  const isWebp =
-    (acceptHeader?.indexOf('image/webp') >= 0 || acceptHeader === '*/*') ??
-    false
-  response.headers.set('x-webp', isWebp ? '1' : '0')
+    if (!token) {
+      throw new Error('', { cause: 'TOKEN_NOT_FOUND' });
+    }
 
-  const { isBot } = userAgent(request)
-  response.headers.set('x-bot', isBot ? '1' : '0')
+    const decodedToken = await verifyIdToken(token, true);
 
-  return response
+    // Add new request headers
+    // Ref: https://vercel.com/templates/next.js/edge-functions-modify-request-header
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('user-id', decodedToken.uid);
+
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    });
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  } catch (error: any) {
+    console.error(error);
+
+    const type = error?.code || error?.cause;
+    let message: string;
+    let status: number;
+
+    switch (type) {
+      case 'TOKEN_NOT_FOUND':
+        message = 'Can not found the session.';
+        status = 403;
+        break;
+
+      case 'TOKEN_EXPIRED':
+        message = 'Session has expired. Please log in again to continue.';
+        status = 401;
+        break;
+
+      case 'INVALID_SIGNATURE':
+        message = 'Invalid token signature.';
+        status = 401;
+        break;
+
+      default:
+        message = 'An internal server error occurred. Please try again later.';
+        status = 500;
+        break;
+    }
+
+    return NextResponse.json({ message }, { status });
+  }
 }
 
-// See https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|apple-icon.png|images|favicon|logo|service-worker.js|sitemap-index.xml|sitemaps.xml|manifest.webmanifest).*)',
-  ],
-}
+  // @TODO: the middleware should be applied to All private routes
+  matcher: '/api/private/user/delete',
+};

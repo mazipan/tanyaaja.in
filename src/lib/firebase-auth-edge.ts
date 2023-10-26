@@ -1,4 +1,5 @@
 import { getFirebaseAuth } from 'next-firebase-auth-edge/lib/auth'
+import { DecodedIdToken } from 'next-firebase-auth-edge/lib/auth/token-verifier'
 
 import ServiceAccount from '@/../tanyaaja-firebase-adminsdk.json'
 
@@ -14,5 +15,7 @@ const Auth = getFirebaseAuth(
   API_KEY,
 )
 
-export const verifyIdToken = (idToken: string, checkRevoked?: boolean) =>
-  Auth.verifyIdToken(idToken, checkRevoked)
+export const verifyIdToken = (
+  idToken: string,
+  checkRevoked?: boolean,
+): Promise<DecodedIdToken> => Auth.verifyIdToken(idToken, checkRevoked)
