@@ -50,9 +50,9 @@ export default function SimpleMode({
 }) {
   const [activeGradient, setActiveGradient] = useState<string>('hyper')
   const { toast } = useToast()
-  const { mutate: addNewOgMutation, isLoading: isAddingNewCustomOg } =
+  const { mutate: addNewOgMutation, isPending: isAddingNewCustomOg } =
     useAddNewCustomOg()
-  const { mutate: updateCustomOgMutation, isLoading: isUpdatingCustomOg } =
+  const { mutate: updateCustomOgMutation, isPending: isUpdatingCustomOg } =
     useUpdateCustomOg()
 
   const isSubmitting = isAddingNewCustomOg || isUpdatingCustomOg

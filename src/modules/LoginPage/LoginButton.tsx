@@ -79,7 +79,7 @@ export const LoginButtonWithRedirect = () => {
 
         postAddUser(user).then((result) => {
           if (result.isNewUser) {
-            queryClient.refetchQueries(['/owner', user.uid])
+            queryClient.refetchQueries({ queryKey: ['/owner', user.uid] })
           }
         })
       })

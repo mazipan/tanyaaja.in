@@ -54,9 +54,9 @@ export default function SettingTelegram({
   existing: NotifChannel[] | null | undefined
 }) {
   const { toast } = useToast()
-  const { mutate: mutateUpdateChannelNotif, isLoading: isLoadingUpdate } =
+  const { mutate: mutateUpdateChannelNotif, isPending: isLoadingUpdate } =
     usePatchUpdateChannelNotif()
-  const { mutate: mutateAddNewChannelNotif, isLoading: isLoadingAdd } =
+  const { mutate: mutateAddNewChannelNotif, isPending: isLoadingAdd } =
     usePostAddNewChannelNotif()
 
   const form = useForm<FormValues>({
