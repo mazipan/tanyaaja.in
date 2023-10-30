@@ -76,12 +76,11 @@ export default function Account() {
   const dialog = useDialog()
   const { isLogin, isLoading, user } = useAuth(auth)
 
-  // @ts-ignore
-  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  const { mutate: updateUser, isLoading: isSubmitting } = useUpdateUser()
+  const { mutate: updateUser, isPending: isSubmitting } = useUpdateUser()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),

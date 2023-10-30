@@ -28,8 +28,7 @@ export default function Account() {
   )
   const { isLogin, isLoading, user } = useAuth(auth)
 
-  // @ts-ignore
-  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
   })
 
@@ -38,14 +37,9 @@ export default function Account() {
     isLoading: isLoadingQuestions,
     fetchNextPage,
     isFetching,
-  } = useQuestionListPagination(
-    // @ts-ignore
-    user,
-    LIMIT,
-    {
-      enabled: !isLoading && isLogin && !!user,
-    },
-  )
+  } = useQuestionListPagination(user!, LIMIT, {
+    enabled: !isLoading && isLogin && !!user,
+  })
 
   const handleClickQuestion = (question: Question) => {
     setSelectedQuestion(question)

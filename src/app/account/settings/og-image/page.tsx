@@ -16,15 +16,12 @@ const auth = getFirebaseAuth()
 export default function SettingOgImage() {
   const { isLogin, isLoading, user } = useAuth(auth)
 
-  // @ts-ignore
-  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  // @ts-ignore
   const { data: dataCustomOg, isLoading: isLoadingCustomOg } =
-    // @ts-ignore
-    useCustomOgByUser(user, {
+    useCustomOgByUser(user!, {
       enabled: !isLoading && isLogin && !!user,
     })
 
