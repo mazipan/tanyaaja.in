@@ -24,7 +24,7 @@ const PublicAccessToggler = ({
   const { toast } = useToast()
   const dialog = useDialog()
 
-  const { mutate, isLoading } = usePatchQuestionAsPublicOrPrivate()
+  const { mutate, isPending } = usePatchQuestionAsPublicOrPrivate()
 
   const hitMutation = async () => {
     trackEvent('click toggle public access')
@@ -64,10 +64,10 @@ const PublicAccessToggler = ({
       variant="outline"
       size="sm"
       className={question?.public ? '' : 'border-red-500'}
-      disabled={disabled ?? isLoading}
+      disabled={disabled ?? isPending}
       onClick={handleTogglePrivacy}
     >
-      {isLoading ? (
+      {isPending ? (
         <>
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         </>

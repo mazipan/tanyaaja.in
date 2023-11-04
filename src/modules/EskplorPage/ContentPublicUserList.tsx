@@ -16,7 +16,7 @@ const ContentPublicUserList = () => {
     isFetching,
     isFetchingNextPage,
     fetchNextPage,
-    isInitialLoading,
+    isLoading,
   } = useGetPublicUser({
     limit: 20,
     name,
@@ -28,7 +28,7 @@ const ContentPublicUserList = () => {
       <PublicUserList
         dataPublicUsers={dataPublicUsers}
         isFetching={isFetchingNextPage}
-        isInitialLoading={isInitialLoading}
+        isInitialLoading={isLoading}
       />
 
       <div className="w-full justify-center flex mt-4">

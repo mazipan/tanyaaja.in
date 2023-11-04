@@ -41,8 +41,7 @@ export function Header() {
   const router = useRouter()
   const { toast } = useToast()
   const { isLogin, user, isLoading } = useAuth(auth)
-  // @ts-ignore
-  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
   })
 

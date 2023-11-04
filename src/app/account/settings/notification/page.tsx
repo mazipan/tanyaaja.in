@@ -15,15 +15,12 @@ const auth = getFirebaseAuth()
 export default function SettingOgImage() {
   const { isLogin, isLoading, user } = useAuth(auth)
 
-  // @ts-ignore
-  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  // @ts-ignore
   const { data: dataNotifChannel, isLoading: isLoadingNotifChannel } =
-    // @ts-ignore
-    useNotifChannelByUser(user, {
+    useNotifChannelByUser(user!, {
       enabled: !isLoading && isLogin && !!user,
     })
 

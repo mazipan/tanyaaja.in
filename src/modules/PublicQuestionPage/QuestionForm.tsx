@@ -50,7 +50,7 @@ type FormValues = Output<typeof schema>
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()
-  const { mutate, isLoading } = useSendQuestion()
+  const { mutate, isPending } = useSendQuestion()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -168,8 +168,8 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
             )}
           />
           <div className="flex flex-wrap justify-between gap-2">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" disabled={isPending}>
+              {isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   <span>Sedang mengirim...</span>

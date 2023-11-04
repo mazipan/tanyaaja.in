@@ -1,7 +1,8 @@
 import {
+  InfiniteData,
+  QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
-  UseInfiniteQueryResult,
   useQuery,
   UseQueryOptions,
   UseQueryResult,
@@ -27,96 +28,125 @@ import {
 
 export const useOwner = (
   user: User,
-  config?: UseQueryOptions<{ data: UserProfile }, Error>,
+  config?: Omit<
+    UseQueryOptions<{ data: UserProfile }, Error>,
+    'queryKey' | 'queryFn'
+  >,
 ): UseQueryResult<{ data: UserProfile }, Error> => {
-  return useQuery<{ data: UserProfile }, Error>(
-    ['/owner', user?.uid],
-    async (): Promise<{ data: UserProfile }> => getExistingUser(user),
-    config,
-  )
+  return useQuery<{ data: UserProfile }, Error>({
+    ...config,
+    queryKey: ['/owner', user?.uid],
+    queryFn: async (): Promise<{ data: UserProfile }> => getExistingUser(user),
+  })
 }
 
 export const useQuestionList = (
   user: User,
-  config?: UseQueryOptions<{ data: Question[] }, Error>,
+  config?: Omit<
+    UseQueryOptions<{ data: Question[] }, Error>,
+    'queryKey' | 'queryFn'
+  >,
 ): UseQueryResult<{ data: Question[] }, Error> => {
-  return useQuery<{ data: Question[] }, Error>(
-    ['/questions', user?.uid],
-    async (): Promise<{ data: Question[] }> => getAllQuestions(user),
-    config,
-  )
+  return useQuery<{ data: Question[] }, Error>({
+    ...config,
+    queryKey: ['/questions', user?.uid],
+    queryFn: async (): Promise<{ data: Question[] }> => getAllQuestions(user),
+  })
 }
 
 export const useQuestionListPagination = (
   user: User,
   limit: number,
-  config?: UseInfiniteQueryOptions<IResponseGetQuestionPagination, Error>,
-): UseInfiniteQueryResult<IResponseGetQuestionPagination, Error> => {
-  return useInfiniteQuery<IResponseGetQuestionPagination, Error>(
-    ['/questions', user?.uid],
-    async ({ pageParam }): Promise<IResponseGetQuestionPagination> =>
+  config?: Omit<
+    UseInfiniteQueryOptions<
+      IResponseGetQuestionPagination,
+      Error,
+      InfiniteData<IResponseGetQuestionPagination>,
+      IResponseGetQuestionPagination,
+      QueryKey,
+      string
+    >,
+    'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
+  >,
+) => {
+  return useInfiniteQuery({
+    ...config,
+    queryKey: ['/questions', user?.uid],
+    queryFn: async ({ pageParam }) =>
       getAllQuestionsWithPagination({
         user: user,
         limit: limit,
-        cursor: pageParam ?? '',
+        cursor: pageParam,
       }),
-    {
-      ...config,
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      retry: false,
-      getNextPageParam: (firstPage) => {
-        return firstPage.next ?? undefined
-      },
+    initialPageParam: '',
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+    getNextPageParam: (firstPage) => {
+      return firstPage.next ?? undefined
     },
-  )
+  })
 }
 
 export const useCustomOgByUser = (
   user: User,
-  config?: UseQueryOptions<{ data: CustomOg[] }, Error>,
+  config?: Omit<
+    UseQueryOptions<{ data: CustomOg[] }, Error>,
+    'queryKey' | 'queryFn'
+  >,
 ): UseQueryResult<{ data: CustomOg[] }, Error> => {
-  return useQuery<{ data: CustomOg[] }, Error>(
-    ['/user-custom-og', user?.uid],
-    async (): Promise<{ data: CustomOg[] }> => getExistingCustomOg(user),
-    config,
-  )
+  return useQuery<{ data: CustomOg[] }, Error>({
+    ...config,
+    queryKey: ['/user-custom-og', user?.uid],
+    queryFn: async (): Promise<{ data: CustomOg[] }> =>
+      getExistingCustomOg(user),
+  })
 }
 
 export const useNotifChannelByUser = (
   user: User,
-  config?: UseQueryOptions<{ data: NotifChannel[] }, Error>,
+  config?: Omit<
+    UseQueryOptions<{ data: NotifChannel[] }, Error>,
+    'queryKey' | 'queryFn'
+  >,
 ): UseQueryResult<{ data: NotifChannel[] }, Error> => {
-  return useQuery<{ data: NotifChannel[] }, Error>(
-    ['/user-notif-channel', user?.uid],
-    async (): Promise<{ data: NotifChannel[] }> =>
+  return useQuery<{ data: NotifChannel[] }, Error>({
+    ...config,
+    queryKey: ['/user-notif-channel', user?.uid],
+    queryFn: async (): Promise<{ data: NotifChannel[] }> =>
       getExistingChannelNotif(user),
-    config,
-  )
+  })
 }
 
 export const useGetPublicUser = (
   param: { limit: number; name: string },
-  config?: UseInfiniteQueryOptions<IResponseGetPublicUserList, Error>,
-): UseInfiniteQueryResult<IResponseGetPublicUserList, Error> => {
-  return useInfiniteQuery<IResponseGetPublicUserList, Error>(
-    ['/public-user', param.name === '' ? 'empty-search' : param.name],
-    async ({ pageParam }): Promise<IResponseGetPublicUserList> =>
+  config?: Omit<
+    UseInfiniteQueryOptions<
+      IResponseGetPublicUserList,
+      Error,
+      InfiniteData<IResponseGetPublicUserList>,
+      IResponseGetPublicUserList,
+      QueryKey,
+      string
+    >,
+    'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam'
+  >,
+) => {
+  return useInfiniteQuery({
+    ...config,
+    queryKey: ['/public-user', param.name === '' ? 'empty-search' : param.name],
+    queryFn: async ({ pageParam }): Promise<IResponseGetPublicUserList> =>
       getAllPublicUsers({
         limit: param.limit,
         name: param.name,
-        offset: pageParam ?? '',
+        offset: pageParam,
       }),
-    {
-      ...config,
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      retry: false,
-      getNextPageParam: (firstPage) => {
-        return firstPage.next ?? undefined
-      },
+    initialPageParam: '',
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: false,
+    getNextPageParam: (firstPage) => {
+      return firstPage.next ?? undefined
     },
-  )
+  })
 }
