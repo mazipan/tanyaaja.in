@@ -32,8 +32,11 @@ import { useToast } from '@/components/ui/use-toast'
 import { BASEURL, patchHit } from '@/lib/api'
 import { isErrorResponse } from '@/lib/error'
 import { trackEvent } from '@/lib/firebase'
+import { getValueFromStorage, setValueToStorage } from '@/lib/storage'
 import { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
+
+const LAST_QUESTION_KEY = 'last_question'
 
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
@@ -57,6 +60,16 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   })
 
   async function sendQuestion(slug: string, q: string, token: string) {
+    const lastQuestion = getValueFromStorage(LAST_QUESTION_KEY)
+    if (q === lastQuestion) {
+      toast({
+        title: 'Pesan gagal terkirim',
+        description:
+          'Pertanyaan yang sama telah dikirim, coba buat pertanyaan lainnya!',
+      })
+      return
+    }
+
     return mutate(
       { slug, q, token },
       {
@@ -66,6 +79,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
             description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
           })
 
+          setValueToStorage(LAST_QUESTION_KEY, q)
           form.reset()
         },
         onError: (error) => {
