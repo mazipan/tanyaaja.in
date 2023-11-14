@@ -1,0 +1,5 @@
+.tweet :global(.react-tweet-theme) {
+  --tweet-body-font-size: 1rem;
+  --tweet-container-margin: 0;
+  @apply mb-4
+}
