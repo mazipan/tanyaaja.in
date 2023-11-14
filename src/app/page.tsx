@@ -1,3 +1,4 @@
+import { Tweet } from 'react-tweet'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -21,6 +22,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { getPublicStatistics } from '@/lib/api'
+import { shuffleArray } from '@/lib/utils'
 import imagehero from '~/public/images/ai-asking-question.jpeg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
@@ -28,6 +30,15 @@ export default async function Home() {
   const statsPromise = getPublicStatistics()
 
   const [stats] = await Promise.all([statsPromise])
+
+  const tweetArr = [
+    '1712849661550329929',
+    '1713003572634485039',
+    '1712776713963450491',
+    '1712441248190185880',
+    '1711254574244520075',
+    '1711577215169933817',
+  ]
 
   return (
     <main className="">
@@ -73,6 +84,21 @@ export default async function Home() {
             alt="Laki-laki dan perempuan yang sedang berdiskusi"
             className="rounded-3xl w-full max-w-[500px]"
           />
+        </div>
+      </section>
+      <section className="container mt-24 mb-16 flex flex-col justify-center items-center gap-4">
+        <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
+          Bagikan
+        </h2>
+        <p className="text-center text-md md:text-lg lg:text-xl text-muted-foreground">
+          Bagikan pertanyaan yang anda dapatkan dari TanyaAja
+        </p>
+        <div className="grid justify-center gap-4 sm:grid-cols-2 md:max-w-full md:grid-cols-3 mt-8">
+          {shuffleArray(tweetArr)
+            .splice(0, 3)
+            .map((value, i) => {
+              return <Tweet id={value} key={i} />
+            })}
         </div>
       </section>
       <section className="container mx-auto mt-24 mb-16 flex flex-col justify-center items-center gap-4">
