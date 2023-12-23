@@ -6,9 +6,9 @@ const TWEETS = [
   '1712849661550329929', // @lynxluna
   '1712776713963450491', // @Maz_Ipan
   '1713003572634485039', // @pveyes
-  '1711577215169933817', // @qepo_s
   '1711254574244520075', // @mgilangjanuar
   '1712441248190185880', // @th_clarence
+  '1711202968169812288', // @aria_ghora
 ]
 
 export const TweetSection = () => {

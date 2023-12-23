@@ -1,4 +1,4 @@
-import { ImageResponse } from 'next/server'
+import { ImageResponse } from 'next/og'
 
 import { CustomQuestionOgSimple } from '@/components/OgImage/CustomQuestionOgSimple'
 import { CustomUserOgSimple } from '@/components/OgImage/CustomUserOgSimple'

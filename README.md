@@ -8,12 +8,12 @@ An anonymous question bank platform
 
 ## Screenshots
 
-| Homepage | Publik | Pertanyaan |
-| -------- | ------ | ---------- |
-| ![Homepage](screenshots/01-homepage.png) | ![Publik](screenshots/04-publik.png) |![Pertanyaan](screenshots/05-pertanyaan.png) |
+| Homepage                                 | Publik                               | Pertanyaan                                   |
+| ---------------------------------------- | ------------------------------------ | -------------------------------------------- |
+| ![Homepage](screenshots/01-homepage.png) | ![Publik](screenshots/04-publik.png) | ![Pertanyaan](screenshots/05-pertanyaan.png) |
 
-| Daftar Pertanyaan | Setelan Akun |
-| ----------------- | ------------ |
+| Daftar Pertanyaan                                          | Setelan Akun                                     |
+| ---------------------------------------------------------- | ------------------------------------------------ |
 | ![Daftar Pertanyaan](screenshots/02-daftar-pertanyaan.png) | ![Setelan Akun](screenshots/03-setelan-akun.png) |
 
 ## Stacks
