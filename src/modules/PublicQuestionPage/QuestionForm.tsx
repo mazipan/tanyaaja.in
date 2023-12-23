@@ -65,7 +65,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       toast({
         title: 'Pesan gagal terkirim',
         description:
-          'Pertanyaan yang sama telah dikirim, coba buat pertanyaan lainnya!',
+          'Pertanyaan yang sama telah dikirim sebelumnya, coba buat pertanyaan lainnya!',
       })
       return
     }
@@ -76,14 +76,14 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         onSuccess: () => {
           toast({
             title: 'Pesan terkirim',
-            description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
+            description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}! Pantau sosial media yang bersangkutan untuk melihat jawabannya.`,
           })
 
           setValueToStorage(LAST_QUESTION_KEY, q)
           form.reset()
         },
         onError: (error) => {
-          let errorMessage = `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`
+          let errorMessage = `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi! Bila masih tidak bisa juga, bisa langsung hubungi @Maz_Ipan di sosial media.`
           if (isErrorResponse(error) && error.type === 'toast') {
             errorMessage = error.message
           }

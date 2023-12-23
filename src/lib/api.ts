@@ -518,7 +518,7 @@ export const getPublicStatistics = async (): Promise<{
       'Content-Type': 'application/json',
     },
     next: {
-      tags: ['public-stats'],
+      revalidate: 60 * 60 * 24, // 24 hours
     },
   })
 
