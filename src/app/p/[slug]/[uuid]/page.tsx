@@ -25,20 +25,29 @@ export async function generateMetadata({
   const owner = await getPublicOwnerUser(slug as string)
   const question = await getQuestionDetail(uuid as string)
   const customOg = await getPublicCustomOg(slug as string)
+  const ownerSlug = owner?.data?.slug
+  const ownerName = owner?.data?.name
 
   const q: Question = (question?.data || [])[0] || {}
 
-  const title = `Intip pertanyaan anonim untuk ${owner?.data?.name} | TanyaAja`
-  const description = `Cuplikan dari pertanyaan anonim yang disampaikan kepada ${owner?.data?.name}`
-  const url = `${BASEURL}/p/${owner?.data?.slug}/${q?.uuid}`
+  const title = `Intip pertanyaan anonim untuk ${ownerName} | TanyaAja`
+  const description = `Cuplikan dari pertanyaan anonim yang disampaikan kepada ${ownerName}`
+  const url = `${BASEURL}/p/${ownerSlug}/${q?.uuid}`
 
   let ogImage = ''
 
   if (customOg && customOg?.data) {
-    // -- mode simple
-    ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${owner?.data?.slug}&name=${owner?.data?.name}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
-  } else {
-    ogImage = `${BASEURL}/api/og?type=question&slug=${owner?.data?.slug}&name=${owner?.data?.name}&question=${q?.question}`
+    if (customOg.data.code_question) {
+      // -- mode advanced
+      ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${ownerSlug}`
+    } else if (customOg.data.simple_text) {
+      // -- mode simple
+      ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${ownerSlug}&name=${ownerName}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+    }
+  }
+
+  if (!ogImage) {
+    ogImage = `${BASEURL}/api/og?type=question&slug=${ownerSlug}&name=${ownerName}&question=${q?.question}`
   }
 
   return {
