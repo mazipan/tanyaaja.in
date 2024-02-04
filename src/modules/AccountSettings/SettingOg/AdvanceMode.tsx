@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { User } from 'firebase/auth'
 import { Info, Loader2, MoveUpRight } from 'lucide-react'
-import { maxLength, minLength, object, type Output, string } from 'valibot'
+import { maxLength, object, optional, type Output, string } from 'valibot'
 
 // @ts-ignore
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -29,17 +29,21 @@ import { jsonToJsx, jsxToJson } from '@/lib/jsx-parser'
 import { CustomOg, UserProfile } from '@/lib/types'
 
 const schema = object({
-  publik: string('Kode laman publik perlu disi terlebih dahulu.', [
-    minLength(2, 'Kode laman publik butuh paling tidak 2 karakter.'),
-    maxLength(10000, 'Kode laman publik hanya bisa maksimal 10000 karakter.'),
-  ]),
-  question: string('Kode laman pertanyaan perlu disi terlebih dahulu.', [
-    minLength(2, 'Kode laman pertanyaan butuh paling tidak 2 karakter.'),
-    maxLength(
-      10000,
-      'Kode laman pertanyaan hanya bisa maksimal 10000 karakter.',
-    ),
-  ]),
+  publik: optional(
+    string('Kode laman publik perlu disi terlebih dahulu.', [
+      maxLength(10000, 'Kode laman publik hanya bisa maksimal 10000 karakter.'),
+    ]),
+    '',
+  ),
+  question: optional(
+    string('Kode laman pertanyaan perlu disi terlebih dahulu.', [
+      maxLength(
+        10000,
+        'Kode laman pertanyaan hanya bisa maksimal 10000 karakter.',
+      ),
+    ]),
+    '',
+  ),
 })
 
 type FormValues = Output<typeof schema>
@@ -56,7 +60,9 @@ export default function AdvanceMode({
   existingOg: CustomOg[] | null | undefined
 }) {
   const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
+  const [formState, setFormState] = useState<
+    'initializing' | 'ready' | 'submitting'
+  >('initializing')
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -69,7 +75,7 @@ export default function AdvanceMode({
   async function onSubmit(data: FormValues) {
     trackEvent('click update og image advance')
     if (user) {
-      setIsSubmitting(true)
+      setFormState('submitting')
       // @ts-ignore
       const codePublik = JSON.stringify(jsxToJson(data?.publik))
       // @ts-ignore
@@ -106,37 +112,43 @@ export default function AdvanceMode({
             description: `Berhasil menyimpan perubahan og image custom!`,
           })
         }
+
+        form.reset({
+          publik: data?.publik,
+          question: data?.question,
+        })
       } catch (err) {
         toast({
           title: 'Gagal menyimpan',
           description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
         })
       }
-      setIsSubmitting(false)
+      setFormState('ready')
     }
   }
 
   useEffect(() => {
     if (existingOg && existingOg.length > 0) {
+      const newDefaultValues: Partial<FormValues> = {}
       try {
-        form.setValue(
-          'publik',
-          jsonToJsx(JSON.parse(existingOg[0].code_public)),
-          {},
-        )
+        const jsxString = jsonToJsx(JSON.parse(existingOg[0].code_public))
+        form.setValue('publik', jsxString, {})
+        newDefaultValues.publik = jsxString
       } catch (err) {
         form.setValue('publik', '', {})
+        newDefaultValues.publik = ''
       }
 
       try {
-        form.setValue(
-          'question',
-          jsonToJsx(JSON.parse(existingOg[0].code_question)),
-          {},
-        )
+        const jsxString = jsonToJsx(JSON.parse(existingOg[0].code_question))
+        form.setValue('question', jsxString, {})
+        newDefaultValues.question = jsxString
       } catch (err) {
         form.setValue('question', '', {})
+        newDefaultValues.question = ''
       }
+      form.reset(newDefaultValues)
+      setFormState('ready')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingOg])
@@ -199,6 +211,7 @@ export default function AdvanceMode({
                     placeholder="Kode untuk OG image laman publik Anda"
                     className="resize-y"
                     rows={10}
+                    disabled={formState === 'initializing'}
                     {...field}
                   />
                 </FormControl>
@@ -221,6 +234,7 @@ export default function AdvanceMode({
                     placeholder="Kode untuk OG image laman pertanyaan Anda"
                     className="resize-y"
                     rows={10}
+                    disabled={formState === 'initializing'}
                     {...field}
                   />
                 </FormControl>
@@ -231,17 +245,31 @@ export default function AdvanceMode({
 
           <Button
             type="submit"
-            disabled={isSubmitting || isLoading}
+            disabled={
+              formState !== 'ready' || !form.formState.isDirty || isLoading
+            }
             className="mt-8"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Menyimpan...</span>
-              </>
-            ) : (
-              'Simpan Perubahan'
-            )}
+            {(() => {
+              if (formState === 'submitting') {
+                return (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Menyimpan...</span>
+                  </>
+                )
+              }
+
+              if (formState === 'initializing') {
+                return (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </>
+                )
+              }
+
+              return 'Simpan Perubahan'
+            })()}
           </Button>
         </form>
       </Form>
