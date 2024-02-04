@@ -10,7 +10,7 @@ interface JsonNode {
   props: {
     style?: Style
     src?: string
-    children?: Array<string | JsonNode>
+    children?: Array<string | JsonNode> | JsonNode | string
   }
 }
 function transformNode(node: JSXElement): JsonNode | null {
@@ -53,6 +53,15 @@ function transformNode(node: JSXElement): JsonNode | null {
 
   if (node.children.length === 0) {
     // no-op
+  } else if (node.children.length === 1) {
+    if (node.children[0].type === 'JSXText') {
+      jsonNode.props.children = node.children[0].value.trim()
+    } else if (node.children[0].type === 'JSXElement') {
+      const childNode = transformNode(node.children[0] as JSXElement)
+      if (childNode) {
+        jsonNode.props.children = childNode
+      }
+    }
   } else {
     jsonNode.props.children = []
 
@@ -140,7 +149,14 @@ export const jsonToJsx = (json?: JsonNode) => {
           .join(' ')
       : ''
 
-    const childrenString = children ? children.map(processNode).join('') : ''
+    const childrenString = children
+      ? Array.isArray(children)
+        ? children.map(processNode).join('')
+        : typeof children === 'string'
+          ? children
+          : processNode(children)
+      : ''
+
     return `<${type} ${propsString}>${childrenString}</${type}>`
   }
 
