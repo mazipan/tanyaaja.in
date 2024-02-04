@@ -25,8 +25,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/components/ui/use-toast'
 import { patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
-import { deparse } from '@/lib/jsx-deparse'
-import JSXParser from '@/lib/jsx-parser'
+import { jsonToJsx, jsxToJson } from '@/lib/jsx-parser'
 import { CustomOg, UserProfile } from '@/lib/types'
 
 const schema = object({
@@ -72,9 +71,9 @@ export default function AdvanceMode({
     if (user) {
       setIsSubmitting(true)
       // @ts-ignore
-      const codePublik = JSON.stringify(JSXParser(data?.publik))
+      const codePublik = JSON.stringify(jsxToJson(data?.publik))
       // @ts-ignore
-      const codeQuestion = JSON.stringify(JSXParser(data?.question))
+      const codeQuestion = JSON.stringify(jsxToJson(data?.question))
       try {
         if (existingOg && existingOg.length > 0) {
           // patch
@@ -119,8 +118,25 @@ export default function AdvanceMode({
 
   useEffect(() => {
     if (existingOg && existingOg.length > 0) {
-      form.setValue('publik', deparse(existingOg[0].code_public), {})
-      form.setValue('question', deparse(existingOg[0].code_question), {})
+      try {
+        form.setValue(
+          'publik',
+          jsonToJsx(JSON.parse(existingOg[0].code_public)),
+          {},
+        )
+      } catch (err) {
+        form.setValue('publik', '', {})
+      }
+
+      try {
+        form.setValue(
+          'question',
+          jsonToJsx(JSON.parse(existingOg[0].code_question)),
+          {},
+        )
+      } catch (err) {
+        form.setValue('question', '', {})
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [existingOg])
