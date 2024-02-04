@@ -6,6 +6,7 @@ import { DefaultOg } from '@/components/OgImage/DefaultOg'
 import { QuestionOg } from '@/components/OgImage/QuestionOg'
 import { UserOg } from '@/components/OgImage/UserOg'
 import { getPublicCustomOg } from '@/lib/api'
+import { truncateText } from '@/lib/utils'
 
 // App router includes @vercel/og.
 // No need to install it.
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
   const type = searchParams.get('type')
   const slug = searchParams.get('slug')
   const name = searchParams.get('name')
-  const question = searchParams.get('question')
+  const question = truncateText(searchParams.get('question') ?? '', 700)
   const forceSimpleMode = searchParams.get('forceSimpleMode')
 
   const theme = searchParams.get('theme')

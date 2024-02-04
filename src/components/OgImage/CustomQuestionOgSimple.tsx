@@ -1,4 +1,4 @@
-import { GRADIENTS } from '@/lib/utils'
+import { GRADIENTS, truncateText } from '@/lib/utils'
 
 export function CustomQuestionOgSimple({
   question,
@@ -16,11 +16,7 @@ export function CustomQuestionOgSimple({
       }}
     >
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
-        <p>
-          {question?.length > 700
-            ? `${question?.substring(0, 700)}...`
-            : `${question}`}
-        </p>
+        <p>{truncateText(question, 700)}</p>
       </div>
       <div></div>
     </div>

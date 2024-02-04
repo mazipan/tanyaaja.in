@@ -26,6 +26,10 @@ export function addDays(date: string, days: number) {
   return result
 }
 
+export function truncateText(text: string, length: number) {
+  return text?.length > 700 ? `${text?.substring(0, length)}...` : text
+}
+
 /**
  * // https://dev.to/nombrekeff/download-file-from-blob-21ho
  * @param blob <Blob>
