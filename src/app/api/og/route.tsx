@@ -12,7 +12,7 @@ import { truncateText } from '@/lib/utils'
 // No need to install it.
 export const runtime = 'edge'
 
-const BASE_OPTIONS = { width: 800, height: 600 }
+const BASE_OPTIONS = { width: 800, height: 400 }
 
 export async function GET(request: Request) {
   const url = new URL(request.url)

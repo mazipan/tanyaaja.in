@@ -172,7 +172,7 @@ export default function AdvanceMode({
                 <MoveUpRight className="h-4 w-4 shrink-0" />
               </Link>
             </li>
-            <li>Gunakan ukuran 800x600 (width: 800px, height: 400px)</li>
+            <li>Gunakan ukuran 800x400 (width: 800px, height: 400px)</li>
             <li>
               Kamu bisa menggunakan{' '}
               <Link
