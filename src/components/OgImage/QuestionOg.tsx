@@ -1,3 +1,5 @@
+import { truncateText } from '@/lib/utils'
+
 export function QuestionOg({ question }: { question: string }) {
   return (
     <div
@@ -8,11 +10,7 @@ export function QuestionOg({ question }: { question: string }) {
       }}
     >
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
-        <p>
-          {question?.length > 700
-            ? `${question?.substring(0, 700)}...`
-            : `${question}`}
-        </p>
+        <p>{truncateText(question, 700)}</p>
       </div>
       <div></div>
     </div>

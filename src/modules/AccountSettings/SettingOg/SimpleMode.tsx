@@ -180,7 +180,7 @@ export default function SimpleMode({
               src={`${BASEURL}/api/og?type=custom-user&slug=${owner?.slug}&theme=${activeGradient}&text=${
                 watchTextOgPublik ||
                 'Kumpulkan pertanyaan anonim dengan lebih mudah'
-              }&r=${new Date().getTime()}`}
+              }&r=${new Date().getTime()}&forceSimpleMode=true`}
               alt="Pratinjau Og Image"
               loading="lazy"
               width={400}

@@ -18,18 +18,28 @@ export async function generateMetadata({
   const slug = params.slug
   const owner = await getPublicOwnerUser(slug as string)
   const customOg = await getPublicCustomOg(slug as string)
+  const ownerSlug = owner?.data?.slug
+  const ownerName = owner?.data?.name
 
-  const title = `Lempar pertanyaan anonim ke ${owner?.data?.name} lewat TanyaAja`
-  const description = `Mulai bertanya anonim ke ${owner?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
-  const url = `${BASEURL}/p/${owner?.data?.slug}`
+  const title = `Lempar pertanyaan anonim ke ${ownerName} lewat TanyaAja`
+  const description = `Mulai bertanya anonim ke ${ownerName} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
+  const url = `${BASEURL}/p/${ownerSlug}`
 
   let ogImage = ''
 
   if (customOg && customOg?.data) {
-    // -- mode simple
-    ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&name=${owner?.data?.name}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
-  } else {
-    ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}&name=${owner?.data?.name}`
+    if (customOg.data.code_public) {
+      // -- mode advanced
+      ogImage = `${BASEURL}/api/og?type=custom-user&slug=${ownerSlug}`
+    } else if (customOg.data.simple_text) {
+      // -- mode simple
+      ogImage = `${BASEURL}/api/og?type=custom-user&slug=${ownerSlug}&name=${ownerName}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+    }
+  }
+
+  if (!ogImage) {
+    // Fallback if none of the custom OG is available
+    ogImage = `${BASEURL}/api/og?type=user&slug=${ownerSlug}&name=${ownerName}`
   }
 
   return {
