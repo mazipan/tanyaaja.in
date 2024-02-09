@@ -21,6 +21,7 @@ export async function GET(request: Request) {
   const slug = searchParams.get('slug')
   const name = searchParams.get('name')
   const question = truncateText(searchParams.get('question') ?? '', 700)
+  const decodedQuestion = decodeURIComponent(question)
   const forceSimpleMode = searchParams.get('forceSimpleMode')
 
   const theme = searchParams.get('theme')
@@ -60,7 +61,7 @@ export async function GET(request: Request) {
     )
   } else if (type === 'question' && question && question !== 'undefined') {
     return new ImageResponse(
-      <QuestionOg question={question || ''} />,
+      <QuestionOg question={decodedQuestion || ''} />,
       BASE_OPTIONS,
     )
   } else if (
@@ -73,7 +74,7 @@ export async function GET(request: Request) {
       // Advanced mode
       return new ImageResponse(
         JSON.parse(
-          customOg.data.code_question.replaceAll('[question]', question),
+          customOg.data.code_question.replaceAll('[question]', decodedQuestion),
         ),
         BASE_OPTIONS,
       )
@@ -83,7 +84,7 @@ export async function GET(request: Request) {
     return new ImageResponse(
       (
         <CustomQuestionOgSimple
-          question={question || ''}
+          question={decodedQuestion || ''}
           theme={theme || ''}
           text={text || ''}
         />
