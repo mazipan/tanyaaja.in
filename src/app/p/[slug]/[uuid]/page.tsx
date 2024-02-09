@@ -36,7 +36,7 @@ export async function generateMetadata({
 
   let ogImage = ''
 
-  let encodedQuestion = encodeURIComponent(q?.question)
+  const encodedQuestion = encodeURIComponent(q?.question)
 
   if (customOg && customOg?.data) {
     if (customOg.data.code_question) {
