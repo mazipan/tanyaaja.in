@@ -36,18 +36,20 @@ export async function generateMetadata({
 
   let ogImage = ''
 
+  let encodedQuestion = encodeURIComponent(q?.question)
+
   if (customOg && customOg?.data) {
     if (customOg.data.code_question) {
       // -- mode advanced
-      ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${ownerSlug}`
+      ogImage = `${BASEURL}/api/og?type=custom-question&question=${encodedQuestion}&slug=${ownerSlug}`
     } else if (customOg.data.simple_text) {
       // -- mode simple
-      ogImage = `${BASEURL}/api/og?type=custom-question&question=${q?.question}&slug=${ownerSlug}&name=${ownerName}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
+      ogImage = `${BASEURL}/api/og?type=custom-question&question=${encodedQuestion}&slug=${ownerSlug}&name=${ownerName}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`
     }
   }
 
   if (!ogImage) {
-    ogImage = `${BASEURL}/api/og?type=question&slug=${ownerSlug}&name=${ownerName}&question=${q?.question}`
+    ogImage = `${BASEURL}/api/og?type=question&slug=${ownerSlug}&name=${ownerName}&question=${encodedQuestion}`
   }
 
   return {
