@@ -33,7 +33,22 @@ export interface CustomOg {
   uid: string
   slug: string
   mode: 'simple' | 'advance'
-  theme: 'hyper' | 'oceanic' | 'pumkin' | 'candy'
+  theme:
+    | 'hyper'
+    | 'pinkneon'
+    | 'oceanic'
+    | 'pumkin'
+    | 'candy'
+    | 'rasta'
+    | 'sublime'
+    | 'owahu'
+    | 'morning'
+    | 'bigsur'
+    | 'messenger'
+    | 'seafoam'
+    | 'emerald'
+    | 'flower'
+    | 'ice'
   simple_text: string
   code_public: string
   code_question: string

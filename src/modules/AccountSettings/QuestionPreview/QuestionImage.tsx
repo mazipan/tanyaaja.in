@@ -18,7 +18,7 @@ export const QuestionImage = ({
       <div
         id="question-card"
         className={cn(
-          '-z-10 p-8 flex flex-col justify-center items-center text-center absolute -top-[2000px] -left-[2000px] rounded-lg min-h-[300px]',
+          '-z-10 p-8 flex flex-col justify-center items-center text-center absolute -top-[2000px] -left-[2000px] rounded-lg min-h-[300px] text-gray-900',
           activeGradient !== ''
             ? GRADIENTS.find((g) => g.id === activeGradient)?.class
             : '',
