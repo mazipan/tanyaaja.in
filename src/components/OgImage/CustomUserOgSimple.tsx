@@ -1,8 +1,6 @@
 import { BASEURL } from '@/lib/api'
 import { GRADIENTS } from '@/lib/utils'
 
-import { LogoSvg } from './LogoSvg'
-
 export function CustomUserOgSimple({
   slug,
   theme,
@@ -22,11 +20,8 @@ export function CustomUserOgSimple({
       <div tw="flex font-bold text-2xl mb-4">
         {BASEURL.replace('https://www.', '')}/p/{slug}
       </div>
-      <div tw="flex flex-col justify-center items-center text-center font-extrabold text-6xl tracking-tight w-full">
+      <div tw="flex flex-col justify-center items-center text-center font-extrabold text-5xl tracking-tight w-full">
         <p>{text}</p>
-      </div>
-      <div tw="flex mb-2 items-center justify-center mt-4 w-full">
-        <LogoSvg />
       </div>
     </div>
   )

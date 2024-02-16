@@ -1,7 +1,5 @@
 import { BASEURL } from '@/lib/api'
 
-import { LogoSvg } from './LogoSvg'
-
 export function UserOg({ slug, name }: { slug: string; name: string }) {
   return (
     <div
@@ -15,13 +13,10 @@ export function UserOg({ slug, name }: { slug: string; name: string }) {
         {BASEURL.replace('https://www.', '')}/p/{slug}
       </div>
       <div tw="flex flex-col justify-center text-center items-center w-full">
-        <p tw="font-extrabold text-6xl tracking-tight">
+        <p tw="font-extrabold text-4xl tracking-tight">
           Sampaikan pertanyaan anonim ke saya
         </p>
         <p tw="text-2xl">({name})</p>
-      </div>
-      <div tw="flex mb-2 items-center justify-center mt-4 w-full">
-        <LogoSvg />
       </div>
     </div>
   )
