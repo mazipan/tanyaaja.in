@@ -76,7 +76,7 @@ export const PreviewContent = ({
 
       {question ? (
         <>
-          <div className="flex gap-2 flex-wrap justify-between flex-col md:flex-row">
+          <div className="flex gap-4 flex-wrap justify-between flex-col md:flex-row">
             <GradientSelection
               activeGradient={activeGradient}
               onClick={handleClickGradient}
@@ -113,7 +113,7 @@ export const PreviewContent = ({
           <div className={cn('relative')}>
             <Card
               className={cn(
-                'p-4 flex justify-center items-center text-center min-h-[300px]',
+                'relative p-4 flex justify-center items-center text-center min-h-[300px] text-gray-900',
                 activeGradient !== ''
                   ? GRADIENTS.find((g) => g.id === activeGradient)?.class
                   : '',

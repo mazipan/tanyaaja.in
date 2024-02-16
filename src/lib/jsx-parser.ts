@@ -55,7 +55,7 @@ function transformNode(node: JSXElement): JsonNode | null {
     // no-op
   } else if (node.children.length === 1) {
     if (node.children[0].type === 'JSXText') {
-      jsonNode.props.children = node.children[0].value.trim()
+      jsonNode.props.children = node.children[0].value?.trim()
     } else if (node.children[0].type === 'JSXElement') {
       const childNode = transformNode(node.children[0] as JSXElement)
       if (childNode) {
@@ -67,7 +67,7 @@ function transformNode(node: JSXElement): JsonNode | null {
 
     node.children.forEach((child) => {
       if (child.type === 'JSXText') {
-        const textValue: string = child.value.trim()
+        const textValue: string = child.value?.trim()
         if (textValue) {
           ;(jsonNode.props.children as Array<unknown>).push(textValue)
         }

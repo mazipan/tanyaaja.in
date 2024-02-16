@@ -24,7 +24,7 @@ export const GradientSelection = ({
               <div
                 key={gradient.id}
                 className={cn(
-                  'h-8 w-8 border rounded-full cursor-pointer',
+                  'h-10 w-10 border rounded-full cursor-pointer',
                   gradient.class,
                   activeGradient === gradient.id
                     ? 'border-2 border-gray-900 dark:border-gray-100'
