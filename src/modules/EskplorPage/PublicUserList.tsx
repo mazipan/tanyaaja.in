@@ -4,7 +4,6 @@ import React, { useEffect } from 'react'
 import Link from 'next/link'
 
 import { InfiniteData } from '@tanstack/react-query'
-import { MoveUpRight } from 'lucide-react'
 
 import EmptyState from '@/components/EmptyState'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
@@ -56,8 +55,7 @@ export default function PublicUserList({
                 </div>
 
                 <Button disabled type="button">
-                  Kunjungi
-                  <MoveUpRight className="w-4 h-4 ml-2" />
+                  Tanya
                 </Button>
               </Card>
             ))}
@@ -68,7 +66,7 @@ export default function PublicUserList({
           {dataPublicUsers?.pages && totalUser > 0 ? (
             <>
               <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
-                {totalUser} pengguna ditemukan
+                Menampilkan {totalUser} pengguna
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -86,7 +84,7 @@ export default function PublicUserList({
                             size="38"
                           />
                           <div className="w-full space-y-0.5">
-                            <h2 className="text-sm font-medium leading-none">
+                            <h2 className="text-lg font-medium leading-none">
                               {up.name}
                             </h2>
                             <p className="text-sm text-muted-foreground">
@@ -94,10 +92,7 @@ export default function PublicUserList({
                             </p>
                           </div>
                           <Button asChild>
-                            <Link href={`/p/${up.slug}`}>
-                              Kunjungi
-                              <MoveUpRight className="w-4 h-4 ml-2" />
-                            </Link>
+                            <Link href={`/p/${up.slug}`}>Tanya</Link>
                           </Button>
                         </Card>
                       ))}
@@ -121,8 +116,7 @@ export default function PublicUserList({
                         </div>
 
                         <Button disabled type="button">
-                          Kunjungi
-                          <MoveUpRight className="w-4 h-4 ml-2" />
+                          Tanya
                         </Button>
                       </Card>
                     ))

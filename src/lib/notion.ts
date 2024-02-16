@@ -233,12 +233,19 @@ export const getPublicUserList = async ({
         },
       ],
     },
+    sorts: [
+      {
+        property: 'count',
+        direction: 'descending',
+      },
+    ],
     page_size: limit,
     start_cursor: offset,
   })
 
   return response
 }
+
 export const getPublicUserListForSiteMap = async () => {
   const response = await notion.databases.query({
     database_id: DB_USER,
