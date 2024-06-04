@@ -19,7 +19,7 @@ import { StatisticPanel } from '@/modules/AccountSettings/StatisticPanel'
 import { useOwner, useQuestionListPagination } from '@/queries/useQueries'
 
 const auth = getFirebaseAuth()
-const LIMIT = 10
+const LIMIT = 15
 
 export default function Account() {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)

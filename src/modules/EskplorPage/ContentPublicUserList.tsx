@@ -18,7 +18,7 @@ const ContentPublicUserList = () => {
     fetchNextPage,
     isLoading,
   } = useGetPublicUser({
-    limit: 20,
+    limit: 15,
     name,
   })
 
