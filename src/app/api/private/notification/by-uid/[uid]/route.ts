@@ -6,6 +6,8 @@ import { simplifyResponseObject } from '@/lib/notion'
 import { getNotifChannelByUid } from '@/lib/notion'
 import { NotifChannel } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')

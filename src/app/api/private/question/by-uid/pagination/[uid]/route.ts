@@ -8,6 +8,8 @@ import {
 } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(request: NextRequest) {
   const limit = Number(request.nextUrl.searchParams.get('limit')) ?? 1
   const cursor = request.nextUrl.searchParams.get('cursor') ?? ''

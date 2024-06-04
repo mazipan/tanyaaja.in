@@ -4,6 +4,8 @@ import type { UserProfile } from '@/lib/types'
 const TODAY = new Date()
 TODAY.setHours(0, 0, 0, 0)
 
+export const runtime = 'edge'
+
 function generateSitemap(data: UserProfile[]) {
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">

@@ -12,6 +12,8 @@ type PublicPageProps = {
   params: { slug: string }
 }
 
+export const runtime = 'edge'
+
 export async function generateMetadata({
   params,
 }: PublicPageProps): Promise<Metadata> {

@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getPublicUserList, simplifyResponseObject } from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(request: NextRequest) {
   try {
     const limit = Number(request.nextUrl.searchParams.get('limit'))

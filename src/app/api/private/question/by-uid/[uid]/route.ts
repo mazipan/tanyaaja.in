@@ -5,6 +5,8 @@ import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')

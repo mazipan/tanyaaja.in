@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUuid, togglePublicAccessQuestion } from '@/lib/notion'
 
+export const runtime = 'edge'
+
 export async function PATCH(
   request: Request,
   { params }: { params: { uuid: string } },

@@ -4,6 +4,8 @@ import { UserProfile } from 'firebase/auth'
 
 import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 
+export const runtime = 'edge'
+
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } },

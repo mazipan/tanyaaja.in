@@ -7,6 +7,8 @@ import {
 } from '@/lib/notion'
 import { CustomOg, UserProfile } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(
   request: Request,
   { params }: { params: { slug: string } },

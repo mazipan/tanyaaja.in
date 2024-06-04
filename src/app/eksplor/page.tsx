@@ -4,6 +4,8 @@ import { Separator } from '@/components/ui/separator'
 import { BASEURL } from '@/lib/api'
 import ContentPublicUserList from '@/modules/EskplorPage/ContentPublicUserList'
 
+export const runtime = 'edge'
+
 export const metadata: Metadata = {
   title: 'Eksplor Pengguna di TanyaAja',
   alternates: {

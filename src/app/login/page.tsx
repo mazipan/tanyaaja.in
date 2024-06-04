@@ -7,6 +7,8 @@ import { BASEURL } from '@/lib/api'
 import { LoginButtonWithRedirect } from '@/modules/LoginPage/LoginButton'
 import logoSvg from '~/public/logo/TanyaAja.svg'
 
+export const runtime = 'edge'
+
 export const metadata: Metadata = {
   title: 'Masuk atau Daftar TanyaAja',
   alternates: {

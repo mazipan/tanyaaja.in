@@ -6,6 +6,8 @@ import {
   updateUserCounter,
 } from '@/lib/notion'
 
+export const runtime = 'edge'
+
 export async function PATCH(
   request: Request,
   { params }: { params: { slug: string } },

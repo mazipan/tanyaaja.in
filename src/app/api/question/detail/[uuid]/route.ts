@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 import { getQuestionsByUuid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function GET(
   request: Request,
   { params }: { params: { uuid: string } },

@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { archivePage, deleteQuestionsByUid, getUserByUid } from '@/lib/notion'
 
+export const runtime = 'edge'
+
 export async function DELETE(request: Request) {
   const res = await request.json()
   try {

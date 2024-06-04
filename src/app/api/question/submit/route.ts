@@ -74,6 +74,8 @@ async function sendQuestion(
   )
 }
 
+export const runtime = 'edge'
+
 export async function POST(request: NextRequest) {
   const res = await request.json()
 

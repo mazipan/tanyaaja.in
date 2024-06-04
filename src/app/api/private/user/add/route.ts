@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { addUser, getUserByUid } from '@/lib/notion'
 
+export const runtime = 'edge'
+
 export async function POST(request: Request) {
   const res = await request.json()
   const headersInstance = headers()

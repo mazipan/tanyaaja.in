@@ -6,6 +6,8 @@ import { sendEmailReportQuestion } from '@/lib/mailer'
 import { getQuestionsByUuid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
+export const runtime = 'edge'
+
 export async function POST(
   request: Request,
   { params }: { params: { uuid: string } },
