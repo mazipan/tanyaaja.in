@@ -134,6 +134,45 @@ export const patchUpdateUser = async (
   return rawRes.json()
 }
 
+export const deleteUser = async (user: User): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await httpClient(`${BASEURL}/api/private/user/delete`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      uid: user.uid,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const deleteAllQuestions = async (
+  user: User,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await httpClient(
+    `${BASEURL}/api/private/question/delete-all`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({
+        uid: user.uid,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
 export const patchHit = async (slug: string): Promise<{ message: string }> => {
   const rawRes = await fetch(`${BASEURL}/api/tracker/hit/${slug}`, {
     method: 'PATCH',

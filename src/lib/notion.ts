@@ -2,6 +2,7 @@ import { Client } from '@notionhq/client'
 import {
   PageObjectResponse,
   type PartialDatabaseObjectResponse,
+  UpdatePageResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 import slugify from '@sindresorhus/slugify'
 import { nanoid } from 'nanoid'
@@ -311,6 +312,13 @@ export const updateUser = async (param: UpdateUserArgs) => {
   })
 }
 
+export const deleteUser = async (pageId: string) => {
+  await notion.pages.update({
+    page_id: pageId,
+    archived: true,
+  })
+}
+
 export const updateUserCounter = async (param: UpdateUserCounterArgs) => {
   await notion.pages.update({
     page_id: param.pageId,
@@ -350,25 +358,34 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
   })
 }
 
-export const getQuestionsByUid = async (uid: string) => {
+export const getQuestionsByUid = async (
+  uid: string,
+  withStatus: boolean = true,
+) => {
+  const filteredByUid = {
+    property: 'uid',
+    rich_text: {
+      equals: uid,
+    },
+  }
+
+  const filter = withStatus
+    ? {
+        and: [
+          filteredByUid,
+          {
+            property: 'status',
+            status: {
+              equals: 'Not started',
+            },
+          },
+        ],
+      }
+    : filteredByUid
+
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
-    filter: {
-      and: [
-        {
-          property: 'uid',
-          rich_text: {
-            equals: uid,
-          },
-        },
-        {
-          property: 'status',
-          status: {
-            equals: 'Not started',
-          },
-        },
-      ],
-    },
+    filter,
   })
 
   return response
@@ -569,34 +586,71 @@ export const getQuestionsByUuidWithPagination = async ({
   uid,
   limit = 10,
   cursor,
+  withStatus = true,
 }: {
   uid: string
   limit: number
   cursor: string | undefined
+  withStatus?: boolean
 }) => {
+  const filteredByUid = {
+    property: 'uid',
+    rich_text: {
+      equals: uid,
+    },
+  }
+
+  const filter = withStatus
+    ? {
+        and: [
+          filteredByUid,
+          {
+            property: 'status',
+            status: {
+              equals: 'Not started',
+            },
+          },
+        ],
+      }
+    : filteredByUid
+
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
-    filter: {
-      and: [
-        {
-          property: 'uid',
-          rich_text: {
-            equals: uid,
-          },
-        },
-        {
-          property: 'status',
-          status: {
-            equals: 'Not started',
-          },
-        },
-      ],
-    },
+    filter,
     page_size: limit,
     start_cursor: cursor,
   })
 
   return response
+}
+
+export const archivePage = async (id: string): Promise<UpdatePageResponse> => {
+  return notion.pages.update({ page_id: id, archived: true })
+}
+
+export const deleteQuestionsByUid = async (uid: string) => {
+  const archivePagePromises: Array<Promise<UpdatePageResponse>> = []
+
+  let hasMore: boolean = true
+  let cursor: string | undefined
+
+  while (hasMore) {
+    const response = await getQuestionsByUuidWithPagination({
+      uid,
+      limit: 100,
+      cursor,
+      withStatus: false,
+    })
+
+    for (const result of response.results) {
+      archivePagePromises.push(archivePage(result.id))
+    }
+
+    hasMore = response.has_more
+    cursor = response.next_cursor as string
+  }
+
+  return archivePagePromises
 }
 
 export const countDatabaseRows = async ({

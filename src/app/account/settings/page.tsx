@@ -40,11 +40,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
-import { useToast } from '@/components/ui/use-toast'
 import { BASEURL } from '@/lib/api'
 import { isErrorResponse } from '@/lib/error'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
 import { DEFAULT_AVATAR, randomizeAvatar } from '@/lib/utils'
+import { useDeleteAllQuestions } from '@/modules/AccountSettings/hooks/useDeleteAllQuestions'
+import { useDeleteUser } from '@/modules/AccountSettings/hooks/useDeleteUser'
 import { useUpdateUser } from '@/modules/AccountSettings/hooks/useUpdateUser'
 import { useOwner } from '@/queries/useQueries'
 
@@ -72,7 +73,6 @@ const schema = object({
 type FormValues = Output<typeof schema>
 
 export default function Account() {
-  const { toast } = useToast()
   const dialog = useDialog()
   const { isLogin, isLoading, user } = useAuth(auth)
 
@@ -81,6 +81,10 @@ export default function Account() {
   })
 
   const { mutate: updateUser, isPending: isSubmitting } = useUpdateUser()
+  const { mutate: deleteQuestions, isPending: isSubmittingDeleteQuestions } =
+    useDeleteAllQuestions()
+  const { mutate: deleteUser, isPending: isSubmittingDeleteUser } =
+    useDeleteUser()
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -302,6 +306,7 @@ export default function Account() {
                 <Button
                   type="button"
                   variant="destructive"
+                  disabled={isSubmittingDeleteQuestions}
                   onClick={() => {
                     dialog({
                       title:
@@ -313,10 +318,7 @@ export default function Account() {
                         variant: 'destructive',
                       },
                     }).then(() => {
-                      toast({
-                        title: 'Fitur "Hapus semua pertanyaan" belum tersedia',
-                        description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
-                      })
+                      deleteQuestions({ user: user! })
                     })
                   }}
                 >
@@ -325,11 +327,9 @@ export default function Account() {
                 <Button
                   type="button"
                   variant="destructive"
+                  disabled={isSubmittingDeleteUser}
                   onClick={() => {
-                    toast({
-                      title: 'Fitur "Hapus akun saya" belum tersedia',
-                      description: `Fitur masih dalam tahap pengembangan, pantau perkembangannya di GitHub dan Twitter!`,
-                    })
+                    deleteUser({ user: user!, auth })
                   }}
                 >
                   Hapus akun saya
