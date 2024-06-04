@@ -88,7 +88,9 @@ export default function PublicUserList({
                               {up.name}
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Telah dikunjungi {up.count} kali
+                              Telah dikunjungi{' '}
+                              {new Intl.NumberFormat('id-ID').format(up.count)}{' '}
+                              kali
                             </p>
                           </div>
                           <Button asChild>
