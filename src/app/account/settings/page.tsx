@@ -329,7 +329,18 @@ export default function Account() {
                   variant="destructive"
                   disabled={isSubmittingDeleteUser}
                   onClick={() => {
-                    deleteUser({ user: user!, auth })
+                    dialog({
+                      title:
+                        'Apakah anda yakin ingin menghapus Akun beserta semua pertanyaan terkait?',
+                      description:
+                        'Pertanyaan dan semua statistik yang sudah dihapus tidak dapat dikembalikan lagi.',
+                      submitButton: {
+                        label: 'Hapus',
+                        variant: 'destructive',
+                      },
+                    }).then(() => {
+                      deleteUser({ user: user!, auth })
+                    })
                   }}
                 >
                   Hapus akun saya
