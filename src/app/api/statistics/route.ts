@@ -5,7 +5,7 @@ import { countDatabaseRows } from '@/lib/notion'
 const DB_USER = process.env.NOTION_DB_USERS_ID ?? ''
 const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID ?? ''
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {

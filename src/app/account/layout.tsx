@@ -9,8 +9,6 @@ import { getFirebaseAuth } from '@/lib/firebase'
 
 const auth = getFirebaseAuth()
 
-export const runtime = 'edge'
-
 export default function PrivateLayout({
   children,
 }: {

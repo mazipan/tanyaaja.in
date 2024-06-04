@@ -6,7 +6,7 @@ import { sendEmailReportQuestion } from '@/lib/mailer'
 import { getQuestionsByUuid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function POST(
   request: Request,

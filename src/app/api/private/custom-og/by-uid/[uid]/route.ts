@@ -5,7 +5,7 @@ import { verifyIdToken } from '@/lib/firebase-admin'
 import { getCustomOgByUid, simplifyResponseObject } from '@/lib/notion'
 import { CustomOg } from '@/lib/types'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const headersInstance = headers()

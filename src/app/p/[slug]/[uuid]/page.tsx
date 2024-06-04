@@ -16,7 +16,6 @@ type PublicQuestionPageProps = {
   params: { slug: string; uuid: string }
 }
 
-export const runtime = 'edge'
 export async function generateMetadata({
   params,
 }: PublicQuestionPageProps): Promise<Metadata> {

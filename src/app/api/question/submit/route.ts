@@ -74,7 +74,7 @@ async function sendQuestion(
   )
 }
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   const res = await request.json()

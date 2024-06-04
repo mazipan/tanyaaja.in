@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUserByUid, updateUser } from '@/lib/notion'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function PATCH(request: Request) {
   const res = await request.json()

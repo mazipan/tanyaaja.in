@@ -5,7 +5,7 @@ import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUid, simplifyResponseObject } from '@/lib/notion'
 import { Question } from '@/lib/types'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const headersInstance = headers()

@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { destroySession, getSession } from '@/lib/notion'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function DELETE(request: Request) {
   const headersInstance = headers()

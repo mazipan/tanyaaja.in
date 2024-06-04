@@ -6,7 +6,7 @@ import {
 } from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {

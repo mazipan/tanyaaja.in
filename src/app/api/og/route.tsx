@@ -10,7 +10,7 @@ import { truncateText } from '@/lib/utils'
 
 // App router includes @vercel/og.
 // No need to install it.
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 const BASE_OPTIONS = { width: 800, height: 400 }
 

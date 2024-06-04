@@ -6,7 +6,7 @@ import {
   updateUserCounter,
 } from '@/lib/notion'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   request: Request,

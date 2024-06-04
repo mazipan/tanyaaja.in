@@ -4,7 +4,7 @@ import { UserProfile } from 'firebase/auth'
 
 import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(
   request: Request,

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUpdates } from '@/lib/telegram'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)

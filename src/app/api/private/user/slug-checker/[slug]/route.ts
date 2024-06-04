@@ -5,7 +5,7 @@ import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 import { UserProfile } from '@/lib/types'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function POST(
   request: Request,

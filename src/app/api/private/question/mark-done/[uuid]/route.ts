@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUuid, markStatusQuestionAsRead } from '@/lib/notion'
 
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   request: Request,
