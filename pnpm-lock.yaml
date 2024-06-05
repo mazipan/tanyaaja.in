@@ -140,6 +140,9 @@ dependencies:
   typescript:
     specifier: 5.4.5
     version: 5.4.5
+  undici:
+    specifier: ^6.18.2
+    version: 6.18.2
   usehooks-ts:
     specifier: ^3.1.0
     version: 3.1.0(react@18.3.1)
@@ -6645,6 +6648,11 @@ packages:
     engines: {node: '>=14.0'}
     dependencies:
       '@fastify/busboy': 2.1.0
+    dev: false
+
+  /undici@6.18.2:
+    resolution: {integrity: sha512-o/MQLTwRm9IVhOqhZ0NQ9oXax1ygPjw6Vs+Vq/4QRjbOAC3B1GCHy7TYxxbExKlb7bzDRzt9vBWU6BDz0RFfYg==}
+    engines: {node: '>=18.17'}
     dev: false
 
   /unicode-trie@2.0.0:
