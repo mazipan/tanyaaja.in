@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { headers } from 'next/headers'
 import Script from 'next/script'
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import clsx from 'clsx'
 
 import { BaseDialog } from '@/components/dialog/BaseDialog'
 import { Footer } from '@/components/Footer'
@@ -57,9 +59,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const headersList = headers()
+  const isBot = headersList.get('x-bot')
+  const isWebp = headersList.get('x-webp')
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body
+        className={clsx(
+          inter.className,
+          isBot === '1' ? 'is-bot' : '',
+          isWebp === '1' ? 'is-webp' : '',
+        )}
+      >
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <main>

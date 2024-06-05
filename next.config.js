@@ -78,6 +78,16 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  swcMinify: true,
+  poweredByHeader: false,
+  images: {
+    unoptimized: true,
+  },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   async headers() {
     return [
       {
