@@ -1,15 +1,23 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 import { InfiniteData } from '@tanstack/react-query'
+import { Flag } from 'lucide-react'
 
 import EmptyState from '@/components/EmptyState'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { ReportUserDialog } from '@/components/ReportDialog/ReportUser'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { trackEvent } from '@/lib/firebase'
 import { IResponseGetPublicUserList } from '@/lib/types'
 import { calculatePageItemCount } from '@/lib/utils'
@@ -25,6 +33,9 @@ export default function PublicUserList({
   isInitialLoading,
 }: PublicUserListProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  const [isShowReportDialog, setIsShowReportDialog] = useState<boolean>(false)
+  const [selectedUser, setSelectedUser] = useState<string>('')
 
   useEffect(() => {
     trackEvent('view eksplor page')
@@ -54,9 +65,19 @@ export default function PublicUserList({
                   <Skeleton className="h-2 w-[100px]" />
                 </div>
 
-                <Button disabled type="button">
-                  Tanya
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    disabled
+                    size="icon"
+                  >
+                    <Flag className="w-4 h-4" />
+                  </Button>
+                  <Button disabled type="button">
+                    Tanya
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>
@@ -93,9 +114,32 @@ export default function PublicUserList({
                               kali
                             </p>
                           </div>
-                          <Button asChild>
-                            <Link href={`/p/${up.slug}`}>Tanya</Link>
-                          </Button>
+                          <div className="flex items-center gap-2">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    variant="secondary"
+                                    type="button"
+                                    size="icon"
+                                    onClick={() => {
+                                      setSelectedUser(up.name)
+                                      setIsShowReportDialog(true)
+                                    }}
+                                  >
+                                    <Flag className="w-4 h-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Laporkan pengguna</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+
+                            <Button asChild>
+                              <Link href={`/p/${up.slug}`}>Tanya</Link>
+                            </Button>
+                          </div>
                         </Card>
                       ))}
                     </React.Fragment>
@@ -133,6 +177,16 @@ export default function PublicUserList({
           )}
         </>
       )}
+      <ReportUserDialog
+        isOpen={isShowReportDialog}
+        user={selectedUser}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setSelectedUser('')
+          }
+          setIsShowReportDialog(isOpen)
+        }}
+      />
     </div>
   )
 }
