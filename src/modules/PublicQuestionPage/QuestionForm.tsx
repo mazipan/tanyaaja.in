@@ -208,7 +208,8 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       </Form>
       <ReportUserDialog
         isOpen={isShowReportDialog}
-        user={owner.name}
+        name={owner.name}
+        email={owner.uid}
         onOpenChange={(isOpen) => {
           setIsShowReportDialog(isOpen)
         }}

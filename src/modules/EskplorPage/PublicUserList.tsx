@@ -35,7 +35,8 @@ export default function PublicUserList({
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const [isShowReportDialog, setIsShowReportDialog] = useState<boolean>(false)
-  const [selectedUser, setSelectedUser] = useState<string>('')
+  const [selectedUserName, setSelectedUserName] = useState<string>('')
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string>('')
 
   useEffect(() => {
     trackEvent('view eksplor page')
@@ -123,7 +124,8 @@ export default function PublicUserList({
                                     type="button"
                                     size="icon"
                                     onClick={() => {
-                                      setSelectedUser(up.name)
+                                      setSelectedUserName(up.name)
+                                      setSelectedUserEmail(up.uid)
                                       setIsShowReportDialog(true)
                                     }}
                                   >
@@ -179,10 +181,12 @@ export default function PublicUserList({
       )}
       <ReportUserDialog
         isOpen={isShowReportDialog}
-        user={selectedUser}
+        name={selectedUserName}
+        email={selectedUserEmail}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
-            setSelectedUser('')
+            setSelectedUserName('')
+            setSelectedUserEmail('')
           }
           setIsShowReportDialog(isOpen)
         }}

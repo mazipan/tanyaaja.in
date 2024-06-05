@@ -567,7 +567,7 @@ export const getPublicStatistics = async (): Promise<{
 export const postReportUser = async (
   reason: string,
   user: string,
-): Promise<{ message: string; data: 'CONTAINS_BAD_WORD' | number | null }> => {
+): Promise<{ message: string }> => {
   const rawRes = await httpClient(`${BASEURL}/api/user/report`, {
     method: 'POST',
     body: JSON.stringify({
@@ -576,6 +576,32 @@ export const postReportUser = async (
     }),
     headers: {
       'Content-Type': 'application/json',
+    },
+  })
+  return rawRes.json()
+}
+
+export const postReportQuestion = async ({
+  user,
+  questionUuid,
+  reason,
+}: {
+  user: User
+  questionUuid: string
+  reason: string
+}): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await httpClient(`${BASEURL}/api/private/question/report`, {
+    method: 'POST',
+    body: JSON.stringify({
+      reason,
+      user,
+      uuid: questionUuid,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
     },
   })
   return rawRes.json()

@@ -1,24 +1,26 @@
 import { useMutation } from '@tanstack/react-query'
+import { User } from 'firebase/auth'
 
-import { postReportUser } from '@/lib/api'
+import { postReportQuestion } from '@/lib/api'
 import { ErrorResponse } from '@/lib/error'
 
 type Props = {
-  user: string
+  user: User
+  uuid: string
   reason: string
 }
 
-const useSendReportUser = () => {
+const useSendReportQuestion = () => {
   return useMutation({
-    mutationFn: async ({ user, reason }: Props) => {
+    mutationFn: async ({ user, reason, uuid }: Props) => {
       try {
-        return await postReportUser(reason, user)
+        return await postReportQuestion({ user, reason, questionUuid: uuid })
       } catch (error) {
         if (error instanceof Response) {
           const err = await error.json()
           const errorResponse: ErrorResponse = {
             type: 'toast',
-            message: err.message || 'Error while report user',
+            message: err.message || 'Error while report question',
           }
 
           throw errorResponse
@@ -28,4 +30,4 @@ const useSendReportUser = () => {
   })
 }
 
-export default useSendReportUser
+export default useSendReportQuestion

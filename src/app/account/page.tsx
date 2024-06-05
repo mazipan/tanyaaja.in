@@ -96,6 +96,7 @@ export default function Account() {
                           question={q}
                           onClick={handleClickQuestion}
                           index={indexParent * LIMIT + indexQuestion + 1}
+                          user={user!}
                         />
                       )
                     })}

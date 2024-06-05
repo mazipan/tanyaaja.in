@@ -20,9 +20,9 @@ import useSendReportUser from './useSendReportUser'
 
 const schema = object({
   reason: string('Alasan perlu disi terlebih dahulu.', [
-    minLength(20, 'Pertanyaan butuh paling tidak 20 karakter.'),
-    maxLength(1000, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
-    includes(' ', 'Pertanyaan membutuhkan lebih dari satu kata.'),
+    minLength(20, 'Alasan butuh paling tidak 20 karakter.'),
+    maxLength(1000, 'Alasan hanya bisa maksimal 1000 karakter.'),
+    includes(' ', 'Alasan membutuhkan lebih dari satu kata.'),
   ]),
 })
 
@@ -30,11 +30,13 @@ type FormValues = Output<typeof schema>
 
 const STORAGE_KEY = 'reported-users'
 export const ReportUserDialog = ({
-  user,
+  name,
+  email,
   isOpen,
   onOpenChange,
 }: {
-  user: string
+  name: string
+  email: string
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
 }) => {
@@ -52,13 +54,13 @@ export const ReportUserDialog = ({
     const storageVal = localStorage.getItem(STORAGE_KEY) || '[]'
     const reportedUsers = JSON.parse(storageVal) as string[]
 
-    if (!reportedUsers.includes(user)) {
+    if (!reportedUsers.includes(email)) {
       mutate(
-        { reason: data.reason, user },
+        { reason: data.reason, user: `${name} - ${email}` },
         {
           onSuccess: () => {
             // Save new reported users to local storage
-            const newReportedUsers = [...reportedUsers, user]
+            const newReportedUsers = [...reportedUsers, email]
             localStorage.setItem(STORAGE_KEY, JSON.stringify(newReportedUsers))
 
             onOpenChange(false)
@@ -86,7 +88,7 @@ export const ReportUserDialog = ({
       onOpenChange={onOpenChange}
       withAction={false}
     >
-      <h2 className="mt-4">Apakah Anda yakin ingin melaporkan "{user}"?</h2>
+      <h2 className="mt-4">Apakah Anda yakin ingin melaporkan "{name}"?</h2>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -100,7 +102,7 @@ export const ReportUserDialog = ({
                 <FormLabel>Alasan</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={`Beritahu kami Alasan Anda melaporkan ${user}`}
+                    placeholder={`Beritahu kami Alasan Anda melaporkan ${name}`}
                     rows={7}
                     {...field}
                   />

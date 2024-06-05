@@ -1,9 +1,15 @@
+'use client'
+
+import { useState } from 'react'
+
 import { InfiniteData, useQueryClient } from '@tanstack/react-query'
-import { CalendarDays } from 'lucide-react'
+import { User } from 'firebase/auth'
+import { CalendarDays, Flag } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
 import PublicAccessToggler from '@/components/PublicAccessToggler'
 import { RedirectButton } from '@/components/RedirectButton'
+import { ReportQuestionDialog } from '@/components/ReportDialog/ReportQuestion'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,6 +29,7 @@ import {
 interface QuestionPanelProps {
   question: Question | null
   owner: UserProfile | null | undefined
+  user: User
   onClick: (q: Question) => void
   index: number
 }
@@ -32,8 +39,10 @@ export const QuestionPanel = ({
   onClick,
   index,
   owner,
+  user,
 }: QuestionPanelProps) => {
   const queryClient = useQueryClient()
+  const [isShowReportDialog, setIsShowReportDialog] = useState<boolean>(false)
 
   const handleUpdateQuestionPrivacy = (question: Question) => {
     // Find the question and update state
@@ -64,66 +73,88 @@ export const QuestionPanel = ({
   }
 
   return (
-    <Card className="relative min-h-[200px] flex flex-col">
-      {question ? (
-        <>
-          <CardHeader>
-            <div className="flex justify-between gap-2 flex-wrap">
-              <CardTitle className="text-2xl self-center leading-none">
-                Pertanyaan #{index}
-              </CardTitle>
+    <>
+      <Card className="relative min-h-[200px] flex flex-col">
+        {question ? (
+          <>
+            <CardHeader>
+              <div className="flex justify-between gap-2 flex-wrap">
+                <CardTitle className="text-2xl self-center leading-none">
+                  Pertanyaan #{index}
+                </CardTitle>
 
-              <PublicAccessToggler
-                question={question}
-                onSuccess={handleUpdateQuestionPrivacy}
-              />
-            </div>
+                <div className="flex gap-2 items-center">
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    size="icon"
+                    onClick={() => {
+                      setIsShowReportDialog(true)
+                    }}
+                  >
+                    <Flag className="w-4 h-4" />
+                  </Button>
+                  <PublicAccessToggler
+                    question={question}
+                    onSuccess={handleUpdateQuestionPrivacy}
+                  />
+                </div>
+              </div>
 
-            <CardDescription className="flex gap-1 items-center">
-              <CalendarDays className="w-4 h-4" />
-              {new Date(question.submitted_date).toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </CardDescription>
-          </CardHeader>
+              <CardDescription className="flex gap-1 items-center">
+                <CalendarDays className="w-4 h-4" />
+                {new Date(question.submitted_date).toLocaleDateString('id-ID', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent className="flex-1">
-            <p className="">
-              {question.question.length > 100
-                ? `${question.question.substring(0, 300)}...`
-                : question.question}
-            </p>
-          </CardContent>
+            <CardContent className="flex-1">
+              <p className="">
+                {question.question.length > 100
+                  ? `${question.question.substring(0, 300)}...`
+                  : question.question}
+              </p>
+            </CardContent>
 
-          <CardFooter className="justify-end gap-2 flex-wrap">
-            {question?.public ? (
-              <>
-                <RedirectButton
-                  url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-                  external
-                />
-                <CopyButton
-                  text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
-                  withLabel
-                />
-              </>
-            ) : null}
+            <CardFooter className="justify-end gap-2 flex-wrap">
+              {question?.public ? (
+                <>
+                  <RedirectButton
+                    url={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                    external
+                  />
+                  <CopyButton
+                    text={`${BASEURL}/p/${owner?.slug}/${question?.uuid}`}
+                    withLabel
+                  />
+                </>
+              ) : null}
 
-            <Button
-              type="button"
-              onClick={() => {
-                onClick(question)
-              }}
-            >
-              Selengkapnya
-            </Button>
-          </CardFooter>
-        </>
-      ) : null}
-    </Card>
+              <Button
+                type="button"
+                onClick={() => {
+                  onClick(question)
+                }}
+              >
+                Selengkapnya
+              </Button>
+            </CardFooter>
+          </>
+        ) : null}
+      </Card>
+      <ReportQuestionDialog
+        isOpen={isShowReportDialog}
+        uuid={question?.uuid || ''}
+        user={user}
+        onOpenChange={(isOpen) => {
+          setIsShowReportDialog(isOpen)
+        }}
+      />
+    </>
   )
 }
