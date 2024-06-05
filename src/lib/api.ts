@@ -563,3 +563,20 @@ export const getPublicStatistics = async (): Promise<{
 
   return rawRes.json()
 }
+
+export const postReportUser = async (
+  reason: string,
+  user: string,
+): Promise<{ message: string; data: 'CONTAINS_BAD_WORD' | number | null }> => {
+  const rawRes = await httpClient(`${BASEURL}/api/user/report`, {
+    method: 'POST',
+    body: JSON.stringify({
+      reason,
+      user,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawRes.json()
+}

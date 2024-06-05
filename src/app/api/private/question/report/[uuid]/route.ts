@@ -12,7 +12,9 @@ export async function POST(
   request: Request,
   { params }: { params: { uuid: string } },
 ) {
+  const res = await request.json()
   const uuid = params.uuid || ''
+  const reason = res.reason || ''
   try {
     const headersInstance = headers()
     const token = headersInstance.get('Authorization')
@@ -38,6 +40,7 @@ export async function POST(
       await sendEmailReportQuestion({
         user: decodedToken.email || decodedToken.uid,
         question: simpleDataResponse,
+        reason,
       })
 
       return NextResponse.json({ message: 'Question reported' })

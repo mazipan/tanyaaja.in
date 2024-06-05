@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Script from 'next/script'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { Loader2, Lock, SendHorizontal } from 'lucide-react'
+import { Flag, Loader2, Lock, SendHorizontal } from 'lucide-react'
 import {
   includes,
   maxLength,
@@ -15,6 +15,7 @@ import {
   string,
 } from 'valibot'
 
+import { ReportUserDialog } from '@/components/ReportDialog/ReportUser'
 // @ts-ignore
 import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
@@ -40,7 +41,7 @@ const LAST_QUESTION_KEY = 'last_question'
 
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
-    minLength(2, 'Pertanyaan butuh paling tidak 2 karakter.'),
+    minLength(50, 'Pertanyaan butuh paling tidak 50 karakter.'),
     maxLength(1000, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
     includes(' ', 'Pertanyaan membutuhkan lebih dari satu kata.'),
   ]),
@@ -51,6 +52,7 @@ type FormValues = Output<typeof schema>
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()
   const { mutate, isPending } = useSendQuestion()
+  const [isShowReportDialog, setIsShowReportDialog] = useState<boolean>(false)
 
   const form = useForm<FormValues>({
     resolver: valibotResolver(schema),
@@ -159,7 +161,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription className="flex items-center gap-2">
+                <FormDescription className="flex items-start gap-2">
                   <Lock className="w-4 h-4" /> Pertanyaanmu akan disampaikan
                   secara anonim
                 </FormDescription>
@@ -190,8 +192,27 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
               />
             ) : null}
           </div>
+          <div className="!mt-2">
+            <Button
+              variant="link"
+              type="button"
+              className="px-0"
+              onClick={() => {
+                setIsShowReportDialog(true)
+              }}
+            >
+              <Flag className="w-4 h-4 mr-1" /> Laporkan Pengguna
+            </Button>
+          </div>
         </form>
       </Form>
+      <ReportUserDialog
+        isOpen={isShowReportDialog}
+        user={owner.name}
+        onOpenChange={(isOpen) => {
+          setIsShowReportDialog(isOpen)
+        }}
+      />
     </>
   )
 }

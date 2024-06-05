@@ -46,25 +46,56 @@ export async function sendEmail({
 export async function sendEmailReportQuestion({
   user,
   question,
+  reason,
 }: {
   user: string
+  reason: string
   question: Question
 }) {
   await sendEmail({
-    subject: 'Report Question',
+    subject: '⚠️ Report Question',
     bodyText: `Hi, TanyaAja.
 
     User ${user} report question ${question.uuid}.
 
-    >> ${question.question}
+    >> Pertanyaan: ${question.question}
+    >> Alasan: ${reason}
 
     Thanks.`,
-    bodyHtml: `Hi, TanyaAja.
+    bodyHtml: `<h2>Hi, <b>TanyaAja</b>.</h2>
+    <br/><br/>
+    User <b>${user}</b> report question <b>${question.uuid}</b>.
+    <br/><br/>
+    >> Pertanyaan: <i>${question.question}</i>
+    <br/>
+    >> Alasan: <b>${reason}</b>
+    <br/><br/>
+    Thanks.`,
+  })
+}
 
-    User ${user} report question ${question.uuid}.
+export async function sendEmailReportUser({
+  user,
+  reason,
+}: {
+  user: string
+  reason: string
+}) {
+  await sendEmail({
+    subject: '⚠️ Report User',
+    bodyText: `Hi, TanyaAja.
 
-    >> ${question.question}
+    User ${user} has been reported.
 
+    >> Alasan: ${reason}
+
+    Thanks.`,
+    bodyHtml: `<h2>Hi, <b>TanyaAja</b>.</h2>
+    <br/><br/>
+    User <b>${user}</b> has been reported.
+    <br/><br/>
+    >> Alasan: <b>${reason}</b>
+    <br/><br/>
     Thanks.`,
   })
 }
