@@ -2,6 +2,8 @@ import FingerprintJS, { type Agent } from '@fingerprintjs/fingerprintjs'
 
 let fp: Agent | null = null
 
+// Visit: https://fingerprintjs.github.io/fingerprintjs/
+// To debug your visitor data
 const FINGERPRINT_KEY = 'ta_fp'
 export const getDeviceIdFingerprint = async (): Promise<string> => {
   await loadFingerprint()
