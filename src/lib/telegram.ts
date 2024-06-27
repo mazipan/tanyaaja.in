@@ -1,6 +1,6 @@
 import { BASEURL } from './api'
 import { getNotifChannelByUid, simplifyResponseObject } from './notion'
-import { NotifChannel, UserProfile } from './types'
+import type { NotifChannel, UserProfile } from './types'
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || ''
 const TELEGRAM_BOT_USERNAME = process.env.TELEGRAM_BOT_USERNAME || ''

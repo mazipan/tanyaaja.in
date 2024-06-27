@@ -1,6 +1,6 @@
 import * as parser from '@babel/parser'
 import traverse from '@babel/traverse'
-import { File, JSXElement } from '@babel/types'
+import type { File, JSXElement } from '@babel/types'
 
 interface Style {
   [key: string]: string | number
@@ -139,8 +139,10 @@ export const jsonToJsx = (json?: JsonNode) => {
               return `style={{${styleToString(
                 value as { [key: string]: string | number },
               )}}}`
+              // biome-ignore lint/style/noUselessElse: sebuah alasan
             } else if (key === 'children') {
               return '' // Children are handled separately
+              // biome-ignore lint/style/noUselessElse: sebuah alasan
             } else {
               return `${key}="${value}"`
             }

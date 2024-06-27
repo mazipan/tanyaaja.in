@@ -34,6 +34,7 @@ export async function GET(request: Request) {
       <UserOg slug={slug || ''} name={name || ''} />,
       BASE_OPTIONS,
     )
+    // biome-ignore lint/style/noUselessElse: sebuah alasan
   } else if (
     // Custom OG for profile page `/p/[slug]`
     type === 'custom-user' &&
@@ -50,20 +51,20 @@ export async function GET(request: Request) {
 
     // Fallback to simple mode
     return new ImageResponse(
-      (
-        <CustomUserOgSimple
-          slug={slug || ''}
-          theme={theme || ''}
-          text={text || ''}
-        />
-      ),
+      <CustomUserOgSimple
+        slug={slug || ''}
+        theme={theme || ''}
+        text={text || ''}
+      />,
       BASE_OPTIONS,
     )
+    // biome-ignore lint/style/noUselessElse: sebuah alasan
   } else if (type === 'question' && question && question !== 'undefined') {
     return new ImageResponse(
       <QuestionOg question={decodedQuestion || ''} />,
       BASE_OPTIONS,
     )
+    // biome-ignore lint/style/noUselessElse: sebuah alasan
   } else if (
     // Custom OG for questions page `/p/[slug]/[uuid]`
     type === 'custom-question' &&
@@ -82,13 +83,11 @@ export async function GET(request: Request) {
 
     // Fallback to simple mode
     return new ImageResponse(
-      (
-        <CustomQuestionOgSimple
-          question={decodedQuestion || ''}
-          theme={theme || ''}
-          text={text || ''}
-        />
-      ),
+      <CustomQuestionOgSimple
+        question={decodedQuestion || ''}
+        theme={theme || ''}
+        text={text || ''}
+      />,
       BASE_OPTIONS,
     )
   }

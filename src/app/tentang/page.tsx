@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 
 import { Separator } from '@/components/ui/separator'
 import { BASEURL } from '@/lib/api'

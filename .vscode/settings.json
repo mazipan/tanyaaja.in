@@ -8,5 +8,8 @@
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   },
-  "eslint.validate": ["javascript", "javascriptreact", "vue"]
+  "eslint.validate": ["javascript", "javascriptreact", "vue"],
+  "[javascript]": {
+	  "editor.defaultFormatter": "biomejs.biome"
+  }
 }

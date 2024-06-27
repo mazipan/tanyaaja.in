@@ -22,26 +22,25 @@ export async function DELETE(request: Request) {
           { message: 'User is not exist' },
           { status: 400 },
         )
-      } else {
-        const foundPage = userInNotion.results[0]
-
-        await Promise.allSettled([
-          deleteQuestionsByUid(decodedToken.uid),
-          archivePage(foundPage.id),
-        ])
-
-        revalidatePath(`/p/${res.slug}`)
-        revalidateTag(res.slug)
-
-        revalidatePath(`/eksplor`)
-        revalidateTag('public-users')
-
-        return NextResponse.json({ message: 'User deleted' })
       }
+      const foundPage = userInNotion.results[0]
+
+      await Promise.allSettled([
+        deleteQuestionsByUid(decodedToken.uid),
+        archivePage(foundPage.id),
+      ])
+
+      revalidatePath(`/p/${res.slug}`)
+      revalidateTag(res.slug)
+
+      revalidatePath('/eksplor')
+      revalidateTag('public-users')
+
+      return NextResponse.json({ message: 'User deleted' })
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

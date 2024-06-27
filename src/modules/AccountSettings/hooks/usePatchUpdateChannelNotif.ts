@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { patchUpdateChannelNotif } from '@/lib/api'
-import { CreateNotifChannelArgs } from '@/lib/types'
+import type { CreateNotifChannelArgs } from '@/lib/types'
 
 export const usePatchUpdateChannelNotif = () => {
   return useMutation({

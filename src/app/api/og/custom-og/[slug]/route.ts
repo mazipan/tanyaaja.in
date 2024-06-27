@@ -5,7 +5,7 @@ import {
   getUserBySlug,
   simplifyResponseObject,
 } from '@/lib/notion'
-import { CustomOg, UserProfile } from '@/lib/types'
+import type { CustomOg, UserProfile } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

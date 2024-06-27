@@ -4,7 +4,7 @@ import { boolean, object, parse, string } from 'valibot'
 import { useAuth } from '@/components/FirebaseAuth'
 import { patchQuestionAsPublicOrPrivate } from '@/lib/api'
 import { getFirebaseAuth } from '@/lib/firebase'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 
 const payloadSchema = object({
   uuid: string(),

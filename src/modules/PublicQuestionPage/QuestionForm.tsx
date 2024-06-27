@@ -34,7 +34,7 @@ import { BASEURL, patchHit } from '@/lib/api'
 import { isErrorResponse } from '@/lib/error'
 import { trackEvent } from '@/lib/firebase'
 import { getValueFromStorage, setValueToStorage } from '@/lib/storage'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
 
 const LAST_QUESTION_KEY = 'last_question'
@@ -109,13 +109,13 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       // @ts-ignore
       if (window?.grecaptcha) {
         // @ts-ignore
-        window?.grecaptcha.ready(function () {
+        window?.grecaptcha.ready(() => {
           // @ts-ignore
           window?.grecaptcha
             .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {
               action: 'submit',
             })
-            .then(async function (token: string) {
+            .then(async (token: string) => {
               await sendQuestion(owner?.slug || '', data.q, token)
             })
         })
@@ -123,8 +123,9 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
-    if (owner && owner?.slug) {
+    if (owner?.slug) {
       setTimeout(() => {
         patchHit(owner.slug)
       }, 2000)
@@ -184,10 +185,10 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
               )}
             </Button>
 
-            {owner && owner?.slug ? (
+            {owner?.slug ? (
               <ShareButton
-                text={`Tanyakan apa aja ke saya`}
-                title={`Kamu bisa tanyakan apa aja ke saya dengan anonim`}
+                text={'Tanyakan apa aja ke saya'}
+                title={'Kamu bisa tanyakan apa aja ke saya dengan anonim'}
                 url={`${BASEURL}/p/${owner?.slug}`}
               />
             ) : null}

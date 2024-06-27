@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getQuestionsByUid, simplifyResponseObject } from '@/lib/notion'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

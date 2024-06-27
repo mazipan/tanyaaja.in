@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import { postReportUser } from '@/lib/api'
-import { ErrorResponse } from '@/lib/error'
+import type { ErrorResponse } from '@/lib/error'
 
 type Props = {
   user: string

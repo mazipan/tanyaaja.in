@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { UserProfile } from 'firebase/auth'
+import type { UserProfile } from 'firebase/auth'
 
 import { getUserBySlug, simplifyResponseObject } from '@/lib/notion'
 

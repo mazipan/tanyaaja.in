@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
@@ -11,7 +11,7 @@ import {
   submitQuestion,
 } from '@/lib/notion'
 import { sendMessageToBot } from '@/lib/telegram'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL || '',
@@ -104,72 +104,34 @@ export async function POST(request: NextRequest) {
           { message: 'The request have been blocked by captcha', data: null },
           { status: 403 },
         )
-      } else {
-        const formData = new URLSearchParams()
-        formData.append('secret', process.env.RECAPTCHA_SECRET_KEY || '')
-        formData.append('response', token)
+      }
+      const formData = new URLSearchParams()
+      formData.append('secret', process.env.RECAPTCHA_SECRET_KEY || '')
+      formData.append('response', token)
 
-        const xRealIp = headersInstance.get('x-real-ip')
-        const xForwardedFor = headersInstance.get('x-forwarded-for')
+      const xRealIp = headersInstance.get('x-real-ip')
+      const xForwardedFor = headersInstance.get('x-forwarded-for')
 
-        let remoteip = ''
-        if (request.ip) {
-          remoteip = request.ip
-        } else if (xRealIp) {
-          remoteip = xRealIp
-        } else if (xForwardedFor) {
-          remoteip = `${xForwardedFor || ''}`.split(',')[0]
-        }
+      let remoteip = ''
+      if (request.ip) {
+        remoteip = request.ip
+      } else if (xRealIp) {
+        remoteip = xRealIp
+      } else if (xForwardedFor) {
+        remoteip = `${xForwardedFor || ''}`.split(',')[0]
+      }
 
-        formData.append('remoteip', remoteip)
+      formData.append('remoteip', remoteip)
 
-        const ratelimitResult = await ratelimit.limit(remoteip)
-        if (!ratelimitResult.success) {
-          return NextResponse.json(
-            {
-              message: 'The request has been rate limited',
-              data: ratelimitResult,
-            },
-            {
-              status: 200,
-              headers: {
-                'X-RateLimit-Limit': `${ratelimitResult.limit}`,
-                'X-RateLimit-Remaining': `${ratelimitResult.remaining}`,
-              },
-            },
-          )
-        }
-
-        const reCaptchaRes = await fetch(
-          `https://www.google.com/recaptcha/api/siteverify`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: formData,
-          },
-        ).then((fetchResponse) => {
-          return fetchResponse.json()
-        })
-
-        if (reCaptchaRes?.score > 0.5) {
-          return await sendQuestion(
-            res.slug,
-            res.question,
-            ratelimitResult.limit,
-            ratelimitResult.remaining,
-          )
-        }
-
+      const ratelimitResult = await ratelimit.limit(remoteip)
+      if (!ratelimitResult.success) {
         return NextResponse.json(
           {
-            message:
-              'Failed while submitting new question, it is being blocked by captcha.',
-            data: reCaptchaRes?.score || 0,
+            message: 'The request has been rate limited',
+            data: ratelimitResult,
           },
           {
-            status: 400,
+            status: 200,
             headers: {
               'X-RateLimit-Limit': `${ratelimitResult.limit}`,
               'X-RateLimit-Remaining': `${ratelimitResult.remaining}`,
@@ -177,9 +139,45 @@ export async function POST(request: NextRequest) {
           },
         )
       }
-    } else {
-      return await sendQuestion(res.slug, res.question, 1000, 1000)
+
+      const reCaptchaRes = await fetch(
+        'https://www.google.com/recaptcha/api/siteverify',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: formData,
+        },
+      ).then((fetchResponse) => {
+        return fetchResponse.json()
+      })
+
+      if (reCaptchaRes?.score > 0.5) {
+        return await sendQuestion(
+          res.slug,
+          res.question,
+          ratelimitResult.limit,
+          ratelimitResult.remaining,
+        )
+      }
+
+      return NextResponse.json(
+        {
+          message:
+            'Failed while submitting new question, it is being blocked by captcha.',
+          data: reCaptchaRes?.score || 0,
+        },
+        {
+          status: 400,
+          headers: {
+            'X-RateLimit-Limit': `${ratelimitResult.limit}`,
+            'X-RateLimit-Remaining': `${ratelimitResult.remaining}`,
+          },
+        },
+      )
     }
+    return await sendQuestion(res.slug, res.question, 1000, 1000)
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json(

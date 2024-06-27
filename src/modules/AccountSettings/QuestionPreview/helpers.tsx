@@ -1,6 +1,6 @@
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
-import { Question, UserProfile } from '@/lib/types'
+import type { Question, UserProfile } from '@/lib/types'
 
 export interface QuestionPreviewProps {
   question: Question | null

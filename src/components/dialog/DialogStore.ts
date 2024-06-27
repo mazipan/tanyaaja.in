@@ -1,7 +1,7 @@
 /** @see https://github.com/theodorusclarence/aether-design-system/blob/main/src/store/useDialogStore.tsx */
 import { create } from 'zustand'
 
-import { ButtonProps } from '@/components/ui/button'
+import type { ButtonProps } from '@/components/ui/button'
 
 type DialogOptions = {
   /** Title for dialog */

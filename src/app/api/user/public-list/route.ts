@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import { getPublicUserList, simplifyResponseObject } from '@/lib/notion'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

@@ -27,6 +27,7 @@ const GoogleIcon = () => {
       height="16"
       className="mr-2 h-4 w-4"
     >
+      <title>Google</title>
       <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
         <path
           fill="#4285F4"
@@ -93,6 +94,7 @@ export const LoginButtonWithRedirect = () => {
   }
 
   // Redirect back to /account --> if the session is already there
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (!isLoading) {
       if (isLogin) {

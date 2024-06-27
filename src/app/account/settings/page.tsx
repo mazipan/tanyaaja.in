@@ -130,6 +130,7 @@ export default function Account() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (!isLoadingOwner && dataOwner && dataOwner.data) {
       form.setValue('image', dataOwner.data.image)

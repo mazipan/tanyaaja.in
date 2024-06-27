@@ -9,7 +9,7 @@ import { useAuth } from '@/components/FirebaseAuth'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 import { calculatePageItemCount } from '@/lib/utils'
 import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { QuestionPanel } from '@/modules/AccountSettings/QuestionCard'
@@ -87,6 +87,7 @@ export default function Account() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {dataPagination.pages.map((questionParent, indexParent) => {
                 return (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: sebuah alasan
                   <React.Fragment key={indexParent}>
                     {questionParent?.data?.map((q, indexQuestion) => {
                       return (

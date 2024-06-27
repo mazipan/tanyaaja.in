@@ -1,13 +1,13 @@
 import {
-  InfiniteData,
-  QueryKey,
+  type InfiniteData,
+  type QueryKey,
   useInfiniteQuery,
-  UseInfiniteQueryOptions,
+  type UseInfiniteQueryOptions,
   useQuery,
-  UseQueryOptions,
-  UseQueryResult,
+  type UseQueryOptions,
+  type UseQueryResult,
 } from '@tanstack/react-query'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
 import {
   getAllPublicUsers,
@@ -17,7 +17,7 @@ import {
   getExistingCustomOg,
   getExistingUser,
 } from '@/lib/api'
-import {
+import type {
   CustomOg,
   IResponseGetPublicUserList,
   IResponseGetQuestionPagination,

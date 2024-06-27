@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 import { Info, Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { getCheckChatId } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
-import { NotifChannel, UserProfile } from '@/lib/types'
+import type { NotifChannel, UserProfile } from '@/lib/types'
 
 import { usePatchUpdateChannelNotif } from '../hooks/usePatchUpdateChannelNotif'
 import { usePostAddNewChannelNotif } from '../hooks/usePostAddNewChannelNotif'
@@ -106,12 +106,14 @@ export default function SettingTelegram({
       } catch (error) {
         toast({
           title: 'Gagal mengambil chat id',
-          description: `Gagal saat mencoba chat id, silahkan coba beberapa saat lagi!`,
+          description:
+            'Gagal saat mencoba chat id, silahkan coba beberapa saat lagi!',
         })
       }
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (existing && existing.length > 0) {
       form.setValue('username', existing[0].telegram_username)

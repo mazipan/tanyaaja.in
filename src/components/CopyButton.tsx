@@ -25,6 +25,7 @@ export function CopyButton({
   return (
     <div className={`flex gap-2 ${fullWidth ? 'w-full' : ''}`}>
       {withInput ? <Input value={text} readOnly /> : null}
+
       <Button
         variant="outline"
         className="flex gap-2 items-center"

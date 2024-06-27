@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
 import { postReportQuestion } from '@/lib/api'
-import { ErrorResponse } from '@/lib/error'
+import type { ErrorResponse } from '@/lib/error'
 
 type Props = {
   user: User

@@ -1,7 +1,7 @@
 'use client'
 import { useMediaQuery } from 'usehooks-ts'
 
-import { QuestionPreviewProps } from './helpers'
+import type { QuestionPreviewProps } from './helpers'
 import { QuestionDialog } from './QuestionDialog'
 import { QuestionSheet } from './QuestionSheet'
 

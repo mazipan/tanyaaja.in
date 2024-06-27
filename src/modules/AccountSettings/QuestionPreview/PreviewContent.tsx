@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ClassMap, Question, UserProfile } from '@/lib/types'
+import type { ClassMap, Question, UserProfile } from '@/lib/types'
 import { CARD_SCALES, cn, downloadQuestion, GRADIENTS } from '@/lib/utils'
 
 import { QuestionImage } from './QuestionImage'

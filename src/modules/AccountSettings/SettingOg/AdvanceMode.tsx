@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 import { Info, Loader2, MoveUpRight } from 'lucide-react'
 import { maxLength, object, optional, type Output, string } from 'valibot'
 
@@ -26,7 +26,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { patchUpdateCustomOg, postAddNewCustomOg } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
 import { jsonToJsx, jsxToJson } from '@/lib/jsx-parser'
-import { CustomOg, UserProfile } from '@/lib/types'
+import type { CustomOg, UserProfile } from '@/lib/types'
 
 const schema = object({
   publik: optional(
@@ -94,7 +94,8 @@ export default function AdvanceMode({
           })
           toast({
             title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan setelan og image custom!`,
+            description:
+              'Berhasil menyimpan perubahan setelan og image custom!',
           })
         } else {
           // create
@@ -109,7 +110,7 @@ export default function AdvanceMode({
           })
           toast({
             title: 'Perubahan berhasil disimpan',
-            description: `Berhasil menyimpan perubahan og image custom!`,
+            description: 'Berhasil menyimpan perubahan og image custom!',
           })
         }
 
@@ -120,13 +121,14 @@ export default function AdvanceMode({
       } catch (err) {
         toast({
           title: 'Gagal menyimpan',
-          description: `Gagal menyimpan perubahan setelan, coba sesaat lagi!`,
+          description: 'Gagal menyimpan perubahan setelan, coba sesaat lagi!',
         })
       }
       setFormState('ready')
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (existingOg && existingOg.length > 0) {
       const newDefaultValues: Partial<FormValues> = {}

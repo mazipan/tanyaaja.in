@@ -23,21 +23,20 @@ export async function PATCH(request: Request) {
             { message: 'Notif channel is not exist' },
             { status: 400 },
           )
-        } else {
-          const foundPage = existing.results[0]
-          await updateNotifChannelByUuid(foundPage?.id, res)
-
-          revalidatePath(`/p/${res.slug}`)
-          revalidateTag(res.slug)
-          revalidateTag(`notif-by-uid-${decodedToken.uid}`)
-
-          return NextResponse.json({ message: 'Notif channel updated' })
         }
+        const foundPage = existing.results[0]
+        await updateNotifChannelByUuid(foundPage?.id, res)
+
+        revalidatePath(`/p/${res.slug}`)
+        revalidateTag(res.slug)
+        revalidateTag(`notif-by-uid-${decodedToken.uid}`)
+
+        return NextResponse.json({ message: 'Notif channel updated' })
       }
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

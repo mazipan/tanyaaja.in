@@ -5,7 +5,7 @@ import domtoimage from 'dom-to-image-more'
 import { customAlphabet } from 'nanoid'
 import { twMerge } from 'tailwind-merge'
 
-import { ClassMap, ICalculatePageItemCount } from './types'
+import type { ClassMap, ICalculatePageItemCount } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -14,9 +14,9 @@ export function cn(...inputs: ClassValue[]) {
 export async function copyTextToClipboard(text: string) {
   if ('clipboard' in navigator) {
     return await navigator.clipboard.writeText(text)
-  } else {
-    return document.execCommand('copy', true, text)
   }
+
+  return document.execCommand('copy', true, text)
 }
 
 export function addDays(date: string, days: number) {
@@ -68,11 +68,11 @@ export function downloadQuestion(questionId: string) {
     // @ts-ignore
     domtoimage
       .toPng(domQuestion)
-      .then(function (dataUrl: string) {
+      .then((dataUrl: string) => {
         const filename = `question-${questionId || Date.now()}.png`
         downloadFromHref(dataUrl, filename)
       })
-      .catch(function (error: Error) {
+      .catch((error: Error) => {
         console.error('Opps, something went wrong!', error)
       })
   }
@@ -231,6 +231,7 @@ export function generateNanoId(size = 7) {
 }
 
 export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: sebuah alasan
   const promise = new Promise<Response>(async (resolve, reject) => {
     try {
       const response = await fetch(input, init)

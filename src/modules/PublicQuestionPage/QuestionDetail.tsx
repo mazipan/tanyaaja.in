@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { BASEURL, patchHit } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 import image404 from '~/public/images/404.png'
 
 export const QuestionDetail = ({
@@ -24,6 +24,7 @@ export const QuestionDetail = ({
   const isNotEmptyQuestion = questions && questions.length > 0
   const question: Question | null = isNotEmptyQuestion ? questions[0] : null
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (slug) {
       setTimeout(() => {
@@ -54,8 +55,8 @@ export const QuestionDetail = ({
                 </Link>
               </Button>
               <ShareButton
-                text={`Tanyakan apa aja ke saya`}
-                title={`Kamu bisa tanyakan apa aja ke saya dengan anonim`}
+                text={'Tanyakan apa aja ke saya'}
+                title={'Kamu bisa tanyakan apa aja ke saya dengan anonim'}
                 url={`${BASEURL}/p/${slug}/${question?.uuid}`}
               />
             </div>

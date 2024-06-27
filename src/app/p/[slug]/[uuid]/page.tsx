@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { ProfileAvatar } from '@/components/ProfileAvatar'
@@ -8,7 +8,7 @@ import {
   getPublicOwnerUser,
   getQuestionDetail,
 } from '@/lib/api'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 import { LinkAds } from '@/modules/PublicQuestionPage/LinkAds'
 import { QuestionDetail } from '@/modules/PublicQuestionPage/QuestionDetail'
 
@@ -38,7 +38,7 @@ export async function generateMetadata({
 
   const encodedQuestion = encodeURIComponent(q?.question)
 
-  if (customOg && customOg?.data) {
+  if (customOg?.data) {
     if (customOg.data.code_question) {
       // -- mode advanced
       ogImage = `${BASEURL}/api/og?type=custom-question&question=${encodedQuestion}&slug=${ownerSlug}`

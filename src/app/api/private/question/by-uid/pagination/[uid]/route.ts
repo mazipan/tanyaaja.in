@@ -1,12 +1,12 @@
 import { headers } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
 import {
   getQuestionsByUuidWithPagination,
   simplifyResponseObject,
 } from '@/lib/notion'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

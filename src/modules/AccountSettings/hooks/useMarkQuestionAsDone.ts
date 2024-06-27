@@ -1,14 +1,14 @@
 import {
-  InfiniteData,
+  type InfiniteData,
   useMutation,
-  UseMutationOptions,
+  type UseMutationOptions,
   useQueryClient,
 } from '@tanstack/react-query'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { patchQuestionAsDone } from '@/lib/api'
-import { IResponseGetQuestionPagination } from '@/lib/types'
+import type { IResponseGetQuestionPagination } from '@/lib/types'
 
 export const useMarkQuestionAsDone = <
   TData = unknown,
