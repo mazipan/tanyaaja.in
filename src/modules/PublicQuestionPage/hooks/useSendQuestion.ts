@@ -6,14 +6,15 @@ import type { ErrorResponse } from '@/lib/error'
 type SendQuestionInput = {
   slug: string
   q: string
+  fp: string
   token: string
 }
 
 const useSendQuestion = () => {
   return useMutation({
-    mutationFn: async ({ slug, q, token }: SendQuestionInput) => {
+    mutationFn: async ({ slug, q, token, fp }: SendQuestionInput) => {
       try {
-        return await postSendQuestion(slug, q, token)
+        return await postSendQuestion(slug, q, fp, token)
       } catch (error) {
         if (error instanceof Response) {
           const err = await error.json()

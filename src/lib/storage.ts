@@ -1,7 +1,7 @@
 const isSessionStorageSupported = () => {
   const storage = window.sessionStorage
   try {
-    const x = '__storage_test__'
+    const x = '__ta_test__'
     storage.setItem(x, x)
     storage.removeItem(x)
     return true

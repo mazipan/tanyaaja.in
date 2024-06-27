@@ -348,6 +348,7 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
       },
       ...submitRichTextProp('uid', param.uid),
       ...submitRichTextProp('question', param.question),
+      ...submitRichTextProp('fingerprint', param.fingerprint),
       submitted_date: {
         type: 'date',
         date: {

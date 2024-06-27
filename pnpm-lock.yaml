@@ -11,6 +11,9 @@ dependencies:
   '@babel/traverse':
     specifier: ^7.24.6
     version: 7.24.6
+  '@fingerprintjs/fingerprintjs':
+    specifier: ^4.4.1
+    version: 4.4.1
   '@hookform/resolvers':
     specifier: ^3.4.2
     version: 3.4.2(react-hook-form@7.51.5)
@@ -445,6 +448,12 @@ packages:
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@fingerprintjs/fingerprintjs@4.4.1:
+    resolution: {integrity: sha512-9xbuuaZdjT13EKIatFGhodGlj6vcf6yvVM04tVG1Ld6XByRWKah5yOrlt838A72r3B/qOACaIdYvassb92i2kg==}
+    dependencies:
+      tslib: 2.6.2
     dev: false
 
   /@firebase/analytics-compat@0.2.10(@firebase/app-compat@0.2.35)(@firebase/app@0.10.5):

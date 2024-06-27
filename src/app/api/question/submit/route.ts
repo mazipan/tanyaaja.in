@@ -27,6 +27,7 @@ const ratelimit = new Ratelimit({
 async function sendQuestion(
   slug: string,
   q: string,
+  fp: string,
   limit: number,
   remaining: number,
 ) {
@@ -54,6 +55,7 @@ async function sendQuestion(
   await submitQuestion({
     uid: simpleDataResponse?.uid,
     question: q,
+    fingerprint: fp,
   })
 
   try {
@@ -157,6 +159,7 @@ export async function POST(request: NextRequest) {
         return await sendQuestion(
           res.slug,
           res.question,
+          res.fp,
           ratelimitResult.limit,
           ratelimitResult.remaining,
         )
@@ -177,7 +180,7 @@ export async function POST(request: NextRequest) {
         },
       )
     }
-    return await sendQuestion(res.slug, res.question, 1000, 1000)
+    return await sendQuestion(res.slug, res.question, res.fp, 1000, 1000)
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json(
