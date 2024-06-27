@@ -1,4 +1,4 @@
-import { ClassMap } from '@/lib/types'
+import type { ClassMap } from '@/lib/types'
 import { cn, GRADIENTS } from '@/lib/utils'
 
 import {
@@ -21,6 +21,7 @@ export const GradientSelection = ({
         <TooltipProvider key={gradient.id}>
           <Tooltip>
             <TooltipTrigger asChild>
+              {/* biome-ignore lint/a11y/useKeyWithClickEvents: sebuah alasan */}
               <div
                 key={gradient.id}
                 className={cn(
@@ -33,7 +34,7 @@ export const GradientSelection = ({
                 onClick={() => {
                   onClick?.(gradient)
                 }}
-              ></div>
+              />
             </TooltipTrigger>
             <TooltipContent>
               <p>{gradient.id}</p>

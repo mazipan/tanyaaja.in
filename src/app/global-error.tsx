@@ -21,7 +21,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <html>
+    <html lang="id-ID">
       <body>
         <main className="w-full container py-8">
           <div className="w-full space-y-0.5">

@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/dialog'
 
 import { ButtonAction } from './ButtonAction'
-import { QuestionPreviewProps } from './helpers'
+import type { QuestionPreviewProps } from './helpers'
 import { PreviewContent } from './PreviewContent'
 
 export const QuestionDialog = ({

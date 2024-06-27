@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 import { Loader2 } from 'lucide-react'
 import { maxLength, minLength, object, type Output, string } from 'valibot'
 
@@ -23,7 +23,7 @@ import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
 import { BASEURL } from '@/lib/api'
 import { trackEvent } from '@/lib/firebase'
-import { ClassMap, CustomOg, UserProfile } from '@/lib/types'
+import type { ClassMap, CustomOg, UserProfile } from '@/lib/types'
 
 import useAddNewCustomOg from './hooks/useAddNewCustomOg'
 import useUpdateCustomOg from './hooks/useUpdatecustomOg'
@@ -74,13 +74,14 @@ export default function SimpleMode({
     onSuccess: () => {
       toast({
         title: 'Perubahan berhasil disimpan',
-        description: `Berhasil menyimpan perubahan setelan og image custom!`,
+        description: 'Berhasil menyimpan perubahan setelan og image custom!',
       })
     },
     onError: () => {
       toast({
         title: 'Gagal menyimpan',
-        description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+        description:
+          'Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!',
       })
     },
   }
@@ -127,12 +128,14 @@ export default function SimpleMode({
       } catch (err) {
         toast({
           title: 'Gagal menyimpan',
-          description: `Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!`,
+          description:
+            'Gagal saat mencoba menyimpan data, silahkan coba beberapa saat lagi!',
         })
       }
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   useEffect(() => {
     if (existingOg && existingOg.length > 0) {
       form.setValue('textOgPublik', existingOg[0].simple_text)
@@ -181,7 +184,7 @@ export default function SimpleMode({
                 watchTextOgPublik ||
                 'Kumpulkan pertanyaan anonim dengan lebih mudah'
               }&r=${new Date().getTime()}&forceSimpleMode=true`}
-              alt="Pratinjau Og Image"
+              alt="Pratinjau"
               loading="lazy"
               width={400}
               height="auto"

@@ -4,7 +4,7 @@ import {
   getPublicUserListForSiteMap,
   simplifyResponseObject,
 } from '@/lib/notion'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

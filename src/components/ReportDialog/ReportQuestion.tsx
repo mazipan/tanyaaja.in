@@ -1,8 +1,15 @@
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { User } from 'firebase/auth'
-import { includes, maxLength, minLength, object, Output, string } from 'valibot'
+import type { User } from 'firebase/auth'
+import {
+  includes,
+  maxLength,
+  minLength,
+  object,
+  type Output,
+  string,
+} from 'valibot'
 
 import {
   Form,
@@ -69,7 +76,8 @@ export const ReportQuestionDialog = ({
           onError: () => {
             toast({
               title: 'Gagal melaporkan pertanyaan',
-              description: `Gagal saat mencoba melaporkan pertanyaan, coba sesaat lagi!`,
+              description:
+                'Gagal saat mencoba melaporkan pertanyaan, coba sesaat lagi!',
             })
           },
         },
@@ -77,7 +85,8 @@ export const ReportQuestionDialog = ({
     } else {
       toast({
         title: 'Sudah melaporkan pertanyaan',
-        description: `Kami mendeteksi bahwa Anda sudah melaporkan pertanyaan ini sebelumnya.`,
+        description:
+          'Kami mendeteksi bahwa Anda sudah melaporkan pertanyaan ini sebelumnya.',
       })
     }
   }
@@ -105,7 +114,9 @@ export const ReportQuestionDialog = ({
                 <FormLabel>Alasan</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={`Beritahu kami Alasan Anda melaporkan pertanyaan ini`}
+                    placeholder={
+                      'Beritahu kami Alasan Anda melaporkan pertanyaan ini'
+                    }
                     rows={7}
                     {...field}
                   />

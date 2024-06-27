@@ -130,6 +130,7 @@ let memoryState: State = { toasts: [] }
 
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action)
+
   listeners.forEach((listener) => {
     listener(memoryState)
   })
@@ -169,6 +170,7 @@ function toast({ ...props }: Toast) {
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: sebuah alasan
   React.useEffect(() => {
     listeners.push(setState)
     return () => {

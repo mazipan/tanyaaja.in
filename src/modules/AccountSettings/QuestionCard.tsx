@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-import { InfiniteData, useQueryClient } from '@tanstack/react-query'
-import { User } from 'firebase/auth'
+import { type InfiniteData, useQueryClient } from '@tanstack/react-query'
+import type { User } from 'firebase/auth'
 import { CalendarDays, Flag } from 'lucide-react'
 
 import { CopyButton } from '@/components/CopyButton'
@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { BASEURL } from '@/lib/api'
-import {
+import type {
   IResponseGetQuestionPagination,
   Question,
   UserProfile,

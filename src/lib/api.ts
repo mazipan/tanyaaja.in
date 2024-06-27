@@ -1,7 +1,7 @@
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
-import { UpdateItem } from './telegram'
-import {
+import type { UpdateItem } from './telegram'
+import type {
   CreateCustomOgArgs,
   CreateNotifChannelArgs,
   CustomOg,

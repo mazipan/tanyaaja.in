@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import { postSendQuestion } from '@/lib/api'
-import { ErrorResponse } from '@/lib/error'
+import type { ErrorResponse } from '@/lib/error'
 
 type SendQuestionInput = {
   slug: string

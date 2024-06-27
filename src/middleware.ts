@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse, userAgent } from 'next/server'
+import { type NextRequest, NextResponse, userAgent } from 'next/server'
 
 export function middleware(request: NextRequest) {
   // eslint-disable-next-line no-console
@@ -15,10 +15,10 @@ export function middleware(request: NextRequest) {
   const isWebp =
     (acceptHeader?.indexOf('image/webp') >= 0 || acceptHeader === '*/*') ??
     false
-  response.headers.set('x-webp', isWebp ? `1` : `0`)
+  response.headers.set('x-webp', isWebp ? '1' : '0')
 
   const { isBot } = userAgent(request)
-  response.headers.set('x-bot', isBot ? `1` : `0`)
+  response.headers.set('x-bot', isBot ? '1' : '0')
 
   return response
 }

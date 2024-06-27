@@ -20,15 +20,14 @@ export async function DELETE(request: Request) {
           { message: 'User is not exist' },
           { status: 400 },
         )
-      } else {
-        await Promise.allSettled([deleteQuestionsByUid(decodedToken.uid)])
-
-        return NextResponse.json({ message: 'All questions deleted' })
       }
+      await Promise.allSettled([deleteQuestionsByUid(decodedToken.uid)])
+
+      return NextResponse.json({ message: 'All questions deleted' })
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

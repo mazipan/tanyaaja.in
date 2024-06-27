@@ -1,14 +1,14 @@
 'use client'
 
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 
 import { useDialog } from '@/components/dialog/DialogStore'
 import { Button } from '@/components/ui/button'
 import { trackEvent } from '@/lib/firebase'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 
 import { useMarkQuestionAsDone } from '../hooks/useMarkQuestionAsDone'
-import { QuestionPreviewProps } from './helpers'
+import type { QuestionPreviewProps } from './helpers'
 
 export const ButtonAction = ({
   question,

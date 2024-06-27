@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getUserByUid, simplifyResponseObject } from '@/lib/notion'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

@@ -1,7 +1,14 @@
 import { useForm } from 'react-hook-form'
 
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { includes, maxLength, minLength, object, Output, string } from 'valibot'
+import {
+  includes,
+  maxLength,
+  minLength,
+  object,
+  type Output,
+  string,
+} from 'valibot'
 
 import {
   Form,
@@ -68,7 +75,8 @@ export const ReportUserDialog = ({
           onError: () => {
             toast({
               title: 'Gagal melaporkan pengguna',
-              description: `Gagal saat mencoba melaporkan pengguna, coba sesaat lagi!`,
+              description:
+                'Gagal saat mencoba melaporkan pengguna, coba sesaat lagi!',
             })
           },
         },
@@ -76,7 +84,8 @@ export const ReportUserDialog = ({
     } else {
       toast({
         title: 'Sudah melaporkan pengguna',
-        description: `Kami mendeteksi bahwa Anda sudah melaporkan pengguna ini sebelumnya.`,
+        description:
+          'Kami mendeteksi bahwa Anda sudah melaporkan pengguna ini sebelumnya.',
       })
     }
   }

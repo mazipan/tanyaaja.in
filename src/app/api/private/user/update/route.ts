@@ -22,30 +22,29 @@ export async function PATCH(request: Request) {
           { message: 'User is not exist' },
           { status: 400 },
         )
-      } else {
-        const foundPage = userInNotion.results[0]
-        await updateUser({
-          name: res.name,
-          slug: res.slug,
-          uid: decodedToken.uid,
-          pageId: foundPage.id,
-          image: res.image,
-          public: res.public ?? false,
-          x_username: res.x_username,
-        })
-
-        revalidatePath(`/p/${res.slug}`)
-        revalidateTag(res.slug)
-
-        revalidatePath(`/eksplor`)
-        revalidateTag('public-users')
-
-        return NextResponse.json({ message: 'User updated' })
       }
+      const foundPage = userInNotion.results[0]
+      await updateUser({
+        name: res.name,
+        slug: res.slug,
+        uid: decodedToken.uid,
+        pageId: foundPage.id,
+        image: res.image,
+        public: res.public ?? false,
+        x_username: res.x_username,
+      })
+
+      revalidatePath(`/p/${res.slug}`)
+      revalidateTag(res.slug)
+
+      revalidatePath('/eksplor')
+      revalidateTag('public-users')
+
+      return NextResponse.json({ message: 'User updated' })
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

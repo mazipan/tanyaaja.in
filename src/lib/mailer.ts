@@ -1,6 +1,6 @@
 import Mailjet from 'node-mailjet'
 
-import { Question } from './types'
+import type { Question } from './types'
 
 const mailjet = new Mailjet({
   apiKey: process.env.MAILJET_API_KEY,

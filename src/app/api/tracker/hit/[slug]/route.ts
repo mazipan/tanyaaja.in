@@ -31,7 +31,7 @@ export async function PATCH(
 
     // @ts-ignore
     const countString = simpleDataResponse?.count || '0'
-    const countNumber = parseInt(`${countString}`, 10)
+    const countNumber = Number.parseInt(`${countString}`, 10)
 
     const nextCounter = countNumber + 1
 

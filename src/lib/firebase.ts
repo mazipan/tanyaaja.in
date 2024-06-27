@@ -19,6 +19,7 @@ export const getFirebaseAuth = () => getAuth(app)
 export const trackEvent = (
   eventName: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: sebuah alasan
   eventParam?: Record<string, any>,
 ) => {
   const analytics = getAnalytics()

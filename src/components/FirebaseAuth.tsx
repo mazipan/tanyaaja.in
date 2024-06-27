@@ -1,8 +1,13 @@
 'use client'
 
-import { createContext, PropsWithChildren, useEffect, useState } from 'react'
+import {
+  createContext,
+  type PropsWithChildren,
+  useEffect,
+  useState,
+} from 'react'
 
-import { Auth, onAuthStateChanged, User } from 'firebase/auth'
+import { type Auth, onAuthStateChanged, type User } from 'firebase/auth'
 
 export const useAuth = (auth: Auth) => {
   const [user, setUser] = useState<User | null>(null)

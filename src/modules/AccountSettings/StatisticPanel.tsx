@@ -4,7 +4,7 @@ import { CopyButton } from '@/components/CopyButton'
 import { TweetButton } from '@/components/TweetButton'
 import { Card } from '@/components/ui/card'
 import { BASEURL } from '@/lib/api'
-import { UserProfile } from '@/lib/types'
+import type { UserProfile } from '@/lib/types'
 
 export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
   return (

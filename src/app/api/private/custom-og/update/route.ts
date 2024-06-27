@@ -24,16 +24,15 @@ export async function PATCH(request: Request) {
             { message: 'Og is not exist' },
             { status: 400 },
           )
-        } else {
-          const foundPage = existingOg.results[0]
-          await updateCustomOgByUuid(foundPage?.id, res)
-
-          revalidatePath(`/p/${res.slug}`)
-          revalidateTag(res.slug)
-          revalidateTag(`og-by-uid-${res.uid}`)
-
-          return NextResponse.json({ message: 'Custom og updated' })
         }
+        const foundPage = existingOg.results[0]
+        await updateCustomOgByUuid(foundPage?.id, res)
+
+        revalidatePath(`/p/${res.slug}`)
+        revalidateTag(res.slug)
+        revalidateTag(`og-by-uid-${res.uid}`)
+
+        return NextResponse.json({ message: 'Custom og updated' })
       }
     }
 

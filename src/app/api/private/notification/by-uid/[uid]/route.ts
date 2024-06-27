@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { simplifyResponseObject } from '@/lib/notion'
 import { getNotifChannelByUid } from '@/lib/notion'
-import { NotifChannel } from '@/lib/types'
+import type { NotifChannel } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 

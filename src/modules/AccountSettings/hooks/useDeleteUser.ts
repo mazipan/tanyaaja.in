@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Auth, signOut, User } from 'firebase/auth'
+import { type Auth, signOut, type User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { deleteUser, destroyActiveSession } from '@/lib/api'
-import { ErrorResponse, isErrorResponse } from '@/lib/error'
+import { type ErrorResponse, isErrorResponse } from '@/lib/error'
 
 type MutationFnBody = {
   user: User

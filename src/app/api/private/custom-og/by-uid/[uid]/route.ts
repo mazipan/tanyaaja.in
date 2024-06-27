@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { getCustomOgByUid, simplifyResponseObject } from '@/lib/notion'
-import { CustomOg } from '@/lib/types'
+import type { CustomOg } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      { message: `Can not found the session`, data: null },
+      { message: 'Can not found the session', data: null },
       { status: 403 },
     )
   } catch (error) {

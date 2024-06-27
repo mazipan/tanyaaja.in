@@ -18,6 +18,7 @@ export function CustomQuestionOgSimple({
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
         <p>{truncateText(question, 700)}</p>
       </div>
+      {/* biome-ignore lint/style/useSelfClosingElements: sebuah alasan */}
       <div></div>
     </div>
   )

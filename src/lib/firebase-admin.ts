@@ -1,4 +1,4 @@
-import { App, getApp, getApps, initializeApp } from 'firebase-admin/app'
+import { type App, getApp, getApps, initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 
 import { firebaseConfig } from '@/lib/firebase'

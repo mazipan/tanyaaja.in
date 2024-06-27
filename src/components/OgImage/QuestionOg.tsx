@@ -12,7 +12,7 @@ export function QuestionOg({ question }: { question: string }) {
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
         <p>{truncateText(question, 700)}</p>
       </div>
-      <div></div>
+      <div />
     </div>
   )
 }

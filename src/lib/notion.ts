@@ -1,13 +1,13 @@
 import { Client } from '@notionhq/client'
-import {
+import type {
   PageObjectResponse,
-  type PartialDatabaseObjectResponse,
+  PartialDatabaseObjectResponse,
   UpdatePageResponse,
 } from '@notionhq/client/build/src/api-endpoints'
 import slugify from '@sindresorhus/slugify'
 import { nanoid } from 'nanoid'
 
-import {
+import type {
   AddUserArgs,
   CreateCustomOgArgs,
   CreateNotifChannelArgs,
@@ -358,10 +358,7 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
   })
 }
 
-export const getQuestionsByUid = async (
-  uid: string,
-  withStatus: boolean = true,
-) => {
+export const getQuestionsByUid = async (uid: string, withStatus = true) => {
   const filteredByUid = {
     property: 'uid',
     rich_text: {
@@ -631,7 +628,7 @@ export const archivePage = async (id: string): Promise<UpdatePageResponse> => {
 export const deleteQuestionsByUid = async (uid: string) => {
   const archivePagePromises: Array<Promise<UpdatePageResponse>> = []
 
-  let hasMore: boolean = true
+  let hasMore = true
   let cursor: string | undefined
 
   while (hasMore) {
@@ -658,8 +655,8 @@ export const countDatabaseRows = async ({
 }: {
   databaseId: string
 }) => {
-  let hasMore: boolean = true
-  let rowsCount: number = 0
+  let hasMore = true
+  let rowsCount = 0
   let nextCursor: string | undefined = undefined
 
   while (hasMore) {

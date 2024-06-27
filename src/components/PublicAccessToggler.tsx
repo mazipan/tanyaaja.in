@@ -3,7 +3,7 @@ import React from 'react'
 import { Loader2 } from 'lucide-react'
 
 import { trackEvent } from '@/lib/firebase'
-import { Question } from '@/lib/types'
+import type { Question } from '@/lib/types'
 import { usePatchQuestionAsPublicOrPrivate } from '@/modules/AccountSettings/hooks/usePatchQuestionAsPublicOrPrivate'
 
 import { useDialog } from './dialog/DialogStore'

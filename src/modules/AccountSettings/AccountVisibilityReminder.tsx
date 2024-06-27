@@ -45,7 +45,7 @@ export const AccountVisibilityReminder = ({ show }: { show: boolean }) => {
   }
 
   return (
-    <ToastProvider duration={Infinity}>
+    <ToastProvider duration={Number.POSITIVE_INFINITY}>
       <Toast open={isShown} onOpenChange={handleReminderClose}>
         <div className="flex items-start gap-4">
           <Info className="w-12 h-auto" />

@@ -1,4 +1,4 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 import { Twitter } from 'lucide-react'
@@ -27,7 +27,7 @@ export async function generateMetadata({
 
   let ogImage = ''
 
-  if (customOg && customOg?.data) {
+  if (customOg?.data) {
     if (customOg.data.code_public) {
       // -- mode advanced
       ogImage = `${BASEURL}/api/og?type=custom-user&slug=${ownerSlug}`
@@ -116,7 +116,7 @@ export default async function PublicPage({
             </a>
           )}
 
-          {owner && owner?.data ? <QuestionForm owner={owner?.data} /> : null}
+          {owner?.data ? <QuestionForm owner={owner?.data} /> : null}
 
           <LinkAds />
         </>
