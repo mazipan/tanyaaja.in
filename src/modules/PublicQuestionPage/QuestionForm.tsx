@@ -36,10 +36,9 @@ import { trackEvent } from '@/lib/firebase'
 import { getValueFromStorage, setValueToStorage } from '@/lib/storage'
 import type { UserProfile } from '@/lib/types'
 import useSendQuestion from '@/modules/PublicQuestionPage/hooks/useSendQuestion'
-import { generateNanoId } from '@/lib/utils'
+import { getDeviceIdFingerprint } from '@/lib/fingerprint'
 
 const LAST_QUESTION_KEY = 'ta_lq'
-const FINGERPRINT_KEY = 'ta_fp'
 
 const schema = object({
   q: string('Pertanyaan perlu disi terlebih dahulu.', [
@@ -114,12 +113,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
   }
 
   async function onSubmit(data: FormValues) {
-    let fp = localStorage.getItem(FINGERPRINT_KEY)
-    if (!fp) {
-      const newRandomId = generateNanoId(10)
-      localStorage.setItem(FINGERPRINT_KEY, newRandomId)
-      fp = newRandomId
-    }
+    const fp = await getDeviceIdFingerprint()
 
     trackEvent('click submit new question')
     if (process.env.NODE_ENV === 'development') {
