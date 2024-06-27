@@ -36,7 +36,7 @@ const schema = object({
 
 type FormValues = Output<typeof schema>
 
-const STORAGE_KEY = 'reported-questions'
+const STORAGE_KEY = 'ta_rq'
 export const ReportQuestionDialog = ({
   user,
   uuid,

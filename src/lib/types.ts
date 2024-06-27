@@ -81,6 +81,7 @@ export interface UpdateUserCounterArgs {
 export interface SubmitQuestionArgs {
   uid: string
   question: string
+  fingerprint: string
 }
 
 export type ClassMap = {

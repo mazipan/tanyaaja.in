@@ -186,6 +186,7 @@ export const patchHit = async (slug: string): Promise<{ message: string }> => {
 export const postSendQuestion = async (
   slug: string,
   question: string,
+  fp: string,
   token: string,
 ): Promise<{ message: string; data: 'CONTAINS_BAD_WORD' | number | null }> => {
   const rawRes = await httpClient(`${BASEURL}/api/question/submit`, {
@@ -193,6 +194,7 @@ export const postSendQuestion = async (
     body: JSON.stringify({
       slug,
       question,
+      fp,
       token,
     }),
     headers: {
