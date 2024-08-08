@@ -13,6 +13,7 @@ import type {
   CreateNotifChannelArgs,
   CreateSessionArgs,
   IRequestPublicUserList,
+  Statistic,
   SubmitQuestionArgs,
   UpdateUserArgs,
   UpdateUserCounterArgs,
@@ -28,6 +29,11 @@ const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID || ''
 const DB_SESSION = process.env.NOTION_DB_SESSION_ID || ''
 const DB_CUSTOM_OG = process.env.NOTION_DB_CUSTOM_OG || ''
 const DB_NOTIF_CHANNEL = process.env.NOTION_DB_NOTIF_CHANNEL || ''
+const DB_STATISTIC = process.env.NOTION_DB_STATISTICS_ID || ''
+const PAGE_ID_STATISTIC_USER =
+  process.env.NOTION_DB_STATISTICS_USER_PAGE_ID || ''
+const PAGE_ID_STATISTIC_QUESTION =
+  process.env.NOTION_DB_STATISTICS_QUESTION_PAGE_ID || ''
 
 const submitRichTextProp = (fieldName: string, value: string) => {
   return {
@@ -680,4 +686,59 @@ export const countDatabaseRows = async ({
   }
 
   return rowsCount
+}
+
+export const getStatistics = async () => {
+  const response = await notion.databases.query({
+    database_id: DB_STATISTIC,
+  })
+
+  if (response.results.length > 0) {
+    const results = response?.results || []
+    // @ts-ignore
+    const simpleResults: Statistic[] = []
+
+    results.forEach((result) => {
+      // @ts-ignore
+      const properties = result.properties
+      const simpleDataResponse = simplifyResponseObject<Statistic>(properties)
+      simpleResults.push(simpleDataResponse)
+    })
+
+    return simpleResults
+  }
+
+  return []
+}
+
+export const incrementStatisticUser = async () => {
+  const resStats = await getStatistics()
+  const currentCount =
+    (resStats || []).find((i) => i.type === 'users')?.counter || 0
+
+  const response = await notion.pages.update({
+    page_id: PAGE_ID_STATISTIC_USER,
+    // @ts-ignore
+    properties: {
+      ...submitNumberProp('counter', currentCount + 1),
+    },
+  })
+
+  return response
+}
+
+export const incrementStatisticQuestion = async () => {
+  const resStats = await getStatistics()
+  const currentCount =
+    (resStats || []).find((i) => i.type === 'questions')?.counter || 0
+
+  const response = await notion.pages.update({
+    page_id: PAGE_ID_STATISTIC_QUESTION,
+    // @ts-ignore
+    properties: {
+      ...submitNumberProp('counter', currentCount + 1),
+    },
+  })
+
+  return response
 }

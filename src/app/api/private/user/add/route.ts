@@ -2,7 +2,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
-import { addUser, getUserByUid } from '@/lib/notion'
+import { addUser, getUserByUid, incrementStatisticUser } from '@/lib/notion'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,6 +22,13 @@ export async function POST(request: Request) {
     }
 
     if (shouldAddUser) {
+      setTimeout(async () => {
+        try {
+          await incrementStatisticUser()
+        } catch (error) {
+          console.error('Error while incrementing statistic user', error)
+        }
+      }, 0)
       await addUser(res)
       return NextResponse.json({ message: 'New user added', isNewUser: true })
     }

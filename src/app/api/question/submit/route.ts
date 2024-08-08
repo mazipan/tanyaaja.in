@@ -7,6 +7,7 @@ import { Redis } from '@upstash/redis'
 import { BAD_WORDS_SET } from '@/lib/constants'
 import {
   getUserBySlug,
+  incrementStatisticQuestion,
   simplifyResponseObject,
   submitQuestion,
 } from '@/lib/notion'
@@ -156,6 +157,13 @@ export async function POST(request: NextRequest) {
       })
 
       if (reCaptchaRes?.score > 0.5) {
+        setTimeout(async () => {
+          try {
+            await incrementStatisticQuestion()
+          } catch (error) {
+            console.error('Error while incrementing statistic question', error)
+          }
+        }, 0)
         return await sendQuestion(
           res.slug,
           res.question,
@@ -180,6 +188,13 @@ export async function POST(request: NextRequest) {
         },
       )
     }
+    setTimeout(async () => {
+      try {
+        await incrementStatisticQuestion()
+      } catch (error) {
+        console.error('Error while incrementing statistic question', error)
+      }
+    }, 0)
     return await sendQuestion(res.slug, res.question, res.fp, 1000, 1000)
   } catch (error) {
     console.error(request.url, error)
