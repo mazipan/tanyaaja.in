@@ -633,19 +633,23 @@ export const deleteQuestionsByUid = async (uid: string) => {
   let cursor: string | undefined
 
   while (hasMore) {
-    const response = await getQuestionsByUuidWithPagination({
-      uid,
-      limit: 100,
-      cursor,
-      withStatus: false,
-    })
+    try {
+      const response = await getQuestionsByUuidWithPagination({
+        uid,
+        limit: 100,
+        cursor,
+        withStatus: false,
+      })
 
-    for (const result of response.results) {
-      archivePagePromises.push(archivePage(result.id))
+      for (const result of response.results) {
+        archivePagePromises.push(archivePage(result.id))
+      }
+
+      hasMore = response.has_more
+      cursor = response.next_cursor as string
+    } catch (error) {
+      hasMore = false
     }
-
-    hasMore = response.has_more
-    cursor = response.next_cursor as string
   }
 
   return archivePagePromises
@@ -661,14 +665,18 @@ export const countDatabaseRows = async ({
   let nextCursor: string | undefined = undefined
 
   while (hasMore) {
-    const response = await notion.databases.query({
-      database_id: databaseId,
-      start_cursor: nextCursor,
-    })
+    try {
+      const response = await notion.databases.query({
+        database_id: databaseId,
+        start_cursor: nextCursor,
+      })
 
-    hasMore = response.has_more
-    nextCursor = response.next_cursor as string
-    rowsCount += response.results.length
+      hasMore = response.has_more
+      nextCursor = response.next_cursor as string
+      rowsCount += response.results.length
+    } catch (error) {
+      hasMore = false
+    }
   }
 
   return rowsCount
