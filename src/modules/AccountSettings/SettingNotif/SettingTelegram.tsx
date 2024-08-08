@@ -6,7 +6,14 @@ import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import type { User } from 'firebase/auth'
 import { Info, Loader2 } from 'lucide-react'
-import { maxLength, minLength, object, type Output, string } from 'valibot'
+import {
+  maxLength,
+  minLength,
+  object,
+  type InferOutput,
+  string,
+  pipe,
+} from 'valibot'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 // @ts-ignore
@@ -30,17 +37,19 @@ import { usePatchUpdateChannelNotif } from '../hooks/usePatchUpdateChannelNotif'
 import { usePostAddNewChannelNotif } from '../hooks/usePostAddNewChannelNotif'
 
 const schema = object({
-  username: string('Username perlu disi terlebih dahulu.', [
+  username: pipe(
+    string('Username perlu disi terlebih dahulu.'),
     minLength(2, 'Username butuh paling tidak 2 karakter.'),
     maxLength(500, 'Username hanya bisa maksimal 1000 karakter.'),
-  ]),
-  chatId: string('Chat ID perlu disi terlebih dahulu.', [
+  ),
+  chatId: pipe(
+    string('Chat ID perlu disi terlebih dahulu.'),
     minLength(2, 'Chat ID butuh paling tidak 2 karakter.'),
     maxLength(20, 'Chat ID hanya bisa maksimal 20 karakter.'),
-  ]),
+  ),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 export default function SettingTelegram({
   isLoading,

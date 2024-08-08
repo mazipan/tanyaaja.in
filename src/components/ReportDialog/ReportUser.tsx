@@ -6,8 +6,9 @@ import {
   maxLength,
   minLength,
   object,
-  type Output,
+  type InferOutput,
   string,
+  pipe,
 } from 'valibot'
 
 import {
@@ -26,14 +27,15 @@ import { useToast } from '../ui/use-toast'
 import useSendReportUser from './useSendReportUser'
 
 const schema = object({
-  reason: string('Alasan perlu disi terlebih dahulu.', [
+  reason: pipe(
+    string('Alasan perlu disi terlebih dahulu.'),
     minLength(20, 'Alasan butuh paling tidak 20 karakter.'),
     maxLength(1000, 'Alasan hanya bisa maksimal 1000 karakter.'),
     includes(' ', 'Alasan membutuhkan lebih dari satu kata.'),
-  ]),
+  ),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 const STORAGE_KEY = 'reported-users'
 export const ReportUserDialog = ({

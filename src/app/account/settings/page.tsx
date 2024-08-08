@@ -11,9 +11,10 @@ import {
   minLength,
   object,
   optional,
-  type Output,
+  type InferOutput,
   startsWith,
   string,
+  pipe,
 } from 'valibot'
 
 import { CopyButton } from '@/components/CopyButton'
@@ -52,25 +53,31 @@ import { useOwner } from '@/queries/useQueries'
 const auth = getFirebaseAuth()
 
 const schema = object({
-  image: string('Avatar perlu disi terlebih dahulu.', [
+  image: pipe(
+    string('Avatar perlu disi terlebih dahulu.'),
     minLength(3, 'Avatar butuh paling tidak 2 karakter.'),
     maxLength(1000, 'Avatar hanya bisa maksimal 1000 karakter.'),
-  ]),
-  name: string('Nama perlu disi terlebih dahulu.', [
+  ),
+  name: pipe(
+    string('Nama perlu disi terlebih dahulu.'),
     minLength(2, 'Nama butuh paling tidak 2 karakter.'),
     maxLength(50, 'Nama hanya bisa maksimal 50 karakter.'),
-  ]),
-  slug: string('Slug perlu disi terlebih dahulu.', [
+  ),
+  slug: pipe(
+    string('Slug perlu disi terlebih dahulu.'),
     minLength(2, 'Slug butuh paling tidak 2 karakter.'),
     maxLength(100, 'Slug hanya bisa maksimal 100 karakter.'),
-  ]),
+  ),
   x_username: optional(
-    string([startsWith('@', 'Username X (Twitter) harus diawali dengan @')]),
+    pipe(
+      string(),
+      startsWith('@', 'Username X (Twitter) harus diawali dengan @'),
+    ),
   ),
   public: optional(isBoolean()),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 export default function Account() {
   const dialog = useDialog()

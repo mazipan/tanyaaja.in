@@ -23,9 +23,12 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error(request.url, error)
-    return NextResponse.json(
-      { message: 'Error while get public statistics' },
-      { status: 500 },
-    )
+    return NextResponse.json({
+      message: `Public statistics`,
+      data: {
+        usersCount: 0,
+        questionsCount: 0,
+      },
+    })
   }
 }
