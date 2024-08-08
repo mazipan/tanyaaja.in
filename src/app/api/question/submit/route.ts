@@ -7,6 +7,7 @@ import { Redis } from '@upstash/redis'
 import { BAD_WORDS_SET } from '@/lib/constants'
 import {
   getUserBySlug,
+  incrementStatisticQuestion,
   simplifyResponseObject,
   submitQuestion,
 } from '@/lib/notion'
@@ -156,6 +157,7 @@ export async function POST(request: NextRequest) {
       })
 
       if (reCaptchaRes?.score > 0.5) {
+        await incrementStatisticQuestion()
         return await sendQuestion(
           res.slug,
           res.question,
@@ -180,6 +182,8 @@ export async function POST(request: NextRequest) {
         },
       )
     }
+
+    await incrementStatisticQuestion()
     return await sendQuestion(res.slug, res.question, res.fp, 1000, 1000)
   } catch (error) {
     console.error(request.url, error)

@@ -29,6 +29,11 @@ export interface Question {
   public: boolean
 }
 
+export interface Statistic {
+  type: string
+  counter: number
+}
+
 export interface CustomOg {
   uid: string
   slug: string

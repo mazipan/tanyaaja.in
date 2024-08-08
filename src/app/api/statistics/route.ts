@@ -1,24 +1,29 @@
 import { NextResponse } from 'next/server'
 
-import { countDatabaseRows } from '@/lib/notion'
-
-const DB_USER = process.env.NOTION_DB_USERS_ID ?? ''
-const DB_QUESTION = process.env.NOTION_DB_QUESTIONS_ID ?? ''
+import { getStatistics, simplifyResponseObject } from '@/lib/notion'
+import { Statistic } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   try {
-    const [usersCount, questionsCount] = await Promise.all([
-      countDatabaseRows({ databaseId: DB_USER }),
-      countDatabaseRows({ databaseId: DB_QUESTION }),
-    ])
+    const resStats = await getStatistics()
+    if (resStats.length > 0) {
+      return NextResponse.json({
+        message: `Public statistics`,
+        data: {
+          usersCount: resStats.find((i) => i.type === 'users')?.counter || 0,
+          questionsCount:
+            resStats.find((i) => i.type === 'questions')?.counter || 0,
+        },
+      })
+    }
 
     return NextResponse.json({
       message: `Public statistics`,
       data: {
-        usersCount,
-        questionsCount,
+        usersCount: 0,
+        questionsCount: 0,
       },
     })
   } catch (error) {
