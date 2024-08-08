@@ -22,8 +22,14 @@ export async function POST(request: Request) {
     }
 
     if (shouldAddUser) {
+      setTimeout(async () => {
+        try {
+          await incrementStatisticUser()
+        } catch (error) {
+          console.error('Error while incrementing statistic user', error)
+        }
+      }, 0)
       await addUser(res)
-      await incrementStatisticUser()
       return NextResponse.json({ message: 'New user added', isNewUser: true })
     }
 
