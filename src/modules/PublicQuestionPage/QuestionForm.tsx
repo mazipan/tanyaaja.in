@@ -11,8 +11,9 @@ import {
   maxLength,
   minLength,
   object,
-  type Output,
+  type InferOutput,
   string,
+  pipe,
 } from 'valibot'
 
 import { ReportUserDialog } from '@/components/ReportDialog/ReportUser'
@@ -41,14 +42,15 @@ import { getDeviceIdFingerprint } from '@/lib/fingerprint'
 const LAST_QUESTION_KEY = 'ta_lq'
 
 const schema = object({
-  q: string('Pertanyaan perlu disi terlebih dahulu.', [
+  q: pipe(
+    string('Pertanyaan perlu disi terlebih dahulu.'),
     minLength(50, 'Pertanyaan butuh paling tidak 50 karakter.'),
     maxLength(1000, 'Pertanyaan hanya bisa maksimal 1000 karakter.'),
     includes(' ', 'Pertanyaan membutuhkan lebih dari satu kata.'),
-  ]),
+  ),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast()

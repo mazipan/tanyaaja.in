@@ -7,7 +7,14 @@ import Link from 'next/link'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import type { User } from 'firebase/auth'
 import { Info, Loader2, MoveUpRight } from 'lucide-react'
-import { maxLength, object, optional, type Output, string } from 'valibot'
+import {
+  maxLength,
+  object,
+  optional,
+  type InferOutput,
+  string,
+  pipe,
+} from 'valibot'
 
 // @ts-ignore
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -30,23 +37,25 @@ import type { CustomOg, UserProfile } from '@/lib/types'
 
 const schema = object({
   publik: optional(
-    string('Kode laman publik perlu disi terlebih dahulu.', [
+    pipe(
+      string('Kode laman publik perlu disi terlebih dahulu.'),
       maxLength(10000, 'Kode laman publik hanya bisa maksimal 10000 karakter.'),
-    ]),
+    ),
     '',
   ),
   question: optional(
-    string('Kode laman pertanyaan perlu disi terlebih dahulu.', [
+    pipe(
+      string('Kode laman pertanyaan perlu disi terlebih dahulu.'),
       maxLength(
         10000,
         'Kode laman pertanyaan hanya bisa maksimal 10000 karakter.',
       ),
-    ]),
+    ),
     '',
   ),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 export default function AdvanceMode({
   isLoading,

@@ -6,7 +6,14 @@ import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import type { User } from 'firebase/auth'
 import { Loader2 } from 'lucide-react'
-import { maxLength, minLength, object, type Output, string } from 'valibot'
+import {
+  maxLength,
+  minLength,
+  object,
+  type InferOutput,
+  string,
+  pipe,
+} from 'valibot'
 
 // @ts-ignore
 import { GradientSelection } from '@/components/GradientSelection'
@@ -29,13 +36,14 @@ import useAddNewCustomOg from './hooks/useAddNewCustomOg'
 import useUpdateCustomOg from './hooks/useUpdatecustomOg'
 
 const schema = object({
-  textOgPublik: string('Text perlu disi terlebih dahulu.', [
+  textOgPublik: pipe(
+    string('Text perlu disi terlebih dahulu.'),
     minLength(2, 'Text butuh paling tidak 2 karakter.'),
     maxLength(500, 'Text hanya bisa maksimal 1000 karakter.'),
-  ]),
+  ),
 })
 
-type FormValues = Output<typeof schema>
+type FormValues = InferOutput<typeof schema>
 
 export default function SimpleMode({
   isLoading,
