@@ -87,7 +87,6 @@ export default function Account() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {dataPagination.pages.map((questionParent, indexParent) => {
                 return (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: sebuah alasan
                   <React.Fragment key={indexParent}>
                     {questionParent?.data?.map((q, indexQuestion) => {
                       return (

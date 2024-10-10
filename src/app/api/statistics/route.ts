@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { getStatistics, simplifyResponseObject } from '@/lib/notion'
-import { Statistic } from '@/lib/types'
+import { getStatistics } from '@/lib/notion'
 
 export const dynamic = 'force-dynamic'
 

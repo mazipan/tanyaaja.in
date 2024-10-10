@@ -21,7 +21,6 @@ export const GradientSelection = ({
         <TooltipProvider key={gradient.id}>
           <Tooltip>
             <TooltipTrigger asChild>
-              {/* biome-ignore lint/a11y/useKeyWithClickEvents: sebuah alasan */}
               <div
                 key={gradient.id}
                 className={cn(

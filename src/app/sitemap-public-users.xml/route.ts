@@ -32,7 +32,7 @@ export async function GET() {
         'content-type': 'application/xml',
       },
     })
-  } catch (error) {
+  } catch (_error) {
     return new Response(generateSitemap([]), {
       status: 200,
       headers: {

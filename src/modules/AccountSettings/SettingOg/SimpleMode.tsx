@@ -133,7 +133,7 @@ export default function SimpleMode({
             mutationOptions,
           )
         }
-      } catch (err) {
+      } catch {
         toast({
           title: 'Gagal menyimpan',
           description:
@@ -158,9 +158,9 @@ export default function SimpleMode({
         <div className="flex flex-col md:flex-row gap-2 justify-between">
           <div className="flex-1 lg:max-w-2xl">
             <div className="space-y-2">
-              <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Pilih warna latar
-              </label>
+              </span>
               <GradientSelection
                 activeGradient={activeGradient}
                 onClick={handleClickGradient}
@@ -184,9 +184,9 @@ export default function SimpleMode({
             />
           </div>
           <div className="flex-1 max-w-[400px]">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Pratinjau
-            </label>
+            </span>
             <img
               src={`${BASEURL}/api/og?type=custom-user&slug=${owner?.slug}&theme=${activeGradient}&text=${
                 watchTextOgPublik ||
