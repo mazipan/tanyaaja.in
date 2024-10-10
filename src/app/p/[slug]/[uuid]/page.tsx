@@ -30,7 +30,7 @@ export async function generateMetadata({
 
   const q: Question = (question?.data || [])[0] || {}
 
-  const title = `Intip pertanyaan anonim untuk ${ownerName} | TanyaAja`
+  const title = `Pertanyaan anonim untuk ${ownerName} di TanyaAja.in`
   const description = `Cuplikan dari pertanyaan anonim yang disampaikan kepada ${ownerName}`
   const url = `${BASEURL}/p/${ownerSlug}/${q?.uuid}`
 
@@ -112,7 +112,7 @@ export default async function PublicQuestionPage({
           />
 
           <h1 className="text-3xl font-extrabold text-center">
-            Intip pertanyaan untuk {owner?.data?.name}
+            Pertanyaan anonim untuk {owner?.data?.name}
           </h1>
 
           <QuestionDetail
