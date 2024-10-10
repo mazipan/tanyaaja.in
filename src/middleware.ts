@@ -26,6 +26,6 @@ export function middleware(request: NextRequest) {
 // See https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|images|favicon|logo|service-worker.js|sitemap-index.xml|sitemaps.xml|manifest.webmanifest).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|apple-icon.png|images|favicon|logo|service-worker.js|sitemap-index.xml|sitemaps.xml|manifest.webmanifest).*)',
   ],
 }

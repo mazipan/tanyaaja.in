@@ -265,6 +265,7 @@ export const getPublicUserListForSiteMap = async () => {
         equals: true,
       },
     },
+    page_size: 20,
   })
 
   return response
