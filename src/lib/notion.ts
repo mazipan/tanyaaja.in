@@ -30,6 +30,9 @@ const DB_SESSION = process.env.NOTION_DB_SESSION_ID || ''
 const DB_CUSTOM_OG = process.env.NOTION_DB_CUSTOM_OG || ''
 const DB_NOTIF_CHANNEL = process.env.NOTION_DB_NOTIF_CHANNEL || ''
 const DB_STATISTIC = process.env.NOTION_DB_STATISTICS_ID || ''
+const DB_BLOCKED_FINGERPRINT =
+  process.env.NOTION_DB_BLOCKED_FINGERPRINT_ID || ''
+
 const PAGE_ID_STATISTIC_USER =
   process.env.NOTION_DB_STATISTICS_USER_PAGE_ID || ''
 const PAGE_ID_STATISTIC_QUESTION =
@@ -653,7 +656,7 @@ export const deleteQuestionsByUid = async (uid: string) => {
 
       hasMore = response.has_more
       cursor = response.next_cursor as string
-    } catch (error) {
+    } catch (_error) {
       hasMore = false
     }
   }
@@ -680,7 +683,7 @@ export const countDatabaseRows = async ({
       hasMore = response.has_more
       nextCursor = response.next_cursor as string
       rowsCount += response.results.length
-    } catch (error) {
+    } catch (_error) {
       hasMore = false
     }
   }
@@ -737,6 +740,49 @@ export const incrementStatisticQuestion = async () => {
     // @ts-ignore
     properties: {
       ...submitNumberProp('counter', currentCount + 1),
+    },
+  })
+
+  return response
+}
+
+export const createBlockedFingerprint = async ({
+  uid,
+  fingerprint,
+  reason,
+}: {
+  uid: string
+  fingerprint: string
+  reason: string
+}) => {
+  await notion.pages.create({
+    parent: {
+      database_id: DB_BLOCKED_FINGERPRINT,
+    },
+    properties: {
+      fingerprint: {
+        type: 'title',
+        title: [
+          {
+            type: 'text',
+            text: { content: fingerprint },
+          },
+        ],
+      },
+      ...submitRichTextProp('blocked_by', uid),
+      ...submitRichTextProp('reason', reason),
+    },
+  })
+}
+
+export const getBlockedFingerprint = async (fingerprint: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_BLOCKED_FINGERPRINT,
+    filter: {
+      property: 'fingerprint',
+      title: {
+        equals: fingerprint,
+      },
     },
   })
 

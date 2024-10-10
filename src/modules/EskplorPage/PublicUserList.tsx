@@ -94,7 +94,6 @@ export default function PublicUserList({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                 {dataPublicUsers?.pages.map((page, parentIndex) => {
                   return (
-                    // biome-ignore lint/suspicious/noArrayIndexKey: sebuah alasan
                     <React.Fragment key={parentIndex}>
                       {page.data.map((up) => (
                         <Card

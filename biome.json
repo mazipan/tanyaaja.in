@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.8.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
   "organizeImports": {
     "enabled": true
   },
@@ -10,9 +10,28 @@
       "complexity": {
         "noForEach": "off"
       },
+      "performance": {
+        "noAccumulatingSpread": "warn"
+      },
+      "correctness": {
+        "noChildrenProp": "off",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
       "style": {
         "noNonNullAssertion": "off",
-        "noUnusedTemplateLiteral": "off"
+        "noUnusedTemplateLiteral": "off",
+        "noParameterAssign": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
       }
     }
   },
@@ -38,6 +57,17 @@
       "attributePosition": "auto"
     }
   },
+  "css": {
+    "linter": {
+      "enabled": true
+    },
+    "formatter": {
+      "indentStyle": "space"
+    },
+    "parser": {
+      "cssModules": true
+    }
+  },
   "overrides": [
     {
       "include": ["*.json"],
@@ -52,9 +82,16 @@
       ".husky/**",
       ".next/**",
       ".vscode/**",
+      ".swc/**",
+      ".yarn/**",
       "coverage/**",
+      "configs/test/**",
+      "configs/mocks/**",
       "node_modules/**",
-      "public/**"
+      "vendors/**",
+      "scripts/**",
+      "public/vendors/**",
+      "public/mockServiceWorker.js"
     ]
   }
 }

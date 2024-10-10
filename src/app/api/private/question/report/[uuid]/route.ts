@@ -3,7 +3,11 @@ import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
 import { sendEmailReportQuestion } from '@/lib/mailer'
-import { getQuestionsByUuid, simplifyResponseObject } from '@/lib/notion'
+import {
+  createBlockedFingerprint,
+  getQuestionsByUuid,
+  simplifyResponseObject,
+} from '@/lib/notion'
 import type { Question } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
@@ -36,6 +40,16 @@ export async function POST(
       // @ts-ignore
       const properties = foundPage.properties
       const simpleDataResponse = simplifyResponseObject<Question>(properties)
+
+      try {
+        await createBlockedFingerprint({
+          fingerprint: simpleDataResponse?.fingerprint || '',
+          uid: decodedToken.email || decodedToken.uid,
+          reason,
+        })
+      } catch (error) {
+        console.error('🔥 [ERROR] create blocked fingerprint', error)
+      }
 
       await sendEmailReportQuestion({
         user: decodedToken.email || decodedToken.uid,

@@ -27,6 +27,7 @@ export interface Question {
   status: 'Done' | 'Not started'
   submitted_date: string
   public: boolean
+  fingerprint?: string
 }
 
 export interface Statistic {

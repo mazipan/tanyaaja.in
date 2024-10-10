@@ -112,7 +112,7 @@ export default function SettingTelegram({
       try {
         const res = await getCheckChatId(user, form.getValues('username'))
         form.setValue('chatId', `${res?.data?.message?.chat?.id || ''}`)
-      } catch (error) {
+      } catch {
         toast({
           title: 'Gagal mengambil chat id',
           description:

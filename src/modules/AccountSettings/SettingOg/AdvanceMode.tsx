@@ -127,7 +127,7 @@ export default function AdvanceMode({
           publik: data?.publik,
           question: data?.question,
         })
-      } catch (err) {
+      } catch {
         toast({
           title: 'Gagal menyimpan',
           description: 'Gagal menyimpan perubahan setelan, coba sesaat lagi!',
@@ -145,7 +145,7 @@ export default function AdvanceMode({
         const jsxString = jsonToJsx(JSON.parse(existingOg[0].code_public))
         form.setValue('publik', jsxString, {})
         newDefaultValues.publik = jsxString
-      } catch (err) {
+      } catch {
         form.setValue('publik', '', {})
         newDefaultValues.publik = ''
       }
@@ -154,7 +154,7 @@ export default function AdvanceMode({
         const jsxString = jsonToJsx(JSON.parse(existingOg[0].code_question))
         form.setValue('question', jsxString, {})
         newDefaultValues.question = jsxString
-      } catch (err) {
+      } catch {
         form.setValue('question', '', {})
         newDefaultValues.question = ''
       }

@@ -594,17 +594,19 @@ export const postReportQuestion = async ({
 }): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 
-  const rawRes = await httpClient(`${BASEURL}/api/private/question/report`, {
-    method: 'POST',
-    body: JSON.stringify({
-      reason,
-      user,
-      uuid: questionUuid,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
+  const rawRes = await httpClient(
+    `${BASEURL}/api/private/question/report/${questionUuid}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        reason,
+        uuid: questionUuid,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
     },
-  })
+  )
   return rawRes.json()
 }

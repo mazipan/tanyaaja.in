@@ -8,7 +8,7 @@ import type { UserProfile } from '@/lib/types'
 export const dynamic = 'force-dynamic'
 
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: { uuid: string } },
 ) {
   const uid = params.uuid || ''
