@@ -6,6 +6,7 @@ import { Redis } from '@upstash/redis'
 
 import { BAD_WORDS_SET } from '@/lib/constants'
 import {
+  getBlockedFingerprint,
   getUserBySlug,
   incrementStatisticQuestion,
   simplifyResponseObject,
@@ -53,16 +54,21 @@ async function sendQuestion(
 
   const simpleDataResponse = simplifyResponseObject<UserProfile>(properties)
 
-  await submitQuestion({
-    uid: simpleDataResponse?.uid,
-    question: q,
-    fingerprint: fp,
-  })
+  const blockedFpResponse = await getBlockedFingerprint(fp)
+  if (blockedFpResponse.results.length > 0) {
+    console.error(`🔴 [BLOCKED] Fingerprint ${fp} was blocked!`)
+  } else {
+    await submitQuestion({
+      uid: simpleDataResponse?.uid,
+      question: q,
+      fingerprint: fp,
+    })
 
-  try {
-    await sendMessageToBot(simpleDataResponse, q)
-  } catch {
-    // do nothing
+    try {
+      await sendMessageToBot(simpleDataResponse, q)
+    } catch {
+      // do nothing
+    }
   }
 
   return NextResponse.json(

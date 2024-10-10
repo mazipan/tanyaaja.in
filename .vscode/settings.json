@@ -2,14 +2,14 @@
   "editor.tabSize": 2,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll": "explicit"
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   },
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   },
-  "eslint.validate": ["javascript", "javascriptreact", "vue"],
-  "[javascript]": {
-	  "editor.defaultFormatter": "biomejs.biome"
+  "workbench.editor.customLabels.patterns": {
+    "**/**.ts": "${dirname}/${filename}",
+    "**/**.tsx": "${dirname}/${filename}"
   }
 }
