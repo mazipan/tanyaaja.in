@@ -50,6 +50,12 @@ See our contribution guidelines in these languages:
 
 - [English](CONTRIBUTING.md)
 
+## Contributors
+
+Thanks goes to these wonderful people!
+
+[![Contributors](https://contrib.rocks/image?repo=mazipan/tanyaaja.in)](https://github.com/mazipan/tanyaaja.in/graphs/contributors)
+
 ## Support Me
 
 - 👉 🇮🇩 [Trakteer](https://trakteer.id/mazipan/tip?utm_source=github-mazipan)
