@@ -1,13 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Search } from 'lucide-react'
-
 import { Button } from '@/components/ui/button'
 import DotPattern from '@/components/ui/dot-pattern'
 import { RainbowButton } from '@/components/ui/rainbow-button'
 import { cn } from '@/lib/utils'
-import imagehero from '~/public/images/ai-asking-question.jpeg'
+import imagehero from '~/public/images/13297294_5203332.svg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
 export const HeroSection = () => {
@@ -32,22 +30,14 @@ export const HeroSection = () => {
           Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah.
         </p>
 
-        <div className="flex gap-8 mt-8 flex-col">
+        <div className="flex gap-4 mt-8 flex-col">
           <Link href="/account">
-            <RainbowButton className="flex gap-2 items-center rounded-lg">
+            <RainbowButton className="rounded-lg">
               Mulai dengan cepat
             </RainbowButton>
           </Link>
-          <Button
-            variant="outline"
-            className="flex gap-2 items-center"
-            size="lg"
-            asChild
-          >
-            <Link href="/eksplor">
-              Lihat pengguna terdaftar
-              <Search className="w-6 h-6" />
-            </Link>
+          <Button variant="outline" size="lg" asChild>
+            <Link href="/eksplor">Lihat dulu aja</Link>
           </Button>
         </div>
       </div>
@@ -55,7 +45,7 @@ export const HeroSection = () => {
         <Image
           src={imagehero}
           alt="Laki-laki dan perempuan yang sedang berdiskusi"
-          className="rounded-3xl w-full max-w-[500px]"
+          className="rounded-3xl w-full max-w-[500px] h-auto md:h-[500px]"
         />
       </div>
     </section>

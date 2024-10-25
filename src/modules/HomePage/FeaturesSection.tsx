@@ -14,12 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import GridPattern from '@/components/ui/grid-pattern'
 import { MagicCard } from '@/components/ui/magic-card'
 import SparklesText from '@/components/ui/sparkles-text'
+import { cn } from '@/lib/utils'
 
 export const FeatureSection = () => {
   return (
-    <section className="container mx-auto mt-24 mb-16 flex flex-col justify-center items-center gap-4">
+    <section className="relative container mx-auto py-8 mt-12 mb-16 flex flex-col justify-center items-center gap-4">
       <SparklesText
         text="Fitur"
         className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center"
@@ -27,7 +29,7 @@ export const FeatureSection = () => {
       <p className="text-center text-md md:text-lg lg:text-xl text-muted-foreground">
         Berbagai fitur yang bisa didapatkan dari platform TanyaAja
       </p>
-      <div className="mx-auto grid justify-center gap-8 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3 mt-8">
+      <div className="relative mx-auto grid justify-center gap-8 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3 mt-8">
         <Card className="relative">
           <BorderBeam />
           <CardHeader>
@@ -91,6 +93,17 @@ export const FeatureSection = () => {
             </CardDescription>
           </CardHeader>
         </MagicCard>
+
+        <GridPattern
+          width={30}
+          height={30}
+          x={-1}
+          y={-1}
+          strokeDasharray={'4 2'}
+          className={cn(
+            '[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]',
+          )}
+        />
       </div>
     </section>
   )
