@@ -1,5 +1,6 @@
 import { Tweet } from 'react-tweet'
 
+import WordRotate from '@/components/ui/word-rotate'
 import styles from './tweet.module.css'
 
 const TWEETS = [
@@ -15,10 +16,15 @@ export const TweetSection = () => {
   return (
     <section className="container max-w-[58rem] mt-24 mb-16 flex flex-col justify-center items-center gap-4">
       <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
-        Jawab di publik
+        Jawab pertanyaan
+        <WordRotate
+          className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center"
+          words={['di mana saja.', 'kapan saja.', 'melalui apa saja.']}
+        />
       </h2>
       <p className="text-center text-md md:text-lg lg:text-xl text-muted-foreground">
-        Bagikan pertanyaan dan jawaban yang kamu di publik
+        Bebas bagikan pertanyaan beserta jawaban dari kamu kapan saja, di mana
+        saja, melalui platform apa saja.
       </p>
       <div className="md:columns-2 lg:columns-3 gap-x-4 mt-8">
         {TWEETS.map((value) => {

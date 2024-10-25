@@ -21,7 +21,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Tanya secara anonim | TanyaAja',
   description:
-    'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
+    'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
   metadataBase: new URL(BASEURL),
   robots: {
     index: true,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     description:
-      'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
+      'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
     siteName: 'TanyaAja.in',
     title: 'Tanya secara anonim | TanyaAja',
     url: BASEURL,
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tanya secara anonim | TanyaAja',
     description:
-      'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
+      'Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.',
     creator: '@Maz_Ipan',
     site: 'TanyaAja.in',
     images: [

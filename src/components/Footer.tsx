@@ -8,12 +8,18 @@ export function Footer() {
           <h4 className="text-lg font-bold mb-2">Lebih Banyak</h4>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link href="/tentang" className="underline">
+              <Link
+                href="/tentang"
+                className="underline text-muted-foreground text-sm"
+              >
                 Tentang TanyaAja
               </Link>
             </li>
             <li>
-              <Link href="/eksplor" className="underline">
+              <Link
+                href="/eksplor"
+                className="underline text-muted-foreground text-sm"
+              >
                 Eksplor Pengguna
               </Link>
             </li>
@@ -23,12 +29,18 @@ export function Footer() {
           <h4 className="text-lg font-bold mb-2">Kebijakan</h4>
           <ul className="flex flex-col gap-2">
             <li>
-              <Link href="/ketentuan-layanan" className="underline">
+              <Link
+                href="/ketentuan-layanan"
+                className="underline text-muted-foreground text-sm"
+              >
                 Ketentuan Layanan
               </Link>
             </li>
             <li>
-              <Link href="/kebijakan-privasi" className="underline">
+              <Link
+                href="/kebijakan-privasi"
+                className="underline text-muted-foreground text-sm"
+              >
                 Kebijakan Privasi
               </Link>
             </li>
@@ -40,7 +52,7 @@ export function Footer() {
             <li>
               <a
                 href="https://status.tanyaaja.in/"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -50,7 +62,7 @@ export function Footer() {
             <li>
               <a
                 href="https://github.com/mazipan/tanyaaja"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -60,7 +72,7 @@ export function Footer() {
             <li>
               <a
                 href="https://github.com/mazipan/tanyaaja/issues/new"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -70,7 +82,7 @@ export function Footer() {
             <li>
               <a
                 href="https://mazipan.space/support"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -85,7 +97,7 @@ export function Footer() {
             <li>
               <a
                 href="https://ksana.in"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -95,7 +107,7 @@ export function Footer() {
             <li>
               <a
                 href="https://www.baca-quran.id/"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -117,7 +129,7 @@ export function Footer() {
                 href="https://mazipan.space/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline"
+                className="underline text-muted-foreground text-sm"
               >
                 {' '}
                 Irfan Maulana

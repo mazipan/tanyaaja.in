@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 
 import type { InfiniteData } from '@tanstack/react-query'
 import { Flag } from 'lucide-react'
@@ -43,6 +43,7 @@ export default function PublicUserList({
   }, [])
 
   const totalUser = calculatePageItemCount(dataPublicUsers?.pages ?? [])
+
   return (
     <div className="w-full flex flex-col gap-4">
       {isInitialLoading ? (
