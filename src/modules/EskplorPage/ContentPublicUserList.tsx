@@ -11,6 +11,7 @@ import SearchName from './SearchName'
 
 const ContentPublicUserList = () => {
   const [name, setName] = useState('')
+
   const {
     data: dataPublicUsers,
     isFetching,

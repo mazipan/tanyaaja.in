@@ -1,16 +1,24 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { ArrowRight, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import DotPattern from '@/components/ui/dot-pattern'
+import { RainbowButton } from '@/components/ui/rainbow-button'
+import { cn } from '@/lib/utils'
 import imagehero from '~/public/images/ai-asking-question.jpeg'
 import logoImage from '~/public/logo/TanyaAja.svg'
 
 export const HeroSection = () => {
   return (
-    <section className="container flex flex-col md:flex-row">
-      <div className="flex-1 flex flex-col gap-4 justify-center items-start p-8">
+    <section className="relative container flex flex-col md:flex-row">
+      <div className="relative flex-1 flex flex-col gap-4 justify-center items-start p-8">
+        <DotPattern
+          className={cn(
+            '[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]',
+          )}
+        />
         <Image
           src={logoImage}
           alt="Simbol tanda tanya"
@@ -21,17 +29,15 @@ export const HeroSection = () => {
           TanyaAja
         </h1>
         <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
-          Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah
+          Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah.
         </p>
 
-        <div className="w-full flex gap-2 mt-8 flex-col xl:flex-row">
-          <Button className="flex gap-2 items-center" size="lg" asChild>
-            <Link href="/account">
+        <div className="flex gap-8 mt-8 flex-col">
+          <Link href="/account">
+            <RainbowButton className="flex gap-2 items-center rounded-lg">
               Mulai dengan cepat
-              <ArrowRight className="w-6 h-6" />
-            </Link>
-          </Button>
-
+            </RainbowButton>
+          </Link>
           <Button
             variant="outline"
             className="flex gap-2 items-center"
@@ -39,7 +45,7 @@ export const HeroSection = () => {
             asChild
           >
             <Link href="/eksplor">
-              Eksplor dulu
+              Lihat pengguna terdaftar
               <Search className="w-6 h-6" />
             </Link>
           </Button>
