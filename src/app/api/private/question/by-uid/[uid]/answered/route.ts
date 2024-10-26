@@ -1,36 +1,25 @@
 import { headers } from 'next/headers'
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
 import { verifyIdToken } from '@/lib/firebase-admin'
-import {
-  getQuestionsByUuidWithPagination,
-  simplifyResponseObject,
-} from '@/lib/notion'
+import { getQuestionsByUid, simplifyResponseObject } from '@/lib/notion'
 import type { Question } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(request: NextRequest) {
-  const limit = Number(request.nextUrl.searchParams.get('limit')) ?? 1
-  const cursor = request.nextUrl.searchParams.get('cursor') ?? ''
-  const status = request.nextUrl.searchParams.get('status') ?? 'pending'
-
+export async function GET(request: Request) {
   const headersInstance = headers()
   const token = headersInstance.get('Authorization')
   try {
     if (token) {
       const decodedToken = await verifyIdToken(token)
 
-      const questionsInNotion = await getQuestionsByUuidWithPagination({
-        uid: decodedToken.uid,
-        limit,
-        cursor: cursor === '' ? undefined : cursor,
-        status: status !== 'done' ? 'Not started' : 'Done',
-      })
-
+      const questionsInNotion = await getQuestionsByUid(
+        decodedToken.uid,
+        'Done',
+      )
       const results = questionsInNotion?.results || []
       // @ts-ignore
-
       const simpleResults: Question[] = []
 
       results.forEach((result) => {
@@ -43,21 +32,19 @@ export async function GET(request: NextRequest) {
       })
 
       return NextResponse.json({
-        message: `Found questions for user ${decodedToken.uid}`,
+        message: `Found answered questions for user ${decodedToken.uid}`,
         data: simpleResults,
-        next: questionsInNotion.next_cursor,
-        hasMore: questionsInNotion.has_more,
       })
     }
 
     return NextResponse.json(
-      { message: 'Can not found the session', data: null },
+      { message: `Can not found the session`, data: null },
       { status: 403 },
     )
   } catch (error) {
     console.error(request.url, error)
     return NextResponse.json(
-      { message: 'Error while get question by uid' },
+      { message: 'Error while get answered question by uid' },
       { status: 500 },
     )
   }

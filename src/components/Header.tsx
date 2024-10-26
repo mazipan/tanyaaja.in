@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { signOut } from 'firebase/auth'
 import {
@@ -39,6 +39,7 @@ const auth = getFirebaseAuth()
 
 export function Header() {
   const router = useRouter()
+  const pathname = usePathname()
   const { toast } = useToast()
   const { isLogin, user, isLoading } = useAuth(auth)
   const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
@@ -69,6 +70,10 @@ export function Header() {
           variant: 'destructive',
         })
       })
+  }
+
+  if (pathname.startsWith('/account')) {
+    return null
   }
 
   return (
@@ -137,7 +142,7 @@ export function Header() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account">
+                    <Link href="/account/questions/pending">
                       <MessageCircle className="h-4 w-4 mr-2" />
                       Daftar Pertanyaan
                     </Link>

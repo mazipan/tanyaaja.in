@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import type { ReactNode } from 'react'
 
 import image404 from '~/public/images/404.png'
 
@@ -9,11 +10,11 @@ export default function EmptyState({
   description,
 }: {
   title: string
-  description: string
+  description: string | ReactNode
 }) {
   return (
     <main className="w-full py-8 flex flex-col items-center gap-6">
-      <div className="w-full space-y-0.5 max-w-3xl">
+      <div className="w-full space-y-4 max-w-3xl">
         <h3 className="text-2xl font-bold tracking-tight text-center">
           {title}
         </h3>
@@ -24,8 +25,8 @@ export default function EmptyState({
         <Image
           src={image404}
           alt="Kucing menjatuhkan vas bunga"
-          width={500}
-          height={500}
+          width={400}
+          height={400}
         />
       </div>
     </main>
