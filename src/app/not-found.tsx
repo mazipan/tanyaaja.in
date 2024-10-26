@@ -27,8 +27,8 @@ export default function NotFound() {
         <Image
           src={image404}
           alt="Kucing menjatuhkan vas bunga"
-          width={500}
-          height={500}
+          width={400}
+          height={400}
         />
         <Button className="flex gap-2 items-center" asChild>
           <Link href="/login">

@@ -14,7 +14,10 @@ export async function GET(request: Request) {
     if (token) {
       const decodedToken = await verifyIdToken(token)
 
-      const questionsInNotion = await getQuestionsByUid(decodedToken.uid)
+      const questionsInNotion = await getQuestionsByUid(
+        decodedToken.uid,
+        'Not started',
+      )
       const results = questionsInNotion?.results || []
       // @ts-ignore
       const simpleResults: Question[] = []

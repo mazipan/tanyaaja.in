@@ -226,6 +226,28 @@ export const getAllQuestions = async (
   return rawRes.json()
 }
 
+export const getAllAnsweredQuestions = async (
+  user: User,
+): Promise<{ data: Question[] }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/by-uid/${user.uid}/answered`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: ['q-by-uid', user.uid],
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
 export const patchQuestionAsDone = async (
   uuid: string,
   user: User,
@@ -526,15 +548,17 @@ export const getAllQuestionsWithPagination = async ({
   user,
   limit,
   cursor,
+  status = 'pending',
 }: {
   user: User
   limit: number
   cursor?: string
+  status?: 'pending' | 'done'
 }): Promise<IResponseGetQuestionPagination> => {
   const token = await user.getIdToken()
 
   const rawRes = await httpClient(
-    `${BASEURL}/api/private/question/by-uid/pagination/${user.uid}?limit=${limit}&cursor=${cursor}`,
+    `${BASEURL}/api/private/question/by-uid/pagination/${user.uid}?status=${status}&limit=${limit}&cursor=${cursor}`,
     {
       method: 'GET',
       headers: {

@@ -1,6 +1,15 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export function Footer() {
+  const pathname = usePathname()
+
+  if (pathname.startsWith('/account')) {
+    return null
+  }
+
   return (
     <footer className="p-4 border-t">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 container mb-8">
@@ -120,7 +129,7 @@ export function Footer() {
       <div className="container">
         <div className="text-center">
           <p>
-            <small>© Sejak 2023, TanyaAja</small>
+            <small>© Sejak 2023, TanyaAja.in</small>
           </p>
           <p>
             <small>

@@ -18,7 +18,7 @@ import type {
   UpdateUserArgs,
   UpdateUserCounterArgs,
 } from './types'
-import { addDays, DEFAULT_AVATAR, generateNanoId } from './utils'
+import { DEFAULT_AVATAR, addDays, generateNanoId } from './utils'
 
 const notion = new Client({
   auth: process.env.NOTION_SECRET,
@@ -369,7 +369,10 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
   })
 }
 
-export const getQuestionsByUid = async (uid: string, withStatus = true) => {
+export const getQuestionsByUid = async (
+  uid: string,
+  status: 'Not started' | 'Done' = 'Not started',
+) => {
   const filteredByUid = {
     property: 'uid',
     rich_text: {
@@ -377,14 +380,14 @@ export const getQuestionsByUid = async (uid: string, withStatus = true) => {
     },
   }
 
-  const filter = withStatus
+  const filter = status
     ? {
         and: [
           filteredByUid,
           {
             property: 'status',
             status: {
-              equals: 'Not started',
+              equals: status,
             },
           },
         ],
@@ -594,12 +597,12 @@ export const getQuestionsByUuidWithPagination = async ({
   uid,
   limit = 10,
   cursor,
-  withStatus = true,
+  status = 'Not started',
 }: {
   uid: string
   limit: number
   cursor: string | undefined
-  withStatus?: boolean
+  status: 'Not started' | 'Done'
 }) => {
   const filteredByUid = {
     property: 'uid',
@@ -608,14 +611,14 @@ export const getQuestionsByUuidWithPagination = async ({
     },
   }
 
-  const filter = withStatus
+  const filter = status
     ? {
         and: [
           filteredByUid,
           {
             property: 'status',
             status: {
-              equals: 'Not started',
+              equals: status,
             },
           },
         ],
@@ -648,7 +651,7 @@ export const deleteQuestionsByUid = async (uid: string) => {
         uid,
         limit: 100,
         cursor,
-        withStatus: false,
+        status: 'Not started',
       })
 
       for (const result of response.results) {

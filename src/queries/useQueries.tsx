@@ -1,11 +1,11 @@
 import {
   type InfiniteData,
   type QueryKey,
-  useInfiniteQuery,
   type UseInfiniteQueryOptions,
-  useQuery,
   type UseQueryOptions,
   type UseQueryResult,
+  useInfiniteQuery,
+  useQuery,
 } from '@tanstack/react-query'
 import type { User } from 'firebase/auth'
 
@@ -57,6 +57,7 @@ export const useQuestionList = (
 export const useQuestionListPagination = (
   user: User,
   limit: number,
+  status: 'pending' | 'done',
   config?: Omit<
     UseInfiniteQueryOptions<
       IResponseGetQuestionPagination,
@@ -71,12 +72,13 @@ export const useQuestionListPagination = (
 ) => {
   return useInfiniteQuery({
     ...config,
-    queryKey: ['/questions', user?.uid],
+    queryKey: ['/questions', user?.uid, status],
     queryFn: async ({ pageParam }) =>
       getAllQuestionsWithPagination({
         user: user,
         limit: limit,
         cursor: pageParam,
+        status: status,
       }),
     initialPageParam: '',
     refetchOnWindowFocus: false,

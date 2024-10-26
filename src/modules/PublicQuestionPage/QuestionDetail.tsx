@@ -1,8 +1,8 @@
 'use client'
 
-import { Fragment, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Fragment, useEffect } from 'react'
 
 import { SendHorizontal } from 'lucide-react'
 
@@ -39,7 +39,7 @@ export const QuestionDetail = ({
   }, [])
 
   return (
-    <div className="w-full flex flex-col gap-2 justify-center items-center">
+    <div className="w-full flex flex-col gap-4 justify-center items-center">
       {isNotEmptyQuestion && question ? (
         <Fragment>
           <Card className="p-4 text-2xl w-full min-h-[200px] md:w-[500px] lg:min-h-[400px] relative flex flex-col items-center justify-center">
@@ -47,7 +47,7 @@ export const QuestionDetail = ({
           </Card>
 
           {slug ? (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center mt-4">
               <Button asChild>
                 <Link href={`/p/${slug}`}>
                   <SendHorizontal className="mr-2 h-4 w-4" />
