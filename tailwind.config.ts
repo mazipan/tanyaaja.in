@@ -175,6 +175,19 @@ module.exports = {
             transform: 'translate(-50%, -50%) scale(0.9)',
           },
         },
+        meteor: {
+          '0%': {
+            transform: 'rotate(215deg) translateX(0)',
+            opacity: '1',
+          },
+          '70%': {
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'rotate(215deg) translateX(-500px)',
+            opacity: '0',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -190,6 +203,7 @@ module.exports = {
         rainbow: 'rainbow var(--speed, 2s) infinite linear',
         grid: 'grid 15s linear infinite',
         ripple: 'ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite',
+        meteor: 'meteor 5s linear infinite',
       },
     },
   },

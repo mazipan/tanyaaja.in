@@ -2,33 +2,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
-import DotPattern from '@/components/ui/dot-pattern'
+import Meteors from '@/components/ui/meteors'
 import { RainbowButton } from '@/components/ui/rainbow-button'
-import { cn } from '@/lib/utils'
+import WordPullUp from '@/components/ui/word-pull-up'
 import imagehero from '~/public/images/13297294_5203332.svg'
-import logoImage from '~/public/logo/TanyaAja.svg'
 
 export const HeroSection = () => {
   return (
     <section className="relative container flex flex-col md:flex-row">
-      <div className="relative flex-1 flex flex-col gap-4 justify-center items-start p-8">
-        <DotPattern
-          className={cn(
-            '[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]',
-          )}
+      <div className="relative flex-1 flex flex-col gap-4 justify-center items-start p-8 overflow-hidden">
+        <Meteors number={150} />
+
+        <WordPullUp
+          className="text-4xl font-bold tracking-[-0.02em] text-black dark:text-white md:text-7xl md:leading-[5rem] text-left"
+          words="Kumpulkan pertanyaan anonim dengan mudah."
         />
-        <Image
-          src={logoImage}
-          alt="Simbol tanda tanya"
-          width={100}
-          height={83.8}
-        />
-        <h1 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
-          TanyaAja
-        </h1>
-        <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
-          Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah.
-        </p>
 
         <div className="flex gap-4 mt-8 flex-col">
           <Link href="/account">

@@ -16,11 +16,14 @@ export const TweetSection = () => {
   return (
     <section className="container max-w-[58rem] mt-24 mb-16 flex flex-col justify-center items-center gap-4">
       <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
-        Jawab pertanyaan
-        <WordRotate
-          className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center"
-          words={['di mana saja.', 'kapan saja.', 'melalui apa saja.']}
-        />
+        <span>Jawab pertanyaan</span>
+        <br />
+        <div className="max-w-[80%] mx-auto text-center">
+          <WordRotate
+            className="font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+            words={['di mana saja.', 'kapan saja.', 'melalui apa saja.']}
+          />
+        </div>
       </h2>
       <p className="text-center text-md md:text-lg lg:text-xl text-muted-foreground">
         Bebas bagikan pertanyaan beserta jawaban dari kamu kapan saja, di mana
