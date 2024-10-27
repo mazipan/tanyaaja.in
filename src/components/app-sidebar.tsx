@@ -18,14 +18,19 @@ import { signOut } from 'firebase/auth'
 import {
   Bell,
   ChevronsUpDown,
-  Image,
+  Image as ImageIcon,
   ListCheck,
   ListTodo,
   LogOut,
   Monitor,
+  Moon,
+  Sun,
   UserRoundCog,
 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import Image from 'next/image'
+import { usePathname, useRouter } from 'next/navigation'
+import logoSvg from '~/public/logo/TanyaAja.svg'
 import { useAuth } from './FirebaseAuth'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
@@ -62,7 +67,7 @@ const items = [
   {
     title: 'Pengaturan OG',
     url: '/account/settings/og-image',
-    icon: Image,
+    icon: ImageIcon,
   },
   {
     title: 'Pengaturan Notifikasi',
@@ -75,6 +80,9 @@ const auth = getFirebaseAuth()
 
 export function AppSidebar() {
   const router = useRouter()
+  const pathname = usePathname()
+  const { setTheme } = useTheme()
+
   const { toast } = useToast()
   const { isLogin, user, isLoading } = useAuth(auth)
   const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
@@ -109,7 +117,22 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader />
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg">
+              <Image
+                src={logoSvg}
+                alt="Tanya Aja"
+                width={30}
+                height={20}
+                className=""
+              />
+              TanyaAja.in
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -117,7 +140,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild size="lg">
+                  <SidebarMenuButton
+                    asChild
+                    size="lg"
+                    isActive={pathname === item.url}
+                  >
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -130,6 +157,32 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton size="lg">
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                Tema Aplikasi
+                <ChevronsUpDown className="ml-auto" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              side="top"
+              className="w-[--radix-popper-anchor-width]"
+            >
+              <DropdownMenuItem onClick={() => setTheme('light')}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('dark')}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme('system')}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenu>
         <SidebarMenu>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
