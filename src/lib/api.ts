@@ -29,13 +29,13 @@ export const getExistingUser = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: [`user-by-uid-${user.uid}`],
       },
     },
   )
-
   /**
    * fetch needs to be rejected manually to trigger react-query error
    * @see https://tanstack.com/query/v4/docs/react/guides/query-functions#usage-with-fetch-and-other-clients-that-do-not-throw-by-default
@@ -80,6 +80,7 @@ export const checkTheSlugOwner = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
     },
   )
@@ -103,6 +104,7 @@ export const postAddUser = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -128,6 +130,7 @@ export const patchUpdateUser = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -145,6 +148,7 @@ export const deleteUser = async (user: User): Promise<{ message: string }> => {
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -166,6 +170,7 @@ export const deleteAllQuestions = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
     },
   )
@@ -216,6 +221,7 @@ export const getAllQuestions = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: ['q-by-uid', user.uid],
@@ -238,6 +244,7 @@ export const getAllAnsweredQuestions = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: ['q-by-uid', user.uid],
@@ -261,6 +268,7 @@ export const patchQuestionAsDone = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
     },
   )
@@ -285,6 +293,7 @@ export const patchQuestionAsPublicOrPrivate = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
     },
   )
@@ -320,6 +329,7 @@ export const destroyActiveSession = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -391,6 +401,7 @@ export const getExistingCustomOg = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: [`og-by-uid-${user.uid}`],
@@ -421,6 +432,7 @@ export const postAddNewCustomOg = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -447,6 +459,7 @@ export const patchUpdateCustomOg = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -465,6 +478,7 @@ export const getExistingChannelNotif = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: [`notif-by-uid-${user.uid}`],
@@ -492,6 +506,7 @@ export const postAddNewChannelNotif = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -515,6 +530,7 @@ export const patchUpdateChannelNotif = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+      cache: 'no-store',
     },
   })
 
@@ -534,6 +550,7 @@ export const getCheckChatId = async (
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: [`chatid-uid-${user.uid}`],
@@ -564,6 +581,7 @@ export const getAllQuestionsWithPagination = async ({
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
       next: {
         tags: ['q-by-uid', user.uid],
@@ -631,6 +649,7 @@ export const postReportQuestion = async ({
       headers: {
         'Content-Type': 'application/json',
         Authorization: token,
+        cache: 'no-store',
       },
     },
   )

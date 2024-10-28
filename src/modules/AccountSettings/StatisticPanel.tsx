@@ -3,7 +3,6 @@ import { Link } from 'lucide-react'
 import { CopyButton } from '@/components/CopyButton'
 import { TweetButton } from '@/components/TweetButton'
 import { Card } from '@/components/ui/card'
-import HyperText from '@/components/ui/hyper-text'
 import { BASEURL } from '@/lib/api'
 import type { UserProfile } from '@/lib/types'
 
@@ -14,10 +13,9 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
         <h3 className="font-semibold leading-none tracking-tight">
           Total kunjungan
         </h3>
-        <HyperText
-          className="font-extrabold text-4xl text-yellow-400"
-          text={new Intl.NumberFormat('id-ID').format(owner?.count || 0)}
-        />
+        <span className="font-extrabold font-mono text-4xl text-yellow-400">
+          {new Intl.NumberFormat('id-ID').format(owner?.count || 0)}
+        </span>
         <small className="font-light text-xs text-muted-foreground">
           Jumlah orang yang mengunjungi laman publik
         </small>
