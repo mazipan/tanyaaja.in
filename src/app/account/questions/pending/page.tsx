@@ -89,7 +89,7 @@ export default function Account() {
                     {questionParent?.data?.map((q, indexQuestion) => {
                       return (
                         <QuestionPanel
-                          key={q.uid}
+                          key={q.uuid}
                           owner={dataOwner?.data}
                           question={q}
                           onClick={handleClickQuestion}
@@ -111,7 +111,7 @@ export default function Account() {
                   className="w-[400px]"
                 >
                   {!isFetching ? (
-                    'Load More'
+                    'Muat Laman Berikutnya'
                   ) : (
                     <>
                       <Loader2 className="animate-spin" size={20} /> Loading

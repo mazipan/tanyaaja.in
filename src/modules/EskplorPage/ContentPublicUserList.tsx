@@ -44,7 +44,7 @@ const ContentPublicUserList = () => {
                 <Loader2 className="animate-spin" size={20} /> Loading
               </>
             ) : (
-              'Load More'
+              'Muat Laman Berikutnya'
             )}
           </Button>
         ) : null}

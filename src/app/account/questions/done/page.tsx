@@ -1,39 +1,56 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-
-import { CalendarDays, Loader2 } from 'lucide-react'
+import React, { useEffect } from 'react'
 
 import EmptyState from '@/components/EmptyState'
 import { useAuth } from '@/components/FirebaseAuth'
-import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from '@/components/ui/card'
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import {} from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Separator } from '@/components/ui/separator'
 import { getFirebaseAuth, trackEvent } from '@/lib/firebase'
-import type { Question } from '@/lib/types'
-import { calculatePageItemCount } from '@/lib/utils'
 import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
-import { QuestionLoader } from '@/modules/AccountSettings/QuestionLoader'
-import { QuestionResponsive } from '@/modules/AccountSettings/QuestionPreview/QuestionResponsive'
+import { useArchiveQuestion } from '@/modules/AccountSettings/hooks/useArchiveQuestion'
 import { useOwner, useQuestionListPagination } from '@/queries/useQueries'
+import { Archive, Loader2 } from 'lucide-react'
+import { Form, useForm } from 'react-hook-form'
 
 const auth = getFirebaseAuth()
 const LIMIT = 15
 
+import { Skeleton } from '@/components/ui/skeleton'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+import { type InferOutput, array, object, string } from 'valibot'
+
+const schema = object({
+  items: array(string()),
+})
+
+type FormValues = InferOutput<typeof schema>
+
 export default function Account() {
-  const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false)
-  const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
-    null,
-  )
   const { isLogin, isLoading, user } = useAuth(auth)
 
   const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user!, {
     enabled: !isLoading && isLogin && !!user,
+  })
+
+  const form = useForm<FormValues>({
+    resolver: valibotResolver(schema),
+    defaultValues: {
+      items: [],
+    },
   })
 
   const {
@@ -45,9 +62,14 @@ export default function Account() {
     enabled: !isLoading && isLogin && !!user,
   })
 
-  const _handleClickQuestion = (question: Question) => {
-    setSelectedQuestion(question)
-    setIsOpenDialog(true)
+  const { mutate, isPending: isPendingMutation } = useArchiveQuestion({
+    onMutate: () => {
+      // Do nothing
+    },
+  })
+
+  function onSubmit(data: FormValues) {
+    console.log(' submit ===> ', data.items)
   }
 
   useEffect(() => {
@@ -74,9 +96,30 @@ export default function Account() {
             <h3 className="text-2xl font-bold tracking-tight">
               Memuat data pertanyaan...
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid gap-2">
               {[1, 2, 3].map((item) => (
-                <QuestionLoader key={item} index={item} />
+                <div
+                  key={item}
+                  className="relative rounded-lg border flex gap-2 p-2 justify-between"
+                >
+                  <div className="flex gap-2 items-start">
+                    <Checkbox checked={false} className="mt-1" />
+                    <div className="grid gap-2">
+                      <small className="text-muted-foreground text-xs">
+                        <Skeleton className="h-2 w-[100px]" />
+                      </small>
+                      <Skeleton className="h-4 w-full" />
+                    </div>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    type="button"
+                    disabled={true}
+                  >
+                    <Archive className="h-4 w-4" />
+                  </Button>
+                </div>
               ))}
             </div>
           </div>
@@ -84,45 +127,140 @@ export default function Account() {
           dataPagination.pages &&
           dataPagination?.pages[0].data.length > 0 ? (
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold tracking-tight">
-              {calculatePageItemCount(dataPagination.pages)} pertanyaan telah
-              dijawab
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {dataPagination.pages.map((questionParent, indexParent) => {
-                return (
-                  <React.Fragment key={indexParent}>
-                    {questionParent?.data?.map((q) => {
-                      return (
-                        <Card
-                          className="relative min-h-[200px] flex flex-col"
-                          key={q.uid}
-                        >
-                          <CardHeader>
-                            <CardDescription className="flex gap-1 items-center">
-                              <CalendarDays className="w-4 h-4" />
-                              {new Date(q.submitted_date).toLocaleDateString(
-                                'id-ID',
-                                {
-                                  year: 'numeric',
-                                  month: 'short',
-                                  day: '2-digit',
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                },
-                              )}
-                            </CardDescription>
-                          </CardHeader>
-                          <CardContent className="flex-1">
-                            <p className="">{q.question}</p>
-                          </CardContent>
-                        </Card>
-                      )
-                    })}
-                  </React.Fragment>
-                )
-              })}
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                type="button"
+                onClick={() => {
+                  const allItems = dataPagination.pages.flatMap((x) =>
+                    x.data.map((y) => y.uuid),
+                  )
+
+                  if (form.watch('items')?.length === allItems.length) {
+                    form.setValue('items', [])
+                    return
+                  }
+
+                  form.setValue('items', allItems)
+                }}
+                variant="outline"
+              >
+                Pilih semua
+              </Button>
+
+              {form.watch('items')?.length > 0 && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      type="button"
+                      disabled={isPendingMutation}
+                    >
+                      Arsipkan {form.watch('items')?.length} pertanyaan
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Yakin ingin mengarsipkan semuanya?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Aksi ini tidak dapat dibatalkan. Ini akan menghapus
+                        pertanyaan kamu secara permanen dari sistem kami.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Batal</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => {
+                          mutate({
+                            uuid: form.watch('items').join(','),
+                            user: user!,
+                          })
+                        }}
+                      >
+                        Lanjutkan
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
             </div>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
+                <div className="grid gap-2">
+                  {dataPagination.pages.map((questionParent, indexParent) => {
+                    return (
+                      <React.Fragment key={indexParent}>
+                        {questionParent?.data?.map((q) => {
+                          return (
+                            <div
+                              key={q.uuid}
+                              className="relative rounded-lg border flex gap-2 p-2 justify-between"
+                            >
+                              <div className="flex gap-2 items-start">
+                                <Checkbox
+                                  checked={form
+                                    .watch('items')
+                                    ?.includes(q.uuid)}
+                                  onCheckedChange={(checked) => {
+                                    if (checked) {
+                                      form.setValue('items', [
+                                        ...form.watch('items'),
+                                        q.uuid,
+                                      ])
+                                    } else {
+                                      form.setValue(
+                                        'items',
+                                        form
+                                          .watch('items')
+                                          .filter((x) => x !== q.uuid),
+                                      )
+                                    }
+                                  }}
+                                  className="mt-1"
+                                />
+                                <div className="grid">
+                                  <small className="text-muted-foreground text-xs">
+                                    {new Date(
+                                      q.submitted_date,
+                                    ).toLocaleDateString('id-ID', {
+                                      year: 'numeric',
+                                      month: 'short',
+                                      day: '2-digit',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </small>
+                                  <span className="text-sm">{q.question}</span>
+                                </div>
+                              </div>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                type="button"
+                                disabled={isPendingMutation}
+                                onClick={() => {
+                                  mutate({
+                                    uuid: q.uuid,
+                                    user: user!,
+                                  })
+                                }}
+                              >
+                                <Archive className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          )
+                        })}
+                      </React.Fragment>
+                    )
+                  })}
+                </div>
+              </form>
+            </Form>
             <div className="flex  justify-center">
               {dataPagination?.pages[dataPagination?.pages.length - 1]
                 .hasMore ? (
@@ -132,7 +270,7 @@ export default function Account() {
                   className="w-[400px]"
                 >
                   {!isFetching ? (
-                    'Load More'
+                    'Muat Laman Berikutnya'
                   ) : (
                     <>
                       <Loader2 className="animate-spin" size={20} /> Loading
@@ -147,9 +285,9 @@ export default function Account() {
             title="Tidak ada satupun pertanyaan"
             description={
               <span>
-                Kamu belum pernah menjawab pertanyaan. <br />
-                Mulai bagikan jawabanmu melalui sosial media dan tandai
-                pertanyaan sebagai sudah dijawab.
+                Tidak menemukan pertanyaan kamu?
+                <br /> Pertanyaan yang telah dijawab akan secara otomatis
+                dihapus dari sistem setelah beberapa pekan. <br />
               </span>
             }
           />
@@ -161,14 +299,6 @@ export default function Account() {
           show={dataOwner ? !dataOwner.data.public : false}
         />
       )}
-
-      <QuestionResponsive
-        isOpen={isOpenDialog}
-        onOpenChange={setIsOpenDialog}
-        user={user}
-        owner={dataOwner?.data}
-        question={selectedQuestion}
-      />
     </>
   )
 }

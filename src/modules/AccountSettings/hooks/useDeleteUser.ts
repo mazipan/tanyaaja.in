@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { type Auth, signOut, type User } from 'firebase/auth'
+import { type Auth, type User, signOut } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
 import { deleteUser, destroyActiveSession } from '@/lib/api'
@@ -49,7 +49,12 @@ export const useDeleteUser = () => {
     onSettled: (_data, _error, { user, auth }) => {
       // invalidate user query to ensure the user data displayed is the latest data
       queryClient.invalidateQueries({ queryKey: ['/owner', user.uid] })
-      queryClient.invalidateQueries({ queryKey: ['/questions', user.uid] })
+      queryClient.invalidateQueries({
+        queryKey: ['/questions', user.uid, 'pending'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['/questions', user.uid, 'done'],
+      })
       destroyActiveSession(user)
       signOut(auth)
     },

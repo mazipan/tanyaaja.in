@@ -276,6 +276,27 @@ export const patchQuestionAsDone = async (
   return rawRes.json()
 }
 
+export const archiveQuestion = async (
+  uuid: string,
+  user: User,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await httpClient(
+    `${BASEURL}/api/private/question/archive/${uuid}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+        cache: 'no-store',
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
 export const patchQuestionAsPublicOrPrivate = async (
   uuid: string,
   access: 'PUBLIC' | 'PRIVATE',
