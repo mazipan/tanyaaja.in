@@ -29,19 +29,26 @@ An anonymous question bank platform
 
 - `node`, minimum version `18.16.0`
 - `pnpm`, [see installation instruction](https://pnpm.io/installation)
-- Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
-  1. Activate the authentication for the web
-  2. [Firebase Admin #1] Go to Project settings -> Service accounts -> Generate new private key
-  3. Copy the downloaded Private key to the Project root directory, rename to `TanyaAja-firebase-adminsdk.json`
-  4. [Firebase Admin #2] Create Realtime Database
-  5. Copy the Database url, e.g. `https://tanyaaja-rtdb.asia-southeast1.firebasedatabase.app`
-  6. Still on Realtime Database, go to Rules -> create Rule.
-  7. Copy the Rule from [here](.firebase/rule.json) then Publish the Rule
 
-- Notion Account
-  - [Create a notion integration](https://developers.notion.com/docs/create-a-notion-integration)
-  - Duplicate the template from: [TanyaAja DB Template](https://general-lady-e21.notion.site/TanyaAja-Template-d6454b3d41934057badb0e389ada5e73)
-  - Add the integration to the page
+#### Firebase and Firebase Admin
+
+- Create Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
+- Activate the authentication for the web
+- [Firebase Admin #1] Go to **Project settings** -> **Service accounts** -> **Generate new private key**
+- Copy the downloaded Private key to the Project root directory, rename to `TanyaAja-firebase-adminsdk.json`
+- [Firebase Admin #2] Create Realtime Database
+- Copy the Database url, e.g. `https://tanyaaja-rtdb.asia-southeast1.firebasedatabase.app`
+- Still on Realtime Database, go to Rules -> create Rule.
+- Copy the Rule from [here](.firebase/rule.json) then Publish the Rule
+
+> [!IMPORTANT]
+> In some conditions, you need to add role "Service Usage Consumer" manually to your Service Account created via Firebase.
+
+#### Notion Account
+
+- [Create a notion integration](https://developers.notion.com/docs/create-a-notion-integration)
+- Duplicate the template from: [TanyaAja DB Template](https://general-lady-e21.notion.site/TanyaAja-Template-d6454b3d41934057badb0e389ada5e73)
+- Add the integration to the page
 
 ### Development Setup
 
