@@ -6,21 +6,21 @@ import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { Loader2, RefreshCw } from 'lucide-react'
 import {
+  type InferOutput,
   boolean as isBoolean,
   maxLength,
   minLength,
   object,
   optional,
-  type InferOutput,
+  pipe,
   startsWith,
   string,
-  pipe,
 } from 'valibot'
 
 import { CopyButton } from '@/components/CopyButton'
-import { useDialog } from '@/components/dialog/DialogStore'
 import { useAuth } from '@/components/FirebaseAuth'
 import { ProfileAvatar } from '@/components/ProfileAvatar'
+import { useDialog } from '@/components/dialog/DialogStore'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -300,6 +300,21 @@ export default function Account() {
             />
           </div>
 
+          <Button
+            type="submit"
+            disabled={isSubmitting || isLoadingOwner}
+            className="mt-8"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
+                <span>Menyimpan...</span>
+              </>
+            ) : (
+              'Simpan Perubahan'
+            )}
+          </Button>
+
           <Card className="mt-6 border-red-600">
             <CardHeader>
               <CardTitle>Area Berbahaya!</CardTitle>
@@ -356,21 +371,6 @@ export default function Account() {
               </div>
             </CardContent>
           </Card>
-
-          <Button
-            type="submit"
-            disabled={isSubmitting || isLoadingOwner}
-            className="mt-8"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin shrink-0" />
-                <span>Menyimpan...</span>
-              </>
-            ) : (
-              'Simpan Perubahan'
-            )}
-          </Button>
         </form>
       </Form>
     </>
