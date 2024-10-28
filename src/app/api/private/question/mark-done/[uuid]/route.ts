@@ -11,29 +11,22 @@ export async function PATCH(
   request: Request,
   { params }: { params: { uuid: string } },
 ) {
-  const uuid = params.uuid || ''
+  const paramUuid = params.uuid || ''
   try {
     const headersInstance = headers()
     const token = headersInstance.get('Authorization')
     if (token) {
       await verifyIdToken(token)
 
-      const existingQuestion = await getQuestionsByUuid(uuid)
+      // Support multi uuid using comma separator
+      const uuids = paramUuid.split(',').filter(Boolean)
 
-      if (existingQuestion.results.length === 0) {
-        return NextResponse.json(
-          {
-            message: `Can not found the question ${uuid}`,
-          },
-          { status: 400 },
-        )
+      for (const id of uuids) {
+        const existingQuestion = await getQuestionsByUuid(id)
+        const foundPage = existingQuestion.results[0]
+        await markStatusQuestionAsRead(foundPage.id)
+        revalidateTag(id)
       }
-
-      const foundPage = existingQuestion.results[0]
-
-      await markStatusQuestionAsRead(foundPage.id)
-
-      revalidateTag(uuid)
 
       return NextResponse.json({ message: 'Question marked as Done' })
     }

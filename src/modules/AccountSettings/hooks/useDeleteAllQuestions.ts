@@ -48,7 +48,12 @@ export const useDeleteAllQuestions = () => {
     onSettled: (_data, _error, { user }) => {
       // invalidate user query to ensure the user data displayed is the latest data
       queryClient.invalidateQueries({ queryKey: ['/owner', user.uid] })
-      queryClient.invalidateQueries({ queryKey: ['/questions', user.uid] })
+      queryClient.invalidateQueries({
+        queryKey: ['/questions', user.uid, 'pending'],
+      })
+      queryClient.invalidateQueries({
+        queryKey: ['/questions', user.uid, 'done'],
+      })
     },
   })
 }

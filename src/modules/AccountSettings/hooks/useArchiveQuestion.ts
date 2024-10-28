@@ -7,10 +7,10 @@ import {
 import type { User } from 'firebase/auth'
 
 import { toast } from '@/components/ui/use-toast'
-import { patchQuestionAsDone } from '@/lib/api'
+import { archiveQuestion } from '@/lib/api'
 import type { IResponseGetQuestionPagination } from '@/lib/types'
 
-export const useMarkQuestionAsDone = <
+export const useArchiveQuestion = <
   TData = unknown,
   TError = unknown,
   TContext = unknown,
@@ -24,17 +24,17 @@ export const useMarkQuestionAsDone = <
 
   return useMutation({
     mutationFn: (body: { uuid: string; user: User }) =>
-      patchQuestionAsDone(body.uuid, body.user),
+      archiveQuestion(body.uuid, body.user),
     onMutate: async (variables) => {
       const { uuid, user } = variables
 
       await queryClient.cancelQueries({
-        queryKey: ['/questions', user.uid, 'pending'],
+        queryKey: ['/questions', user.uid, 'done'],
       })
 
       const prevQuestions = queryClient.getQueryData<
         InfiniteData<IResponseGetQuestionPagination> | undefined
-      >(['/questions', user.uid, 'pending'])
+      >(['/questions', user.uid, 'done'])
 
       if (prevQuestions) {
         const updatedListQuestion = prevQuestions.pages.map((prevQuestion) => {
@@ -49,7 +49,7 @@ export const useMarkQuestionAsDone = <
         // optimistically update questions list
         queryClient.setQueryData<
           InfiniteData<IResponseGetQuestionPagination> | undefined
-        >(['/questions', user.uid, 'pending'], {
+        >(['/questions', user.uid, 'done'], {
           ...prevQuestions,
           pages: updatedListQuestion,
         })
@@ -63,19 +63,19 @@ export const useMarkQuestionAsDone = <
     },
     onError: (_err, { user }, context) => {
       queryClient.setQueryData(
-        ['/questions', user.uid, 'pending'],
+        ['/questions', user.uid, 'done'],
         context?.prevQuestions,
       )
 
       toast({
-        title: 'Gagal menyimpan perubahan',
+        title: 'Gagal mengarsipkan pertanyaan',
         description:
-          'Gagal saat mencoba menandai pertanyaan sebagai sudah dijawab, coba sesaat lagi!',
+          'Gagal saat mencoba mengarsipkan pertanyaan, coba sesaat lagi!',
       })
     },
     onSettled: (_data, _err, { user }) => {
       queryClient.invalidateQueries({
-        queryKey: ['/questions', user.uid, 'pending'],
+        queryKey: ['/questions', user.uid, 'done'],
       })
     },
   })
