@@ -32,6 +32,9 @@ An anonymous question bank platform
 
 #### Firebase and Firebase Admin
 
+> [!TIP]
+> If you need step-by-step guidance for setup Firebase, go to [docs](./docs/) directory.
+
 - Create Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
 - Activate the authentication for the web
 - [Firebase Admin #1] Go to **Project settings** -> **Service accounts** -> **Generate new private key**
