@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "metadata": {
+      "$user_id": {
+        ".read": "$user_id === auth.uid",
+        ".write": "false"
+      }
+    },
+    "users": {
+      "$user_id": {
+        ".read": "auth != null && $user_id === auth.uid && (!root.child('metadata').child(auth.uid).child('revokeTime').exists() || auth.token.auth_time > root.child('metadata').child(auth.uid).child('revokeTime').val())",
+        ".write": "auth != null && $user_id === auth.uid && (!root.child('metadata').child(auth.uid).child('revokeTime').exists() || auth.token.auth_time > root.child('metadata').child(auth.uid).child('revokeTime').val())"
+      }
+    }
+  }
+}
