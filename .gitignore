@@ -37,3 +37,4 @@ next-env.d.ts
 
 # secret
 *-firebase-adminsdk.json
+*-firebase-adminsdk.production.json

@@ -32,7 +32,7 @@ An anonymous question bank platform
 - Firebase project, go to [console.firebase.google.com](https://console.firebase.google.com)
   1. Activate the authentication for the web
   2. [Firebase Admin #1] Go to Project settings -> Service accounts -> Generate new private key
-  3. Copy the downloaded Private key to the Project root directory, rename to 'TanyaAja-firebase-adminsdk.json'
+  3. Copy the downloaded Private key to the Project root directory, rename to `TanyaAja-firebase-adminsdk.json`
   4. [Firebase Admin #2] Create Realtime Database
   5. Copy the Database url, e.g. `https://tanyaaja-rtdb.asia-southeast1.firebasedatabase.app`
   6. Still on Realtime Database, go to Rules -> create Rule.
@@ -43,18 +43,32 @@ An anonymous question bank platform
   - Duplicate the template from: [TanyaAja DB Template](https://general-lady-e21.notion.site/TanyaAja-Template-d6454b3d41934057badb0e389ada5e73)
   - Add the integration to the page
 
-### Development
+### Development Setup
 
 - Install all dependencies, by running `pnpm install`
 - Create new `.env.local` file, copy from the `.env.example` and fill it with your value from Firebase and Notion
-- [Firebase Admin #1] Fill the `GOOGLE_APPLICATION_CREDENTIALS` in the `.env.local` with path to the `*-firebase-adminsdk.json` file, e.g.
+
+### Additional Steps For Firebase Admin Setup
+
+- Copy value from `TanyaAja-firebase-adminsdk.json` to https://www.textfixer.com/tools/remove-line-breaks.php and click button "Remove Line Breaks"
+- Fill the `FIREBASE_SERVICE_ACCOUNT_KEY` in the `.env.local` with the value from the website previously.
+
+```bash
+# Make sure to add single quote here
+FIREBASE_SERVICE_ACCOUNT_KEY='Your JSON value'
 ```
-GOOGLE_APPLICATION_CREDENTIALS=tanyaaja-firebase-adminsdk.json
-```
-- [Firebase Admin #2] Fill the `REALTIME_DATABASE_URL` in the `.env.local` with the Realtime Database URL, e.g.
-```
+
+Read more in: https://dev.to/vvo/how-to-add-firebase-service-account-json-files-to-vercel-ph5
+
+
+### Additional Steps For Firebase RTDB Setup
+
+- Fill the `REALTIME_DATABASE_URL` in the `.env.local` with the Realtime Database URL, e.g.
+
+```bash
 REALTIME_DATABASE_URL=https://tanyaaja-rtdb.asia-southeast1.firebasedatabase.app
 ```
+
 - Run in local, using command `pnpm run dev`
 
 ## Contributing
