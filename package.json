@@ -12,7 +12,8 @@
     "lint": "biome lint --write",
     "lint:unsafe": "biome lint --write --unsafe",
     "check": "biome check --unsafe --reporter=summary",
-    "start": "next start"
+    "start": "next start",
+    "ci:cleanup": "tsx ./scripts/cleanup.ts"
   },
   "dependencies": {
     "@babel/parser": "^7.26.1",
@@ -95,7 +96,8 @@
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "postcss": "8.4.47",
-    "tailwindcss": "3.4.14"
+    "tailwindcss": "3.4.14",
+    "tsx": "^4.19.2"
   },
   "packageManager": "pnpm@9.12.2",
   "engines": {

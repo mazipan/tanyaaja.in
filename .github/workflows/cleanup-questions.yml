@@ -38,4 +38,4 @@ jobs:
         run: pnpm install
 
       - name: Run cleanup script
-        run: pnpm dlx tsx ./scripts/cleanup.ts
+        run: pnpm run ci:cleanup
