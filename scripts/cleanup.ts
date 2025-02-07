@@ -46,10 +46,10 @@ const deleteAnsweredQuestions = async () => {
   let loop = 1;
   let cursor: string | undefined;
 
-  while (hasMore || loop <= MAX_LOOP) {
+  while (hasMore && loop <= MAX_LOOP) {
     try {
       const response = await getAnsweredQuestionsWithPagination({
-        limit: 5,
+        limit: 50,
         cursor,
       });
 
@@ -66,6 +66,9 @@ const deleteAnsweredQuestions = async () => {
       hasMore = false;
     }
   }
+
+  console.log(`>>> We will try deleting ${archivePagePromises.length} answered questions...`);
+  await Promise.allSettled(archivePagePromises);
 };
 
 (async () => {
