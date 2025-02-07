@@ -1,4 +1,4 @@
-name: Auto Comment
+name: Cleanup Question
 
 on:
   workflow_dispatch:

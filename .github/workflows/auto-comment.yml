@@ -4,6 +4,12 @@ on:
     types: [opened]
 jobs:
   run:
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      pull-requests: write
+
     runs-on: ubuntu-latest
     steps:
       - uses: wow-actions/auto-comment@v1
