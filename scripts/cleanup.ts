@@ -33,8 +33,8 @@ const getAnsweredQuestionsWithPagination = async ({
     filter,
     sorts: [
       {
-        property: 'last_edited_time',
-        direction: 'descending',
+        property: 'Last edited time',
+        direction: 'ascending',
       },
     ],
     page_size: limit,
