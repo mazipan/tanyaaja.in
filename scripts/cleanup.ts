@@ -68,6 +68,6 @@ const deleteAnsweredQuestions = async () => {
   }
 };
 
-async () => {
+(async () => {
   await deleteAnsweredQuestions();
-};
+})();
