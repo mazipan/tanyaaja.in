@@ -39,3 +39,6 @@ jobs:
 
       - name: Run cleanup script
         run: pnpm run ci:cleanup
+        env:
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          NOTION_DB_QUESTIONS_ID: ${{ secrets.NOTION_DB_QUESTIONS_ID }}

@@ -49,7 +49,7 @@ const deleteAnsweredQuestions = async () => {
   while (hasMore || loop <= MAX_LOOP) {
     try {
       const response = await getAnsweredQuestionsWithPagination({
-        limit: 100,
+        limit: 5,
         cursor,
       });
 
@@ -69,5 +69,9 @@ const deleteAnsweredQuestions = async () => {
 };
 
 (async () => {
-  await deleteAnsweredQuestions();
+  if (!process.env.NOTION_SECRET || !process.env.NOTION_DB_QUESTIONS_ID) {
+    return;
+  } else {
+    await deleteAnsweredQuestions();
+  }
 })();
