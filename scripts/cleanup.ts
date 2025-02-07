@@ -31,6 +31,12 @@ const getAnsweredQuestionsWithPagination = async ({
   const response = await notion.databases.query({
     database_id: DB_QUESTION,
     filter,
+    sorts: [
+      {
+        property: 'last_edited_time',
+        direction: 'descending',
+      },
+    ],
     page_size: limit,
     start_cursor: cursor,
   });
@@ -38,7 +44,9 @@ const getAnsweredQuestionsWithPagination = async ({
   return response;
 };
 
-const MAX_LOOP = 2;
+const MAX_LOOP = 3;
+const SIZE = 100;
+
 const deleteAnsweredQuestions = async () => {
   const archivePagePromises = [];
 
@@ -49,7 +57,7 @@ const deleteAnsweredQuestions = async () => {
   while (hasMore && loop <= MAX_LOOP) {
     try {
       const response = await getAnsweredQuestionsWithPagination({
-        limit: 50,
+        limit: SIZE,
         cursor,
       });
 

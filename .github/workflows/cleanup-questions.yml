@@ -6,7 +6,7 @@ on:
     branches:
       - master-disable
   schedule:
-  - cron: "0 0 1 * *" # See https://crontab.guru/#0_0_1_*_*
+  - cron: "0 0 * * 1" # See https://crontab.guru/#0_0_*_*_1
 
 jobs:
   cleanup_question:
