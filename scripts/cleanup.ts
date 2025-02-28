@@ -44,7 +44,7 @@ const getAnsweredQuestionsWithPagination = async ({
   return response;
 };
 
-const MAX_LOOP = 3;
+const MAX_LOOP = 5;
 const SIZE = 100;
 
 const deleteAnsweredQuestions = async () => {
